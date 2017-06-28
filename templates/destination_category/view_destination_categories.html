@@ -1,0 +1,49 @@
+{*配送先カテゴリー一覧*}
+<h1>{$smarty.const.DESTINATION_CATEGORY}{$smarty.const.VIEW_ALL}</h1>
+<div class="div_list">
+	{if $data}
+	{*複数ページへ渡る場合のリンク*} 
+	{foreach from=$links item="links"} 
+		{$links}
+	{/foreach}
+	 {*PCの場合、テーブルで閲覧できる*} 
+	 <div align="left">
+	 	<a href="index.php?action=/destination_category/putDestinationCategory&company_id={$company_id}">
+	 		{$smarty.const.DESTINATION_CATEGORY} {$smarty.const.NEW_DATA} 
+	 	</a></div>
+</div>
+<table class="report_table">
+	<tr>
+		<th>{$smarty.const.CATRGORY_NAME}</th>
+		<th>{$smarty.const.COLOR}</th>
+		<th>{$smarty.const.EDIT}/{$smarty.const.DELETE}</th>
+	</tr>
+	{foreach from=$data item="data"}
+	<tr>
+		<td>{$data.name}</td>
+		<td><div style="width:100px; height:30px;background-color:{$data.color}"></div> </td>
+		<td><a href="index.php?action=/destination_category/putDestinationCategory&destination_categories_id={$data.id}&company_id={$company_id}" >
+		{$smarty.const.EDIT_ICON}</a>
+		{if $carrier==NULL || $carrier == 'Android'|| $carrier =='iPhone'}
+		{literal}
+			<script type="text/javascript">
+			<!--
+			function check(){
+				return confirm("この記録を消去して、本当によろしいですか？消去すると、元に戻りません。")
+			}
+			//-->
+			</script>	
+			{/literal}
+		{/if}
+		<a href="index.php?action=/destination_category/deleteDestinationCategory&id={$data.id}&company_id={$company_id}"  
+		{literal}onclick="return check()"{/literal}>{$smarty.const.COMMON_DELETE_ICON}</a></td>
+	</tr>
+	{*データがない場合*} {foreachelse}
+	<div>{$smarty.const.TOP_NODATA}</div>
+	{/foreach}
+</table>
+
+{else if}
+<div>{$smarty.const.TOP_NODATA}</div>
+<div align="left"><a href="index.php?action=/destination_category/putDestinationCategory&company_id={$company_id}">配送先カテゴリーの追加はこちらから</a></div>
+{/if}
