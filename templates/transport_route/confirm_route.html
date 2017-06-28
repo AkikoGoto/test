@@ -1,0 +1,167 @@
+<h1>{if $status=='EDIT'}
+	{$smarty.const.TRANSPOERT_ROUTE} {$smarty.const.EDIT}{$smarty.const.CONFIRM_DISPLAY}
+	{elseif $status=='EDIT_DRIVER'} {$smarty.const.EDIT_ROOT_OF_DRIVER}{$smarty.const.CONFIRM_DISPLAY}：{$last_name}{$first_name}({$title_date})
+	{else} {$smarty.const.TRANSPOERT_ROUTE} {$smarty.const.CONFIRM_NEW_REGISTER} {/if}</h1>
+
+<FORM METHOD="POST" action="index.php?action={$target}" name="profile">
+	{*OSM Map本体*}
+	{include file="elements/osm_mini_map.html"}
+
+	{if $status != 'EDIT_DRIVER'}
+
+		<div class="item_name"><font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+			{$smarty.const.TRANSPOERT_ROUTE_NAME}
+		</div>
+
+		<div>
+			{$name|escape}
+	        <input type="hidden" name="name" value="{$name|escape}">
+		</div>
+
+	   	<div class="item_name">
+			{$smarty.const.ROUTE_INFOEMATION}<br>
+	   	</div>
+		<div>
+			{$information}
+			<input type="hidden" name="information" value="{$information}">
+	   	</div>
+
+	   	<div class="item_name">
+			{$smarty.const.CATEGORY_TEMPORARY_STORAGE}<br>
+	   	</div>
+		<div>
+			{$destinationName}
+			<input type=hidden name="destination_id" value="{$destination_id|escape}">
+	   	</div>
+	{else}
+		<div class="item_name">
+			<font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+				{$smarty.const.SELECT_ROOT}
+		</div>
+		<div>
+			{$transportRoute.name|escape}
+		</div>
+
+		<div class="item_name">
+				{$smarty.const.DRIVER_ROUTE_INFORMATION}
+		</div>
+		{$information}
+		<input type="hidden" name="information" value="{$information}">
+	{/if}
+
+   	<div align="center">
+	   	<input type=hidden name="company_id" value="{$company_id|escape}">
+	   	<input type=hidden name="id" value="{$id|escape}">
+		<input type=hidden name="transport_route_drivers_id" value="{$transport_route_drivers_id|escape}">
+	   	<input type=hidden name="date" value="{$date|escape}">
+	   	<input type=hidden name="geo_json" value="{$geo_json|escape}">
+	   	<input type=hidden name="status" value="{$status|escape}">
+	   	<input type=hidden name="driver_id" value="{$driver_id|escape}">
+	   	<input type=hidden name="select_root_id" value="{$select_root_id|escape}">
+		<input type=hidden name="transport_route_id" value="{$transport_route_id|escape}">
+		<button class="btn btn-large btn-ocher" type="submit" value="{$smarty.const.COMMON_SUBMIT}">
+		{$smarty.const.COMMON_SUBMIT}</button>
+	</div>
+
+</FORM>
+
+{if empty($status)}
+<script type="text/javascript">
+{literal}
+var center_latitude ={/literal}{$company_lat}{literal};
+var center_longitude ={/literal}{$company_long}{literal};
+
+function initialize(center_latitude,center_longitude) {
+
+       {/literal}
+       {*パラメーターの初期化とマップの描画は別ファイル*}
+       {include file = "js_html/initialize_mapBoxGl_js.html"}
+
+       {literal}
+       	var route = {geo_json : {/literal}{$geo_json}{literal}};
+
+    	addRouteAndPopup(route, "transport_route", "{/literal}{$name}{literal}", "#e87272");
+
+    	var positionDatas = route.geo_json.features[0].geometry.coordinates;
+
+    	addLineOnStyleLoad(positionDatas, "#ff0000", "newRoute");
+
+    	resizeMapToLine(positionDatas);
+}
+{/literal}
+</script>
+
+
+<script src="templates/js/mapbox/addAreaPolygonAndPopup.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addRoute.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addPolygon.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/resizeToFit.js" type="text/javascript"></script>
+<script src="templates/js/randomColor.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addPopup.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addLine.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/focusPosition.js" type="text/javascript"></script>
+<script
+	src='https://api.mapbox.com/mapbox.js/plugins/turf/v2.0.2/turf.min.js'></script>
+<script src="templates/js/mapbox/resizeMapToLine.js"
+	type="text/javascript"></script>
+
+{else}
+
+<script type="text/javascript">
+{literal}
+var center_latitude ={/literal}{$company_lat}{literal};
+var center_longitude ={/literal}{$company_long}{literal};
+
+function initialize(center_latitude,center_longitude) {
+
+       {/literal}
+       {*パラメーターの初期化とマップの描画は別ファイル*}
+       {include file = "js_html/initialize_mapBoxGl_js.html"}
+
+       {literal}
+       	var route = {geo_json : {/literal}{if !empty($geo_json)}{$geo_json}{else}{$transportRoute.geo_json}{/if}{literal}};
+
+    	addRouteAndPopup(route, "transport_route", "{/literal}{$name}{literal}", "#e87272");
+
+    	var positionDatas = route.geo_json.features[0].geometry.coordinates;
+
+    	addLineOnStyleLoad(positionDatas, "#ff0000", "newRoute");
+
+    	resizeMapToLine(positionDatas);
+
+
+    	//ナビエリア描画
+    	{/literal}
+    	{if !empty($naviAreas)}
+	    	{foreach from=$naviAreas item="naviArea" key=k}{literal}
+		    	var coordinates = [{/literal}{$naviArea.longitude|escape}{literal}, {/literal}{$naviArea.latitude|escape}{literal}];{/literal}
+		    	var area_name = 'エリア名称：{$naviArea.name|escape}</br>半径：{$naviArea.radius|escape}m</br>メッセージ内容：{$naviArea.message|regex_replace:'/\r\n/':'</br>'}';{literal}
+		    	var radius = {/literal}{$naviArea.radius|escape} {literal};
+		    	var color = "#7bc1f3";
+		    	var area_id = "navi_area" + {/literal}{$k}{literal};
+
+		    	addAreaPolygonAndPopup(coordinates, radius, area_name, color, area_id);
+
+	    		{/literal}
+	    	{/foreach}
+       	{/if}
+    	{literal}
+}
+{/literal}
+</script>
+
+
+<script src="templates/js/mapbox/addAreaPolygonAndPopup.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addRoute.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addPolygon.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/resizeToFit.js" type="text/javascript"></script>
+<script src="templates/js/randomColor.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addPopup.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addLine.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/focusPosition.js" type="text/javascript"></script>
+<script
+	src='https://api.mapbox.com/mapbox.js/plugins/turf/v2.0.2/turf.min.js'></script>
+<script src="templates/js/mapbox/resizeMapToLine.js"
+	type="text/javascript"></script>
+
+{/if}

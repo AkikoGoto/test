@@ -1,0 +1,85 @@
+{*ドライバー業務日誌*}
+<h1>{$smarty.const.DAY_REPORT_DATA}：{$driver_name.last_name}&nbsp;{$driver_name.first_name}</h1>
+<div>
+{if $smarty.const.MODE =="CONCRETE"}
+	<a href="index.php?action=concrete/worktime&driver_id={$driver_id}&company_id={$company_id}">{$smarty.const.WORK_RECORDS}</a>
+{else}
+	<a href="index.php?action=worktime&driver_id={$driver_id}&company_id={$company_id}">{$smarty.const.WORK_RECORDS}</a>
+{/if}
+&nbsp;&nbsp;
+	 <a href="index.php?action=/day_report/day_report_putin&driver_id={$driver_id}&company_id={$company_id}">
+ 		日報用データの追加
+ 	</a>
+</div>
+{$smarty.const.HUNDRED_WORK_TIME}
+{*直近100件のデータ*}
+{*複数ページへ渡る場合のリンク*}
+ {foreach from=$links item="links"} {$links}{/foreach}
+ 
+{*PCの場合、テーブルで閲覧する*} {if $carrier==NULL}
+<table class="report_table">
+	<tr>
+		<th>{$smarty.const.DRIVE_DATE}</th>
+		<th>{$smarty.const.START_METER}</th>
+		<th>{$smarty.const.ARRIVAL_METER}</th>
+		<th>{$smarty.const.SUPPLIED_OIL}</th>
+		<th>{$smarty.const.EDIT} &nbsp;|&nbsp;
+		{$smarty.const.DELETE}</th>
+	</tr>
+	{foreach from=$data item="data"}
+	<tr>
+		<td>{$data.drive_date}</td>
+		<td>{$data.start_meter}</td>
+		<td>{$data.arrival_meter}</td>
+		<td>{$data.supplied_oil}</td>
+		<td>
+		<a href="index.php?action=/day_report/day_report_putin&id={$data.id}&driver_id={$driver_id}&company_id={$company_id}">
+			{$smarty.const.EDIT_ICON}</a>
+		{if $carrier==NULL}
+		{literal}
+			<script type="text/javascript">
+			<!--
+			function check(){
+				return confirm("この記録を消去して、本当によろしいですか？消去すると、元に戻りません。")
+			}
+			//-->
+			</script>	
+			{/literal}
+		{/if}
+		&nbsp;|&nbsp;
+		<a href="index.php?action=/day_report/day_report_delete&id={$data.id}&driver_id={$driver_id}&company_id={$company_id}" 
+				{literal}onclick="return check()"{/literal}>{$smarty.const.COMMON_DELETE_ICON}</a></td>
+	</tr>
+	{*データがない場合*} {foreachelse}
+	<div>{$smarty.const.TOP_NODATA}</div>
+	{/foreach}
+</table>
+{*スマートフォン、ガラケーの場合*} {else} {foreach from=$data item="data"}
+<div>
+	<b> {if $data.status==1}{$working_status->action_1} {elseif
+		$data.status==2}{$working_status->action_2} {elseif
+		$data.status==3}{$working_status->action_3} {elseif
+		$data.status==4}{$working_status->action_4} {elseif
+		$data.status==5}{$smarty.const.DRIVER_OTHER} {/if} </b>
+</div>
+{if $data.start}
+<div>{$data.start}</div>
+{/if} ~
+{if $data.end}
+<div>
+	{$data.end}
+</div>
+{/if} {if $data.total_time}
+<div>{$data.total_time}</div>
+{/if}
+<div>
+	<a href="index.php?action=/day_report/day_report_putin&id={$data.id}&driver_id={$driver_id}&company_id={$company_id}">
+	{$smarty.const.EDIT}
+	</a>
+	|
+	<a href="index.php?action=/day_report/day_report_delete&id={$data.id}&driver_id={$driver_id}&company_id={$company_id}" 
+					{literal}onclick="return check()"{/literal}>{$smarty.const.DELETE}</a>
+</div>
+<hr>
+{/foreach} {/if} {*リンクの設定*} {foreach from=$links item="links"} {$links}
+{/foreach}

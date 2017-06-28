@@ -1,0 +1,105 @@
+<h1>{$smarty.const.DESTINATION_CATEGORY} {if $status=='EDIT'}
+	{$smarty.const.EDIT_DATA} {else} {$smarty.const.NEW_DATA} {/if}
+	</h1>
+	<p>{$smarty.const.COMMON_CONFIRM_MESSAGE}</p>
+<FORM METHOD="POST" action="index.php?action=/destination_category/putDestinationCategoryDb">
+	{if $status=='EDIT'}
+	<div class="item_name">
+		{$smarty.const.COMMON_ID}
+	</div>
+	<div>
+		{$id|escape} <input type=hidden name="id"
+			value="{$id|escape}">
+	</div>
+	{/if}
+	<div class="item_name">
+		<font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+			{$smarty.const.CATRGORY_NAME}
+	</div>
+	<div>
+		{$name|escape} <input type="hidden" name="name"
+			value="{$name|escape}">
+	</div>
+
+	<div class="item_name">
+		<font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+			{$smarty.const.COLOR}
+	</div>
+	<div>
+		<div style="width:100px; height:30px;background-color:{$color}"></div> 
+		{$color|escape} <input type="hidden" name="color"
+			value="{$color|escape}">
+	</div>
+	
+<div class="height_100">
+		<input type=hidden name="company_id" value="{$company_id|escape}"> 
+		<button class="btn btn-large btn-ocher" type="submit" value="{$smarty.const.COMMON_SUBMIT}">
+			{$smarty.const.COMMON_SUBMIT}
+		</button>
+</div>
+</FORM>
+
+<script>
+{literal}
+var colorhex="#FF0000"
+	function mouseOverColor(hex)
+	{
+	document.getElementById("divpreview").style.backgroundColor=hex;
+	document.getElementById("divpreviewtxt").innerHTML=hex;
+	document.body.style.cursor="pointer";
+	}
+
+	function mouseOutMap()
+	{
+	document.getElementById("divpreview").style.backgroundColor=colorhex;
+	document.getElementById("divpreviewtxt").innerHTML=colorhex;
+	document.body.style.cursor="";
+	}
+function clickColor(hex,seltop,selleft)
+{
+var xhttp,c
+if (hex==0)
+	{
+	c=document.getElementById("colorhex").value;
+	}
+else
+	{
+	c=hex;
+	}
+if (c.substr(0,1)=="#")
+	{
+	c=c.substr(1);
+	}
+
+colorhex="#" + c;
+colorhex=colorhex.substr(0,10);
+document.getElementById("colorhex").value=colorhex;
+
+if (window.XMLHttpRequest)
+{
+xhttp=new XMLHttpRequest();
+}
+else
+{
+xhttp=new ActiveXObject("Microsoft.XMLHTTP");
+}
+xhttp.open("GET","http_colorshades.asp?colorhex=" + c + "&r=" + Math.random(),false);
+xhttp.send("");
+document.getElementById("colorshades").innerHTML=xhttp.responseText;
+if (seltop>-1 && selleft>-1)
+	{
+	document.getElementById("selectedColor").style.top=seltop + "px";
+	document.getElementById("selectedColor").style.left=selleft + "px";
+	document.getElementById("selectedColor").style.visibility="visible";
+	}
+else
+	{
+	document.getElementById("divpreview").style.backgroundColor=colorhex;
+	document.getElementById("divpreviewtxt").innerHTML=colorhex;
+	document.getElementById("selectedColor").style.visibility="hidden";
+	}
+//refreshleader()
+
+}
+{/literal}
+</script>

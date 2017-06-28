@@ -1,0 +1,8 @@
+{*メッセージ出力画面*}
+
+<h1>{$smarty.const.MESSAGE}{$smarty.const.WAS_SENT}</h1>
+
+<p>{$result_info}</p>
+<p>{$error_info}</p>
+<div><a href="?action=/message/message_history&company_id={$id}">{$smarty.const.MESSAGE_HISTORY}</a></div>
+<div><a href="?action=/message/message_form&company_id={$id}">{$smarty.const.MESSAGE_SEND_SUCCEEDING}</a></div>

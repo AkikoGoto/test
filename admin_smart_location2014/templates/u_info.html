@@ -1,0 +1,22 @@
+{*ユーザー情報表示画面*}
+
+<h1>{$Userinfo->u_name|escape}さんのユーザー情報</h1>
+
+{*各項目はescapeでサニタイズ*}
+
+<table border="1" class="thread" width="90%" >
+<tr>
+<td width="30%">会員No.</td>
+<td class="con_even">{$Userinfo->u_no|escape}</td>
+</tr>
+{*ユーザー本人でない場合はIDを表示しない*}
+{if $u_no == $Userinfo->u_no}
+{/if}
+<tr>
+<td>名前</td><td class="con_even">{$Userinfo->u_name|escape}</td>
+</tr>
+
+</table>
+{*セッションで持っているu_noの値がここで取得するu_noと同等なら、情報を編集可能*}
+{if $u_no == $Userinfo->u_no}<div><a href="index.php?action=u_info_update&u_update_no={$u_no}">情報を編集する</a></div>{/if}
+

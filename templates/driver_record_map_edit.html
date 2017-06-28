@@ -1,0 +1,140 @@
+<FORM METHOD="POST" action="index.php?action=driver_record_map_try" >
+
+	<div class="item_name"><b>{$smarty.const.DRIVER_STATUS}</b></div>
+	 <select name="status">
+		 {if $smarty.const.MODE =="CONCRETE"}
+		 	<option value="1" {if $worktime_status==1 || $data[0].status==1}selected{/if}>{$smarty.const.OFFICE_START}</option>
+			<option value="2" {if $worktime_status==2 || $data[0].status==2}selected{/if}>{$smarty.const.SCENE_START}</option>
+		 	<option value="3" {if $worktime_status==3 || $data[0].status==3}selected{/if}>{$smarty.const.FROM_SCENE_START}</option>	 
+		 	<option value="4" {if $worktime_status==4 || $data[0].status==4}selected{/if}>{$smarty.const.OFFICE_RETURN}</option>
+		  	<option value="5" {if $worktime_status==5 || $data[0].status==5}selected{/if}>{$smarty.const.LUNCH}</option>
+		  	<option value="6" {if $worktime_status==6 || $data[0].status==6}selected{/if}>{$smarty.const.CONTACT_HOLD}</option>
+			<option value="7" {if $worktime_status==7 || $data[0].status==7}selected{/if}>{$smarty.const.CAR_WASH_HOLD}</option>
+		 	<option value="8" {if $worktime_status==8 || $data[0].status==8}selected{/if}>{$smarty.const.CAR_WASH}</option>	 
+		 	<option value="9" {if $worktime_status==9 || $data[0].status==9}selected{/if}>{$smarty.const.FEED}</option>
+		  	<option value="10" {if $worktime_status==10 || $data[0].status==10}selected{/if}>{$smarty.const.COPY}</option>
+		  	<option value="11" {if $worktime_status==11 || $data[0].status==11}selected{/if}>{$smarty.const.OTHER}</option>
+		{else}
+		 	<option value="1" {if $driver_record_map_status==1 || $data[0].status==1}selected{/if}>{$working_status->action_1}</option>
+			<option value="2" {if $driver_record_map_status==2 || $data[0].status==2}selected{/if}>{$working_status->action_2}</option>
+			 <option value="3" {if $driver_record_map_status==3 || $data[0].status==3}selected{/if}>{$working_status->action_3}</option>	 
+			 <option value="4" {if $driver_record_map_status==4 || $data[0].status==4}selected{/if}>{$working_status->action_4}</option>
+			 <option value="5" {if $driver_record_map_status==5 || $data[0].status==5}selected{/if}>{$smarty.const.DRIVER_OTHER}</option>
+		 {/if}
+	 </select>
+
+	<div class="item_name"><b>{$smarty.const.COMMON_JYUSYO}</b></div>
+		<div>
+			<input type="text" size="50" maxlength="100" class="textinput" name="address"
+			 value="{if $driver_record_map_address}{$driver_record_map_address}{else}{$data[0].address}{/if}" {$onload_js}>
+		</div>
+
+	<div class="item_name"><b>{$smarty.const.SPEED}</b></div>
+		<div>
+			<input type="text" size="50" maxlength="100" class="textinput" name="speed"
+			 value="{if $driver_record_map_speed}{$driver_record_map_speed|escape}{else}{$data[0].speed|escape}{/if}">
+		</div>
+<!-- 	<div class="item_name"><b>{$smarty.const.DRIVER_SALES}</b></div>
+		<div>
+			<input type="text" size="50" maxlength="100" class="textinput" name="sales"
+			 value="{if $driver_record_map_sales}{$driver_record_map_sales|escape}{else}{$data[0].sales|escape}{/if}">
+		</div>
+
+	<div class="item_name"><b>{$smarty.const.DRIVER_MEMO}</b></div>
+		<div>
+			<input type="text" size="50" maxlength="100" class="textinput" name="detail"
+			 value="{if $driver_record_map_detail}{$driver_record_map_detail|escape}{else}{$data[0].detail|escape}{/if}">
+		</div>
+	 -->	
+		
+	<div class="item_name"><b>{$smarty.const.COMMON_DATETIME}</b></div>
+
+ 		<input type="checkbox" name="start" value="【開始時刻】" {if $driver_record_map_start_time} checked{/if}>開始
+ 		<input type="checkbox" name="end" value="【終了時刻】" {if $driver_record_map_end_time} checked{/if}>終了（変更したい時刻を選択してください。）<br>
+		
+			<select name="time_from_year">
+				{foreach from=$select_menu_year item='each_year'}
+					<option value="{$each_year|escape}"
+					{if $driver_record_map_from_year}
+						{if $each_year==$driver_record_map_from_year}
+							selected
+						{/if}
+					{elseif $each_year==$db_year}
+						selected
+					{/if}>{$each_year|escape}</option>
+				{/foreach}
+			</select>年
+		
+			<select name="time_from_month">
+				{foreach from=$select_menu_month item='each_month'}
+					<option value="{$each_month|escape}"
+					{if $driver_record_map_from_month}
+						{if $each_month==$driver_record_map_from_month}
+							selected
+						{/if}
+					{elseif $each_month==$db_month}
+						selected
+					{/if}>{$each_month|escape}</option>
+				{/foreach}
+			</select>月
+			
+			<select name="time_from_day">
+				{foreach from=$select_menu_day item='each_day'}
+								<option value="{$each_day|escape}"
+					{if $driver_record_map_from_day}
+						{if $each_day==$driver_record_map_from_day}
+							selected
+						{/if}
+					{elseif $each_day==$db_day}
+						selected
+					{/if}>{$each_day|escape}</option>
+				{/foreach}
+			</select>日
+		
+			<select name="time_from_hour">
+				{foreach from=$select_menu_hour item='each_hour'}
+				<option value="{$each_hour|escape}"
+					{if $driver_record_map_from_hour}
+						{if $each_hour==$driver_record_map_from_hour}
+							selected
+						{/if}
+					{elseif $each_hour==$db_hour}
+						selected
+					{/if}>{$each_hour|escape}</option>
+				{/foreach}
+			</select>時
+		
+			<select name="time_from_minit">
+				{foreach from=$select_menu_minit item='each_minit'}
+				<option value="{$each_minit|escape}"
+					{if $driver_record_map_from_minit}
+						{if $each_minit==$driver_record_map_from_minit}
+							selected
+						{/if}
+					{elseif $each_minit==$db_minit}
+						selected
+					{/if}>{$each_minit|escape}</option>
+				{/foreach}
+			</select>分
+
+<!-- 		<select name="time_from_seconds">
+				{foreach from=$select_menu_seconds item='each_seconds'}
+				<option value="{$each_seconds|escape}"
+					{if $driver_record_map_from_seconds}
+						{if $each_seconds==$driver_record_map_from_seconds}
+							selected
+						{/if}
+					{elseif $each_seconds==$db_seconds}
+						selected
+					{/if}>{$each_seconds|escape}</option>
+				{/foreach}
+			</select>秒
+-->
+	<div align="center">
+	<input type=hidden name="edit" value="{$edit}">
+	<input type=hidden name="id" value="{$data[0].id}">
+	<input type="hidden" name="driver_id" value={$driver_id}>
+	<input type="hidden" name="company_id" value={$company_id}>
+	<input type="submit" name="submit" value="{$smarty.const.COMMON_SUBMIT}"></div>
+
+</FORM>

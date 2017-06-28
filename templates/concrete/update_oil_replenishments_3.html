@@ -1,0 +1,118 @@
+{php}
+session_start();
+{/php}
+
+<FORM METHOD="POST" action="index.php?action=concrete/update_confirm_oil_replenishments_3">
+
+<h1>{$smarty.const.OIL_DATA_INSERT}</h1>
+
+	<!-- 軽油(3)のデータ入力 -->
+	<div class="item_name">
+		<b>{$check_date}</b>
+	</div>
+	
+		<table class="demand_table">
+			<tr class="tr_border">
+				<!-- 軽油補給量 -->
+				<td class="exist_border">{$smarty.const.OIL_REPLENISHMENT}</td>
+				<td>
+					<input type="text" name="oil_replenishment" value="{if $oil_replenishment}{$oil_replenishment}{elseif $concrete_oil_replenishment}{$concrete_oil_replenishment}{/if}">
+				</td>
+			</tr>
+			<tr class="tr_border">
+    			<!-- 開始時間 -->
+    			<td class="exist_border">{$smarty.const.START_TIME}</td>
+    			<td>
+    				<select name="start_time_hour">
+	    				{foreach from=$select_menu_hour item=start_hour}
+							<option value="{$start_hour}"
+								{if $oil_from_hour}
+									{if $start_hour==$oil_from_hour}
+										selected
+									{/if}
+								{elseif $start_hour==$concrete_start_time_hour}
+									selected
+								{elseif $start_hour==9}
+									selected
+								{/if}
+							>{$start_hour}</option>
+		    			{/foreach}
+		    		</select>
+		    		時
+		    		<select name="start_time_minit">
+	    				{foreach from=$select_menu_minit item=start_minit}
+							<option value="{$start_minit}"
+								{if $oil_from_minit}
+									{if $start_minit==$oil_from_minit}
+										selected
+									{/if}
+								{elseif $concrete_start_time_minute}
+									{if $start_minit==$concrete_start_time_minute}
+										selected
+									{/if}
+								{elseif $start_minit==0}
+									selected
+								{/if}
+							>{$start_minit}</option>
+		    			{/foreach}
+		    		</select>
+		    		分
+		    	</td>
+    		</tr>
+    		<tr class="tr_border">
+    			<!-- 終了時間 -->
+    			<td class="exist_border">{$smarty.const.END_TIME}</td>
+    			<td>
+    				<select name="end_time_hour">
+	    				{foreach from=$select_menu_hour item=end_hour}
+							<option value="{$end_hour}"
+								{if $oil_from_hour}
+									{if $end_hour==$oil_to_hour}
+										selected
+									{/if}
+								{elseif $concrete_end_time_hour}
+									{if $end_hour==$concrete_end_time_hour}
+										selected
+									{/if}
+								{elseif $end_hour==18}
+									selected
+								{/if}
+							>{$end_hour}</option>
+		    			{/foreach}
+		    		</select>
+		    		時
+		    		<select name="end_time_minit">
+	    				{foreach from=$select_menu_minit item=end_minit}
+							<option value="{$end_minit}"
+								{if $oil_from_minit}
+									{if $end_minit==$oil_to_minit}
+										selected
+									{/if}
+								{elseif $concrete_end_time_minute}
+									{if $end_minit==$concrete_end_time_minute}
+										selected
+									{/if}
+								{elseif $end_minit==0}
+									selected
+								{/if}
+							>{$end_minit}</option>
+		    			{/foreach}
+		    		</select>
+		    		分
+    			</td>
+    		</tr>
+    		
+    	</table>
+    	
+	<div align='center'>
+		<input type="hidden" name="check_date" value="{$check_date}">
+		<input type="hidden" name="check_year" value="{$check_year}">
+		<input type="hidden" name="check_month" value="{$check_month}">
+		<input type="hidden" name="check_day" value="{$check_day}">
+		<input type="hidden" name="status" value="{if $status}{$status}{/if}">
+		<input type="hidden" name="oil_replenishment_type" value="3">
+		<input type="hidden" name="concrete_attendance_id" value="{$concrete_attendance_id}">
+		<input type="submit" name="submit" value="{$smarty.const.COMMON_SUBMIT}">
+	</div>
+	
+</FORM>

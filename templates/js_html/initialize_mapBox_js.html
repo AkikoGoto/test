@@ -1,0 +1,10 @@
+{* MAPBoxの初期化*}
+{literal}
+
+	L.mapbox.accessToken = '{/literal}{$smarty.const.MAPBOX_ACCESS_TOKEN}{literal}';
+	var zoom           = 17;
+	map = L.mapbox.map('map', '{/literal}{$smarty.const.MAPBOX_PROJECT_ID}{literal}', {
+				keyboard : false
+				}).setView([center_latitude, center_longitude], zoom);
+ 	L.control.scale().addTo(map);
+ {/literal}

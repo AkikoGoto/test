@@ -1,0 +1,15 @@
+<h1>{$smarty.const.DRIVER_MENU}</h1>
+<p>{$smarty.const.HELLO}{$driver_last_name}&nbsp;{$driver_first_name}{$smarty.const.COMPELLATION2}</p>
+
+<div>
+	<ul class="list1">
+		<li><a href="index.php?action=driver_record_map&driver_id={$driver_id}&company_id={$company_id}">{$smarty.const.DRIVER_RECORDS_MAP}</a>		
+		<li>
+		{if $smarty.const.MODE =="CONCRETE"}
+		<a href="index.php?action=concrete/worktime&driver_id={$driver_id}&company_id={$company_id}">{$smarty.const.WORK_RECORDS}</a>
+		{else}
+		<a href="index.php?action=worktime&driver_id={$driver_id}&company_id={$company_id}">{$smarty.const.WORK_RECORDS}</a>
+		{/if}
+		<li><a href="index.php?action=/message/message_history_driver&driver_id={$driver_id}&company_id={$company_id}">{$smarty.const.MESSAGE}</a>
+	</ul>
+</div>

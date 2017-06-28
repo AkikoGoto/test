@@ -1,0 +1,32 @@
+{*ルートを地図で表示させる画面*}
+<h1>{$smarty.const.ROOT_DETAIL}</h1>
+<div>{$date}&nbsp;:&nbsp;{$driver_last_name}&nbsp;{$driver_first_name}</div>
+
+{if $data}
+	
+	<div class="">
+		総距離：<span id="root_kilo_distance_result"></span>
+	</div>
+	
+	{*Google Map本体*} {include file="google_map_wide.html"}
+	<a href="javascript:resizeToFit();">全体表示</a>
+	
+
+	{*点と線を表示　Javascript*}
+	<script type="text/javascript">
+		{literal}
+		var root_locations = {/literal}{$root_locations}{literal};
+		{/literal}
+	</script>
+	<script type="text/javascript" src="{$smarty.const.G_MAP_ROOT_JS}"></script>
+	<script type="text/javascript">
+		{literal}
+			initialize( {/literal}{$last_latitude}{literal}, {/literal}{$last_longitude}{literal});
+		{/literal}
+	</script>
+	
+{else if}
+
+	<div>{$smarty.const.TOP_NODATA}</div>
+	
+{/if}

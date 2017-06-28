@@ -1,0 +1,50 @@
+{*メッセージやり取り画面 ドライバー画面*}
+
+<h1>{$smarty.const.MESSAGE}</h1>
+
+{*複数ページへ渡る場合のリンク*}
+{foreach from=$links item="links"}
+{$links}
+{/foreach}
+
+{foreach from=$data item="data"}
+<div class = "each_message">
+	<div>
+		<div>
+			<div>
+				{$data.created}
+			</div>
+			<div>
+				<a href = "?action=/message/message_by_thread_driver&driver_id={$driver_id}&thread_id={$data.thread_id}">
+					{$data.gcm_message}
+				</a>
+				&nbsp;&nbsp;&nbsp;
+					{if $data.not_has_read==1}<span class="has_not_read">{$smarty.const.HAS_NOT_READ}</span>{/if}
+				</span>
+			</div>
+		</div>
+		<div class="message_jyusyo">
+			{$smarty.const.COMMON_JYUSYO}：
+			{if $data.address}
+				{$data.address}
+			{else}
+				{$smarty.const.COMMON_NO_INFO}
+			{/if}
+		</div>
+	</div>
+	{if $data.error_info}
+	<div class="error_info">
+		{$data.error_info}
+	</div>
+	{/if}
+	
+</div>
+{*配列が空だった場合*}
+	{foreachelse}
+	<div>
+		現在データがありません。
+	</div>
+	{/foreach}
+
+
+ 

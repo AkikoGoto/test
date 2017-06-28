@@ -1,0 +1,205 @@
+{* ドライバーのアイコンとウィンドウを表示　*}
+{literal}
+	function addMarkerAndWindow(){
+
+		// MIT-licensed code by Benjamin Becquet
+		// https://github.com/bbecquet/Leaflet.PolylineDecorator
+		L.RotatedMarker = L.Marker.extend({
+			options : {
+					angle : 0
+				},
+				_setPos : function(pos) {
+					L.Marker.prototype._setPos.call(this, pos);
+					if (L.DomUtil.TRANSFORM) {
+						// use the CSS transform rule if available
+						this._icon.style[L.DomUtil.TRANSFORM] += ' rotate(' + this.options.angle + 'deg)';
+					} else if (L.Browser.ie) {
+						// fallback for IE6, IE7, IE8
+						var rad = this.options.angle * L.LatLng.DEG_TO_RAD, costheta = Math.cos(rad), sintheta = Math.sin(rad);
+						this._icon.style.filter += ' progid:DXImageTransform.Microsoft.Matrix(sizingMethod=\'auto expand\', M11=' + costheta + ', M12=' + (-sintheta) + ', M21=' + sintheta + ', M22=' + costheta + ')';
+					}
+				}
+			});
+			
+		L.rotatedMarker = function(pos, options) {
+			return new L.RotatedMarker(pos, options);
+		};
+		
+		//各マーカー緯度経度、タイトルなどのJSON情報の配列
+		var geoJson = [];
+		myLayer = L.mapbox.featureLayer().addTo(map);
+		
+		{/literal}
+
+		{* ドライバーのアイコンが指定のものがあれば表示、なければステータスで色分け *}
+		{foreach from=$driver_locations item=driver_location key=k}
+			{literal}
+			var longitude = {/literal}{$driver_location.longitude}{literal};
+			var latitude = {/literal}{$driver_location.latitude}{literal};
+			var direction = {/literal}{if $driver_location.direction}"{$driver_location.direction}"{else}null{/if}{literal};
+			var car_number = encodeURIComponent({/literal}"{$data.$k.car_type}"{literal});
+			
+			{/literal}{if $driver_location.status==1 || $driver_location.status==4}{literal}
+		
+				var tri_icon = L.icon({
+						iconUrl : template_url+'templates/image/triangle.gif',
+						iconSize : [80, 80],
+						iconAnchor: [40, 50]
+				});
+			
+			{/literal}{elseif $driver_location.status==2 || $driver_location.status==3}{literal}
+			
+				var tri_icon = L.icon({
+						iconUrl : template_url+'templates/image/triangle_width_long.gif',
+						iconSize : [100, 70],
+						iconAnchor: [50, 40]
+				});
+			
+		{/literal}{/if}{literal}
+				
+			//進行方向のマーカー
+			if(direction !=null){
+				var tri_marker = L.rotatedMarker(new L.LatLng(latitude, longitude), {
+						icon : tri_icon
+				});
+				tri_marker.options.angle = direction;//Math.PI;
+				tri_marker.addTo(map);
+			}
+			
+			//各ドライバーの緯度経度等情報をJSON形式にする
+			var driver_json_data = 
+				{
+			    "type": "Feature",
+			    "geometry": {
+			        "type": "Point",
+			        "coordinates": [{/literal}{$driver_location.longitude}{literal}, 
+			        				{/literal}{$driver_location.latitude}{literal}]
+			    },
+			    "properties": {
+			        "title": {/literal}"{$driver_location.driver_name}"{literal},
+			        "description" :
+					{/literal}
+						{*ドライバーステータス*}
+						
+							{if $driver_location.status==1 || $driver_location.status==5}"{$working_status->action_1}"
+	
+							{elseif $driver_location.status==2}
+								{if !empty($driver_location.geographic_id) && $driver_location.geographic_id != PATROL}
+									{if $driver_location.geographic_id == TEST_DRIVE_GROUP}
+										"{$working_status->action_2}<br>{$test_all_number_control_system_url_start}"+car_number+"{$test_all_number_control_system_url_middle}"+car_number+"{$test_all_number_control_system_url_end}"
+									{else}
+										"{$working_status->action_2}<br>{$transport_all_number_control_system_url_start}"+car_number+"{$transport_all_number_control_system_url_middle}"+car_number+"{$transport_all_number_control_system_url_end}"
+									{/if}
+								{else}
+								"{$working_status->action_2}"
+								{/if}
+							{elseif $driver_location.status==3}"{$working_status->action_3}"
+							
+							{elseif $driver_location.status==4}"{$working_status->action_4}"
+							
+							{else}ステータスなし
+							{/if}{literal},
+							
+					{/literal}{if $driver_location.image_name != NULL}{literal}
+				        "icon": {
+							"iconUrl":"http://{/literal}{$driver_location.image_name}{literal}",
+							"iconSize":[30,30],
+				            "iconAnchor": [15, 25], // point of the icon which will correspond to marker's location
+				            "popupAnchor": [0, -25], // point from which the popup should open relative to the iconAnchor
+				        }
+					{/literal}{elseif $driver_location.status==1 || $driver_location.status==5}{literal}
+						"icon": {
+							"iconUrl":"http://edison.doutaikanri.com/smart_location_admin/templates/image/track_front_working_middle.gif",
+							"iconSize":[30,34],
+				            "iconAnchor": [15, 30], // point of the icon which will correspond to marker's location
+				            "popupAnchor": [0, -30], // point from which the popup should open relative to the iconAnchor
+				        }
+					{/literal}{elseif $driver_location.status==2}{literal}
+						"icon": {
+							"iconUrl":"http://edison.doutaikanri.com/smart_location_admin/templates/image/track_rightDirection_transit.gif",
+							"iconSize":[40,24],
+				            "iconAnchor": [20, 20], // point of the icon which will correspond to marker's location
+				            "popupAnchor": [0, -20], // point from which the popup should open relative to the iconAnchor
+				        }
+					{/literal}{elseif $driver_location.status==3}{literal}
+						"icon": {
+							"iconUrl":"http://edison.doutaikanri.com/smart_location_admin/templates/image/track_leftDirection_returnRunning.gif",
+							"iconSize":[40,24],
+				            "iconAnchor": [20, 20], // point of the icon which will correspond to marker's location
+				            "popupAnchor": [0, -20], // point from which the popup should open relative to the iconAnchor
+				        }
+					{/literal}{elseif $driver_location.status==4}{literal}
+						"icon": {
+							"iconUrl":"http://edison.doutaikanri.com/smart_location_admin/templates/image/track_front_break_wait_middle.gif",
+							"iconSize":[30,34],
+				            "iconAnchor": [15, 20], // point of the icon which will correspond to marker's location
+				            "popupAnchor": [0, -20], // point from which the popup should open relative to the iconAnchor
+				        }
+					{/literal}{else}{literal}
+						'marker-color' : '#000000',
+						'marker-size' : 'medium',							
+						'marker-symbol' : 'car'
+					{/literal}{/if}{literal}				        
+			    }
+			};
+			
+			geoJson.push(driver_json_data);
+			
+			{/literal}
+		{/foreach}
+		
+		{literal}
+			
+			// Set a custom icon on each marker based on feature properties.
+			myLayer.on('layeradd', function(e) {
+				var marker = e.layer;
+			    feature = marker.feature;
+			    
+			    if(marker.feature.properties.icon){
+				    marker.setIcon(L.icon(feature.properties.icon));
+				    marker.setZIndexOffset(1000);
+				}
+			    
+			});
+			markerLayer =  myLayer.setGeoJSON(geoJson);
+			
+		{/literal}
+		
+		{if $driver_locations|@count >1}
+			{literal}
+				//マーカーが一個の時は、fitBoundsが正しく動作しない
+				var bounds = markerLayer.getBounds();
+				map.fitBounds(bounds);
+			{/literal}
+		{else if}
+			{literal}
+				//マーカーが一個の時は、マーカーの場所を地図の中心にセット
+				map.setView([latitude, longitude]);
+			{/literal}
+		{/if}
+			
+		{foreach from=$driver_locations item=driver_location key=k}
+
+			{literal}
+				var company_id = {/literal}{$company_id}{literal};
+				var longitude = {/literal}{$driver_location.longitude}{literal};
+				var latitude = {/literal}{$driver_location.latitude}{literal};
+				var same_position = {/literal}{if $driver_location.same_position}"{$driver_location.same_position}"{else}null{/if}{literal};
+				var driver_name = {/literal}"{$driver_location.driver_name}"{literal};
+				
+				//同じ場所に、複数人がいる場合
+				if(same_position !=null){
+					var latlng = L.latLng(latitude, longitude);
+					var popup = L.popup()
+						.setLatLng(latlng)
+						.setContent('<div class="popup_window">'+same_position+'と'+driver_name+'が同じ場所にいます</div>')
+						.openOn(map);
+				}
+				
+			{/literal}
+	
+		{/foreach}
+
+	}
+
+			

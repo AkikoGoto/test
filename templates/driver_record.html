@@ -1,0 +1,76 @@
+{*ドライバー業務日誌*}
+<h1>{$smarty.const.DRIVER_RECORDS}：{$driver_name.last_name}&nbsp;{$driver_name.first_name}</h1>
+<p>{$smarty.const.LIMIT_DRIVER_RECORDS}</p>
+{*PCの場合、テーブルで閲覧できる*}
+{if $carrier==NULL}
+<table class="list">
+	<tr>
+		<th>{$smarty.const.DRIVER_STATUS}</th>	
+		<th>{$smarty.const.COMMON_JYUSYO}</th>	
+		<th>{$smarty.const.DRIVER_SALES}（{$smarty.const.YEN}）</th>	
+		<th>{$smarty.const.DRIVER_MEMO}</th>	
+		<th>{$smarty.const.COMMON_DATETIME}</th>	
+	</tr>
+	{foreach from=$data item="data"}	
+	<tr>
+		<td>
+			{if $data.status==1}{$working_status->action_1}
+			{elseif $data.status==2}{$working_status->action_2}
+			{elseif $data.status==3}{$working_status->action_3}
+			{elseif $data.status==4}{$working_status->action_4}
+			{elseif $data.status==5}{$smarty.const.DRIVER_OTHER}
+			{/if}
+		</td>
+		<td>
+			{$data.address}
+		</td>
+		<td>
+			{$data.sales}
+		</td>
+		<td>
+			{$data.detail}
+		</td>
+		<td>
+			{$data.created}
+		</td>
+	</tr>
+	{*データがない場合*}
+	{foreachelse}
+		<div>
+		{$smarty.const.TOP_NODATA}
+		</div>
+	{/foreach}
+</table>
+{*スマートフォン、ガラケーの場合*}
+	{else}
+    {foreach from=$data item="data"}
+     <div><b>	
+			{if $data.status==1}{$working_status->action_1}
+			{elseif $data.status==2}{$working_status->action_2}
+			{elseif $data.status==3}{$working_status->action_3}
+			{elseif $data.status==4}{$working_status->action_4}
+			{elseif $data.status==5}{$smarty.const.DRIVER_OTHER}
+			{/if}
+			</b>
+	</div>
+			{if $data.address}
+			<div>{$data.address}</div>
+			{/if}
+			{if $data.sales}
+			<div>{$smarty.const.DRIVER_SALES}:
+			{$data.sales}{$smarty.const.YEN}</div>
+			{/if}
+			{if $data.detail}
+			<div>{$data.detail}</div>
+			{/if}
+		
+	<div>
+		{$data.created}
+	</div>
+	<hr> 
+    {/foreach}
+{/if}
+	{*リンクの設定*}
+	{foreach from=$links item="links"}
+	{$links}
+	{/foreach}

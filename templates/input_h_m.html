@@ -1,0 +1,32 @@
+	 <select name="hour">
+	  {php} 
+		$this_hour=date('G');
+			for($l=1; $l<25; $l++){
+				echo "<option value=\"$l\"";
+				if($_SESSION['hour']){
+					if($l==$_SESSION['hour']){
+						 echo " selected=selected";	
+					}
+				}elseif($l==$this_hour-1){
+						 echo " selected=selected";	
+				}
+				echo ">$l</option>";
+			}
+	 {/php}		
+	 </select>時
+	 <select name="minit">
+	  {php} 
+		$this_minit=date('i');
+			for($m=1; $m<60; $m++){
+				echo "<option value=\"$m\"";				
+						if($_SESSION['minit']){
+								if($m==$_SESSION['minit']){
+									 echo "selected=selected";	
+								}
+						}elseif($m==$this_minit){
+						 		echo " selected=selected";	
+						}
+				echo ">$m</option>";
+			}
+	 {/php}		
+	 </select>分

@@ -1,0 +1,11 @@
+<table class="report_table">
+	<tr><th>障害物ID</th><th>障害物区分</th><th>緯度</th><th>経度</th><th>方角</th><th>角度誤差許容限界</th>　</tr>
+	
+	{foreach from=$csvdata item=data}
+	<tr>
+		{foreach from=$data item=dat}
+			<td>{$dat}</td>
+		{/foreach}
+	</tr>
+	{/foreach}
+</table>

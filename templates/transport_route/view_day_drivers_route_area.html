@@ -1,0 +1,90 @@
+<h1>{$smarty.const.DRIVERS_ROUTE_AREA}：{$date|substr:0:4}年{$date|substr:4:2}月{$date|substr:6:2}日</h1>
+<div align="left">
+ 	<a href="index.php?action=/transport_route/putRoute&company_id={$company_id}">
+ 		ルート新規追加
+ 	</a>　
+ 	<a href="index.php?action=transport_route/setRouteToDriver&company_id={$company_id}">
+ 		ドライバーへのルート一括設定
+ 	</a>　
+ 	<a href="index.php?action=/root/areaToDriverSetting&company_id={$company_id}">
+ 		一時的なルート及びエリアのコピー
+ 	</a>　
+ 	<a href="index.php?action=transport_route/viewRoutes&company_id={$company_id}">
+ 		ルート一覧
+ 	</a>
+ </div>
+ 
+ <form METHOD="GET" action="index.php" style="margin-top: 20px;">
+ 	<a href="index.php?action=transport_route/viewDayDriversRouteArea&company_id={$company_id}&date={$theDayBefore}">1日前</a>&nbsp;
+	<a href="index.php?action=transport_route/viewDayDriversRouteArea&company_id={$company_id}&date={$nextDay}">1日後</a>&nbsp;
+	<input type="hidden" name="action" value="transport_route/viewDayDriversRouteArea">
+	<input type="text" id="datepicker" size="16" class="input_mini" name="date" placeholder="日付を入力" value="{$date}">
+	<input type="hidden" name="company_id" value="{$company_id|escape}">
+	<button type="submit" class="btn-primary">送信</button>
+</form>
+{if $noRouteDrivers|@count != $driverRoutes|@count}
+	<table class="report_table">
+		<tr>
+			<th>ドライバー名</th>
+			<th>ルート</th>
+			<th>エリア数</th>
+			<th>所属している仮置場</th>
+			<th>{$smarty.const.DRIVER_ROUTE_INFORMATION}</th>
+			<th>削除</th>
+		</tr>
+		{foreach from=$driverRoutes item="driverRoute" key=k}
+			{if !empty($driverRoute.transport_route_drivers_id)}
+				<tr>
+					<td>
+						{$driverRoute.last_name}{$driverRoute.first_name}
+					</td>
+					<td>
+						<a href="index.php?action=transport_route/viewDriverRouteArea&company_id={$company_id}&driver_id={$driverRoute.id}&transport_route_id={$driverRoute.transport_route_id}&date={$driverRoute.date}">
+							{$driverRoute.transport_route_name}
+						</a>
+					</td>
+					<td>
+						{$driverRoute.count_navi_area}箇所
+					</td>
+					<td>
+						{if isset($destinations[$driverRoute.destination_id].destination_name)}
+							{$destinations[$driverRoute.destination_id].destination_name}
+						{/if}
+					</td>
+					<td>
+						{$driverRoute.route_driver_information}
+					</td>
+					<td>
+						<a href="index.php?action=transport_route/deleteTransportRouteDriver&transport_route_drivers_id={$driverRoute.transport_route_drivers_id}&company_id={$company_id}" {literal}onclick="return check()"{/literal}>
+							{$smarty.const.COMMON_DELETE_ICON}
+						</a>			
+					</td>
+				</tr>
+			{/if}
+		{/foreach}
+	</table>
+	{if $noRouteDrivers|@count != 0}
+		<p>以下のドライバーはルートが設定されていません</p>
+		<p>{","|implode:$noRouteDrivers}</p>
+	{/if}
+{else if $noRouteDrivers|@count != 0}
+	<p>ルートを設定されたドライバーは存在しません</p>
+{/if}
+<script src="{$smarty.const.JQUERY_UI_JS}"></script>
+<script src="{$smarty.const.DATE_PICKER_JA_JS}"></script>
+<link  rel="stylesheet" href="{$smarty.const.JQUERY_UI_CSS}">
+
+<script>
+{literal}
+$(function() {
+	var dateFormat = 'yymmdd';
+    $("#datepicker").datepicker({
+    	dateFormat: dateFormat
+    });
+  });
+
+function check(){
+	return confirm("この輸送ルートを消去して、本当によろしいですか？消去すると、元に戻りません。")
+}
+{/literal}
+</script>

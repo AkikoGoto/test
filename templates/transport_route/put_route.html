@@ -1,0 +1,261 @@
+<h1>{if $status=='EDIT'}
+	{$smarty.const.TRANSPOERT_ROUTE} {$smarty.const.EDIT_DATA}
+	{elseif $status=='EDIT_DRIVER'} {$smarty.const.EDIT_ROOT_OF_DRIVER}：{$driver_name.last_name}{$driver_name.first_name}({$title_date})
+	{else} {$smarty.const.TRANSPOERT_ROUTE} {$smarty.const.NEW_DATA} {/if}</h1>
+
+{if $hasNoCompanysLatLng}
+	<div class="red">会社の住所が正しく登録されていないため、会社の住所を地図の中心地に設定することができませんでした。</div>
+{/if}
+
+{*OSM Map本体*}
+{include file="elements/osm_mini_map.html"}
+
+<FORM METHOD="POST" action="index.php?action=/transport_route/tryPutRoute" enctype="multipart/form-data">
+
+	{if $status=='EDIT_DRIVER'}
+		<div class="item_name">
+			<font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+				{$smarty.const.SELECT_ROOT}
+		</div>
+		<div style="padding:0 0 5px">{$smarty.const.SELECT_ROOT_ON_SMARTDOUTAIKANRI}</div>
+		<select name="select_root_id">
+			{foreach from=$all_roots key=k item="all_root"}
+				<option value="{$all_root.id}" {if $transport_route_id==$k}selected{/if}>{$all_root.name}</option>
+			{/foreach}
+		</select>
+		<div class="item_name">
+			{$smarty.const.DRIVER_ROUTE_INFORMATION}
+		</div>
+		<input type="text" name="information" value="{if !empty($pre_data.information)}{$pre_data.information|escape}{elseif !empty($transport_route_drivers.information)}{$transport_route_drivers.information|escape}{/if}">
+	{else}
+		{if empty($geo_json)}
+			<div class="item_name">
+				<font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+					{$smarty.const.GEO_JSON_UPLOAD}
+			</div>
+			<div>
+
+			{if $status=='EDIT'}
+				<p>※ルートの編集をしたい場合は下記のフォームより、ファイルをアップロード(ファイルサイズは5メガ以内)</p>
+			{else}
+				<p>※ファイルサイズは5メガ以内</p>
+			{/if}
+				<input type="file" name="geo_json" />
+			  	<progress id="progressBar" value="0" max="100">
+				 </progress>
+			</div>
+			<div id ="percentageCalc"></div>
+			<div id ="file_content"></div>
+			<input type="hidden" id="geo_json" name="geo_json"/>
+		{else}
+			<input type="hidden" name="geo_json" value="{$geo_json|escape}"/>
+		{/if}
+
+		<div class="item_name">
+			<font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+				{$smarty.const.TRANSPOERT_ROUTE_NAME}
+		</div>
+		<div>
+			<input type="text" name="name" size="100"
+				maxlength="120"
+				value="{if !empty($pre_data.name)}{$pre_data.name|escape}{elseif !empty($transportRoute.name)}{$transportRoute.name}{/if}">
+		</div>
+		<div class="item_name">
+			{$smarty.const.ROUTE_INFOEMATION}
+		</div>
+		<div>
+			<input type="text" name="information" size="100"
+				maxlength="120"
+				value="{if !empty($pre_data.information)}{$pre_data.information|escape}{elseif !empty($transportRoute.information)}{$transportRoute.information}{/if}">
+		</div>
+
+		<div class="item_name">
+				{$smarty.const.CATEGORY_TEMPORARY_STORAGE}
+		</div>
+		<select name="destination_id">
+			{foreach from=$temporaryStorageDestinations item="temporaryStorageDestination"}
+				<option value="{$temporaryStorageDestination.destination_id}" {if $temporaryStorageDestination.destination_id==$transportRoute.destination_id}selected{/if}>
+					{$temporaryStorageDestination.destination_name}
+				</option>
+			{/foreach}
+		</select>
+	{/if}
+
+	<div align="center">
+		<input type=hidden name="company_id" value="{$company_id|escape}">
+		<input type=hidden name="title_date" value="{$title_date|escape}">
+		<input type=hidden name="date" value="{$date|escape}">
+		<input type=hidden name="status" value="{$status|escape}">
+		<input type=hidden name="driver_id" value="{$driver_id|escape}">
+		<input type=hidden name="transport_route_drivers_id" value="{$transport_route_drivers.id|escape}">
+		<input type=hidden name="last_name" value="{$driver_name.last_name|escape}">
+		<input type=hidden name="first_name" value="{$driver_name.first_name|escape}">
+		<input type=hidden name="id" value="{$transport_route_id|escape}">
+		<button type="submit" name="submit" value="{$smarty.const.COMMON_SUBMIT}" class="btn btn-large btn-ocher" >
+		{$smarty.const.COMMON_SUBMIT}</button>
+	</div>
+
+</FORM>
+{if empty($status)}
+	{if empty($geo_json)}
+		<script type="text/javascript">
+		{literal}
+		var center_latitude ={/literal}{$company_lat}{literal};
+		var center_longitude ={/literal}{$company_long}{literal};
+
+		function initialize(center_latitude,center_longitude) {
+
+			{/literal}
+			{*パラメーターの初期化とマップの描画は別ファイル*}
+			{include file = "js_html/initialize_mapBoxGl_js.html"}
+
+		}
+
+		</script>
+<script src="templates/js/mapbox/uploadGeoJson.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/resizeMapToLine.js" type="text/javascript"></script>
+
+	{elseif !empty($geo_json)}
+		<script type="text/javascript">
+			{literal}
+				var center_latitude ={/literal}{$company_lat}{literal};
+				var center_longitude ={/literal}{$company_long}{literal};
+
+				function initialize(center_latitude,center_longitude) {
+
+			       {/literal}
+			       {*パラメーターの初期化とマップの描画は別ファイル*}
+			       {include file = "js_html/initialize_mapBoxGl_js.html"}
+
+			       {literal}
+			       	var route = {geo_json : {/literal}{$geo_json}{literal}};
+
+			    	addRouteAndPopup(route, "transport_route", "{/literal}{$name}{literal}", "#e87272");
+
+			    	var positionDatas = route.geo_json.features[0].geometry.coordinates;
+
+			    	addLineOnStyleLoad(positionDatas, "#ff0000", "newRoute");
+
+			    	resizeMapToLine(positionDatas);
+				}
+			{/literal}
+		</script>
+	{/if}
+
+
+{elseif $status == 'EDIT'}
+
+<script type="text/javascript">
+{literal}
+var center_latitude ={/literal}{$company_lat}{literal};
+var center_longitude ={/literal}{$company_long}{literal};
+
+function initialize(center_latitude,center_longitude) {
+
+       {/literal}
+       {*パラメーターの初期化とマップの描画は別ファイル*}
+       {include file = "js_html/initialize_mapBoxGl_js.html"}
+
+       {literal}
+       	var route = {geo_json : {/literal}{$transportRoute.geo_json}{literal}};
+
+    	addRouteAndPopup(route, "transport_route", "{/literal}{$transportRoute.name}{literal}", "#e87272");
+
+    	var positionDatas = route.geo_json.features[0].geometry.coordinates;
+
+    	addLineOnStyleLoad(positionDatas, "#ff0000", "newRoute");
+
+    	resizeMapToLine(positionDatas);
+
+
+    	//ナビエリア描画
+    	{/literal}
+    	{if !empty($naviAreas)}
+	    	{foreach from=$naviAreas item="naviArea" key=k}
+	    		{literal}
+			    	var coordinates = [{/literal}{$naviArea.longitude|escape}{literal}, {/literal}{$naviArea.latitude|escape}{literal}];{/literal}
+			    	var area_name = 'エリア名称：{$naviArea.name|escape}</br>';
+			    	area_name += '半径：{$naviArea.radius|escape}m</br>';
+			    	area_name += 'メッセージ内容：{$naviArea.message|regex_replace:'/\r\n/':'</br>'}';{literal}
+			    	var radius = {/literal}{$naviArea.radius|escape} {literal};
+			    	var color = "#7bc1f3";
+			    	var area_id = "navi_area" + {/literal}{$k}{literal};
+
+			    	addAreaPolygonAndPopup(coordinates, radius, area_name, color, area_id);
+
+	    		{/literal}
+
+	    	{/foreach}
+    	{/if}
+    	{literal}
+}
+{/literal}
+</script>
+
+{else}
+<script type="text/javascript">
+{literal}
+var center_latitude ={/literal}{$company_lat}{literal};
+var center_longitude ={/literal}{$company_long}{literal};
+
+function initialize(center_latitude,center_longitude) {
+
+       {/literal}
+       {*パラメーターの初期化とマップの描画は別ファイル*}
+       {include file = "js_html/initialize_mapBoxGl_js.html"}
+
+       {foreach from=$transportRoute item="all_root" key=k}
+	       {literal}
+
+		       	var route = {geo_json : {/literal}{$all_root.geo_json}{literal}};
+
+		    	addRouteAndPopup(route, "transport_route" + {/literal}{$all_root.id}{literal}, "{/literal}{$all_root.name}{literal}", "#e87272");
+		    	var positionDatas = route.geo_json.features[0].geometry.coordinates;
+
+		    	addLineOnStyleLoad(positionDatas, "#ff0000", "newRoute" + {/literal}{$all_root.id}{literal});
+		    	resizeMapToLine(positionDatas);
+
+		    	var root_id = {/literal}{$all_root.id}{literal};
+
+	    	{/literal}
+
+        {/foreach}
+
+            //ナビエリア描画
+        	{if !empty($naviAreas)}
+    	    	{foreach from=$naviAreas item="naviArea" key=k}
+    	    		{literal}
+    			    	var coordinates = [{/literal}{$naviArea.longitude|escape}{literal}, {/literal}{$naviArea.latitude|escape}{literal}];{/literal}
+    			    	var area_name = 'エリア名称：{$naviArea.name|escape}</br>半径：{$naviArea.radius|escape}m</br>メッセージ内容：{$naviArea.message|regex_replace:'/\r\n/':'</br>'}';{literal}
+    			    	var radius = {/literal}{$naviArea.radius|escape} {literal};
+    			    	var color = "#7bc1f3";
+    			    	var area_id = "navi_area" + {/literal}{$k}{literal};
+
+    			    	addAreaPolygonAndPopup(coordinates, radius, area_name, color, area_id);
+
+    	    		{/literal}
+
+    	    	{/foreach}
+        	{/if}
+
+    	{literal}
+}
+{/literal}
+</script>
+
+{/if}
+
+<script src="templates/js/mapbox/addAreaPolygonAndPopup.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addRoute.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addPolygon.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/resizeToFit.js" type="text/javascript"></script>
+<script src="templates/js/randomColor.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addPopup.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addLine.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/focusPosition.js" type="text/javascript"></script>
+<script
+	src='https://api.mapbox.com/mapbox.js/plugins/turf/v2.0.2/turf.min.js'></script>
+<script src="templates/js/mapbox/resizeMapToLine.js"
+	type="text/javascript"></script>
+<script src="templates/js/mapbox/uploadGeoJson.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/resizeMapToLine.js" type="text/javascript"></script>

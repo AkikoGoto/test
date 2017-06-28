@@ -1,0 +1,72 @@
+{*近い営業所データを表示*}
+<h1>{$smarty.const.DRIVER_MAP}</h1>
+{*空車アイコン表示のJavascript*}
+<script type="text/javascript">
+{literal}
+var center_latitude ={/literal}{$company_lat}{literal};
+var center_longitude ={/literal}{$company_long}{literal};			
+			
+var map;
+var driver_info_consecutive_id = [];
+
+function initialize(center_latitude,center_longitude) {
+
+	{/literal}
+	{*パラメーターの初期化とマップの描画は別ファイル*}
+	{include file = "js_html/initialize_mapBoxGl_js.html"}
+
+	{* ドライバーのJSON配列を作成 *}
+	{include file = "js_html/makeDriversFeatureData.html"}
+	
+	{* 輸送ルートのJavascriptのObjectを作成 *}
+	{include file = "js_html/makeTransportRoutesData.html"}
+	
+	
+	{* 配送先のJSON配列を作成 *}
+	{include file = "js_html/makeDestinationsFeatureData.html"}
+	{literal}
+
+	
+	addCircleAndSymbolMarker(destinationDatas, "destinations", colorList ) ;
+	makeMapboxPopup('destinations');	
+	
+	addSymbolMarker(datas);
+	addImageMarker(datas);
+	makeMapboxPopup('drivers');	
+	
+	addRoutes(routes);
+	
+	resizeToFit(datas);
+					
+}
+
+</script>
+
+<script src="templates/js/mapbox/makeDestinationFeatureData.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addCircleAndSymbolMarker.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addSymbolMarker.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addImageMarker.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addPopup.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addArrow.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addRoute.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addPolygon.js" type="text/javascript"></script>
+<script src="templates/js/randomColor.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/focusPosition.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/resizeToFit.js" type="text/javascript"></script>
+<script src='https://api.mapbox.com/mapbox.js/plugins/turf/v2.0.2/turf.min.js'></script>
+
+{/literal} 
+{*OSM Map本体*} 
+{include file="osm_map.html"}
+{*複数ページへ渡る場合のリンク*} {foreach from=$links item="links"} {$links}
+{/foreach}
+<div class="under_map_list">
+<a href="javascript:resizeToFit();">全体表示</a> | 
+<a href="index.php?action=getDriverAndDestinationMap&company_id={$company_id}">配送先を合わせて表示</a> | 
+<a href="index.php?action=getDriverMap&company_id={$company_id}">配送先を消す</a>
+</div>
+
+{include file="elements/drivers_table.html"}
+
+
+

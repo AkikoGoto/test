@@ -1,0 +1,39 @@
+{*メッセージ送信確認画面*}
+<h1>{$smarty.const.COMMON_CONFIRM}</h1>
+<FORM METHOD="POST" action="index.php?action=/root/putRootDb"
+	name="profile">
+
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		{$smarty.const.DELIVER_DATE}
+	</div>
+	<div>
+		{$date|escape} <input type="hidden" name="date"
+			value="{$date|escape}">
+	</div>
+
+	<div class="item_name" >
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		{$smarty.const.COMMON_DRIVER}</div>
+	<div>
+		{$driver_name|escape} 
+	</div>
+		<input type="hidden" name="driver_id"
+			value="{$driver_id|escape}">
+
+	<div class="item_name">
+		{$smarty.const.DRIVER_OTHER}
+	</div>
+	<div>
+		{$information|escape} <input type="hidden" name="information"
+			value="{$information|escape}">
+	</div>
+
+
+	<div align="center">
+		<input type=hidden name="id" value="{$id|escape}"> 
+		<input type=hidden name="company_id" value="{$company_id|escape}"> 
+		<button class="btn btn-large btn-ocher" type="submit" name="submit">
+		{$smarty.const.COMMON_SUBMIT}</button>
+	</div>
+</form>

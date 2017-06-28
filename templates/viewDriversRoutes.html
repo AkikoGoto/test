@@ -1,0 +1,33 @@
+{*ドライバー業務日誌目次画面*}
+
+<h1>{$companyName}&nbsp;{$smarty.const.COMMON_DRIVERS_ROUTES}</h1>
+<a name="top">&nbsp;</a>
+{*複数ページへ渡る場合のリンク*}
+{foreach from=$links item="links"}
+{$links}
+{/foreach}
+<table class="middle_table report_table">
+{foreach from=$data item="data"}
+	<tr>
+		<td>
+			{$data->last_name|escape}{$data->first_name|escape}
+		</td>
+
+		{if !$is_lite}
+		<td>			
+			<a href="index.php?action=/root/viewRoots&driver_id={$data->id|escape}&company_id={$data->company_id|escape}">
+			{$smarty.const.ROOT}
+			</a>
+		</td>
+		{/if}
+	</tr>
+{*配列が空だった場合*}
+{foreachelse}
+<tr>
+	<td>
+		現在データがありません。
+	</td>
+</tr>
+{/foreach}
+</table>
+ 

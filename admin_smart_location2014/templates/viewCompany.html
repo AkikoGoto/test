@@ -1,0 +1,148 @@
+{*会社情報表示画面*}
+
+<h1>会社情報</h1>
+
+	<TABLE class="thread" border="1" id="middle_box">
+		<TBODY>
+			<tr>
+				<th width="120px">ID</th>
+				<td class="con_odd">{$id|escape} <input type=hidden name="id"
+					value="{$id|escape}">
+				</td>
+			</tr>
+
+			<tr>
+				<th width="100px">{$smarty.const.COMMON_IS_COMPANY}</th>
+				<td class="con_odd">{if $is_company==0}
+				{$smarty.const.COMMON_INDIVIDUAL} 
+					{elseif $is_company==1}
+					{$smarty.const.COMMON_CORPORATE} 
+					{else}
+					{$smarty.const.ERROR_TITLE} {/if} <input type=hidden
+					name="is_company" value="{$is_company|escape}">
+				</td>
+			</tr>
+			
+			<tr>
+				<th>{$smarty.const.COMMON_GROUP_ID}<br></th>
+				<td class="con_odd">{$company_group_id|escape} <input type=hidden
+					name="company_group_id" value="{$company_group_id|escape}">
+				</td>
+			</tr>
+			
+			<tr>
+				<th>{$smarty.const.COMMON_COMPANY}<br></th>
+				<td class="con_odd">{$company_name|escape} <input type=hidden
+					name="company_name" value="{$company_name|escape}">
+				</td>
+			</tr>
+
+			<!-- Geographic -->
+			<tr>
+				<th>{$smarty.const.COMMON_PREFECTURE}</th>
+				<td class="con_odd">{$prefecture_name|escape}</td>
+			</tr>
+			<tr>
+				<th>{$smarty.const.COMMON_CITY}</th>
+				<td class="con_odd">{$city|escape} <input type="hidden" name="city"
+					value="{$city|escape}">
+				</td>
+			</tr>
+
+			<tr>
+				<th>{$smarty.const.COMMON_WARD}</th>
+				<td class="con_odd">{$ward|escape} <input type="hidden" name="ward"
+					value="{$ward|escape}">
+				</td>
+			</tr>
+
+			<tr>
+				<th>{$smarty.const.COMMON_TOWN}</th>
+				<td class="con_odd">{$town|escape} <input type="hidden" name="town"
+					value="{$town|escape}">
+				</td>
+			</tr>
+
+			<tr>
+				<th>{$smarty.const.COMMON_ADDRESS}</th>
+				<td class="con_odd">{$address|escape} <input type="hidden"
+					name="address" value="{$address|escape}">
+				</td>
+			</tr>
+
+			<tr>
+				<th>{$smarty.const.COMMON_TEL}</th>
+				<td class="con_odd">{$contact_tel|escape} <input type="hidden" name="tel"
+					value="{$tel|escape}">
+				</td>
+			</tr>
+
+
+			<tr>
+				<th>{$smarty.const.COMMON_EMAIL}</th>
+				<td class="con_odd">{$email|escape} <input type="hidden"
+					name="email" value="{$email|escape}">
+				</td>
+			</tr>
+			
+				
+			<tr>
+				<th>{$smarty.const.WHAT_BILL}</th>
+				<td class="con_odd">
+					{if $invoice==0}
+						{$smarty.const.NO}
+					{elseif $invoice==1}
+						{$smarty.const.YES}
+					{/if}
+					<input type="hidden" name="invoice" value="{$invoice}">
+				</td>
+			</tr>		
+			
+			<tr><th>
+				iPhone台数</th>
+				<td class="con_odd">
+					{$iphone_device_number} 台
+					<input type="hidden" class="textinput" name="iphone_device_number" value="{$iphone_device_number}">
+		        	<br>  
+			</td></tr>
+			
+			<tr><th>
+			Android台数</th>
+				<td class="con_odd">
+					{$android_device_number} 台
+					<input type="hidden" class="textinput" name="android_device_number" value="{$android_device_number}">
+		        	<br>  
+				</td></tr>
+						
+			<tr>
+				<th>{$smarty.const.COMMON_CONTACT_PERSON}</th>
+				<td class="con_odd">{$contact_person_last_name|escape} {$contact_person_first_name|escape}
+					<input type="hidden" name="contact_person_last_name" value="{$contact_person_last_name|escape}">
+					<input type="hidden" name="contact_person_first_name" value="{$contact_person_first_name|escape}">
+				</td>
+			</tr>
+
+			<tr>
+				<th>{$smarty.const.COMMON_CONTACT_TEL}</th>
+				<td class="con_odd">{$mobile_tel|escape} <input type="hidden"
+					name="contact_tel" value="{$contact_tel|escape}">
+				</td>
+			</tr>
+
+			<tr>
+				<th>{$smarty.const.COMMON_PWD}</th>
+				<td class="con_odd">{$smarty.const.PWD_NO_DISPLAY}</td>
+			</tr>
+			<!-- Geographic終わり -->
+			
+				<tr><th>
+				{$smarty.const.COMMON_MESSAGE}欄</th>
+					<td class="con_odd">
+						{$remarks|escape}
+						<input type="hidden" name="remarks" value="{$remarks|escape}"> 			
+					</td></tr>
+		</TBODY>
+	</TABLE>
+
+<!-- <div id="map_canvas" style="width: 500px; height: 300px"></div>
+{$geocode_address_div} -->

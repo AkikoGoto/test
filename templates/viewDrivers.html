@@ -1,0 +1,90 @@
+{*ドライバー一覧画面*}
+
+<h1>{$companyName}&nbsp;{$smarty.const.COMMON_DRIVERS}<a name="top">&nbsp;</a></h1>
+
+{*営業所ごとのドライバー一覧画面*}
+<a href="index.php?action=viewDrivers&id={$id}" >{$smarty.const.ALL_SELECT}</a>
+{foreach from=$branchList item="branch"}
+&nbsp;&nbsp;<a href="index.php?action=viewDrivers&branch_id={$branch->geographic_id}&id={$id}" >{$branch->name|escape}</a>
+{/foreach}
+<div class="margin-top">
+{*複数ページへ渡る場合のリンク*}
+{foreach from=$links item="links"}
+{$links}&nbsp;&nbsp;
+{/foreach}
+</div>
+<table class="middle_table report_table">
+<tr>
+	<th>No</th>
+	<th>ID</th>
+	<th>名前</th>
+	<th>サブグループ</th>
+	<th>サブグループ管理者</th>
+	<th>編集</th>
+	<th>削除</th>
+</tr>
+{foreach from=$data item="data" key=k}
+<tr>
+	<th>
+		{$k+1}
+	</th>
+	<td>
+		{$data->id}
+	</td>
+	<td>
+	<a href="index.php?action=viewDriver&id={$data->id}">
+	{$data->last_name|escape}&nbsp;{$data->first_name|escape}
+	</a>
+	{if $u_id==$data->company_id}
+	{if $carrier==NULL}
+		{literal}
+			<script type="text/javascript">
+			<!--
+			function check(){
+				return confirm("このドライバーを消去して、本当によろしいですか？消去すると、元に戻りません。")
+			}
+			//-->
+			</script>	
+			{/literal}
+	{/if}
+	</td>
+	<td class="geographic_name">
+		{$data->geographic_name|escape}
+	</td>
+	<td class="show_branch_manager">
+		{if $data->is_branch_manager}
+			{$smarty.const.BRANCH_MANAGER}
+		{/if}
+	</td>
+	{if !$is_government==1}
+	<td class="edit_cell">
+		<a href="index.php?action=putDriver&driver_id={$data->id}&company_id={$id}" >{$smarty.const.EDIT_ICON}</a>
+	</td>
+	<td class="delete_cell">
+		{if $data->is_group_manager }
+			管理者は削除できません
+		{else}
+			<a href="index.php?action=deleteDriver&id={$data->id}&company_id={$id}" 
+			{literal}onclick="return check()"{/literal}>{$smarty.const.COMMON_DELETE_ICON}
+			</a>
+		{/if}
+	{/if}
+	
+	</td>
+	{/if}
+</tr>
+{*配列が空だった場合*}
+{foreachelse}
+<tr>
+<td>
+	現在データがありません。
+</td>
+</tr>
+{/foreach}
+</table>
+{*複数ページへ渡る場合のリンク*}
+{foreach from=$links item="links"}
+{$links}
+{/foreach}
+
+ 

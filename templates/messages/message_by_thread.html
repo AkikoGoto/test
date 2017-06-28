@@ -1,0 +1,133 @@
+{*メッセージやり取り画面*}
+<h1>{$smarty.const.MESSAGE}</h1>
+<div>
+	{if $is_driver}
+		<a href="index.php?action=/message/message_history_driver&driver_id={$driver_id}">
+	{else}
+		<a href="?action=/message/message_history&company_id={$id}">
+	{/if}	
+	{$smarty.const.MESSAGE_HISTORY}
+	</a>
+	{if !$is_driver}
+	|
+	<a href="?action=/message/message_form&company_id={$id}">
+	{$smarty.const.MESSAGE}{$smarty.const.COMMON_BTN_SRCH}
+	{/if}
+	</a>
+</div>
+
+
+{*複数ページへ渡る場合のリンク*}
+{foreach from=$links item="links"}
+{$links}
+{/foreach}
+
+{foreach from=$data item="data"}
+<div class = "each_message">
+	<div class="message_header">
+		<div>
+			{$smarty.const.COMMON_DATETIME}：{$data.created}&nbsp;&nbsp;&nbsp;&nbsp;
+			{if !$is_driver}
+			{$smarty.const.DRIVER_STATUS}：{$data.status}&nbsp;&nbsp;&nbsp;&nbsp;
+			{/if}
+			{if $data.has_read}
+				<span class="has_read">
+				{$smarty.const.HAS_READ}
+				</span>
+			{/if}		
+		</div>
+		<div>
+			{if $data.thread_parent =="1" && !$is_driver}
+				<b>{$smarty.const.DRIVER_NAME}</b>：
+					{foreach from=$data.driver_infos item="driver_info" name="drivers"}
+					
+						{if $driver_info->has_read}
+							<span class="has_read">
+								{$smarty.const.HAS_READ}
+							</span>&nbsp;
+						{/if}	
+					
+						{$driver_info->last_name|escape}&nbsp;{$driver_info->first_name|escape}
+							{if $smarty.foreach.drivers.last}&nbsp;&nbsp;{else},{/if}
+					{/foreach}
+
+			{/if}
+			<b>{$smarty.const.COMMON_SENDER}</b>：{$data.sender}
+			
+			
+		</div>
+
+	</div>
+	<div>
+		<div class="message_jyusyo">
+			{$smarty.const.COMMON_JYUSYO}：
+			{if $data.address}
+				{$data.address}
+			{else}
+				{$smarty.const.COMMON_NO_INFO}
+			{/if}
+			&nbsp;&nbsp;
+			{if !$is_driver}
+				<a href="index.php?action=/message/deleteMessage&id={$data.id}&company_id={$id}"  
+			{literal}onclick="return check()"{/literal}>{$smarty.const.COMMON_DELETE_ICON_MINI}</a>
+			{/if}
+			
+		</div>
+		{if $data.gcm_message=="ROGER"}
+			{$smarty.const.ROGER}
+		{else}				
+			{$data.gcm_message|nl2br}
+		{/if}
+	</div>
+	{if $data.error_info}
+	<div class="error_info">
+		{$data.error_info}
+	</div>
+	{/if}
+	
+</div>
+{*配列が空だった場合*}
+	{foreachelse}
+	<div>
+		現在データがありません。
+	</div>
+	{/foreach}
+
+<!-- ここから返信フォーム -->
+{if !$is_driver}
+	<div class="line"></div>
+	<form method="post" action="index.php?action=/message/tryMessage&company_id={$id}">
+	<div class="item_name"><font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		{$smarty.const.COMMON_REPLY}　{$smarty.const.MESSAGE_MAX}{$smarty.const.CHAR_LIMIT}</div>
+	<textarea name="gcm_message" cols=40 rows=4></textarea>
+		{foreach from=$first_data.driver_infos item="driver_info"}
+			<div>
+				<input type="checkbox" name="driver_id[]" value="{$driver_info->id}" id="{$driver_info->id}" checked> 
+				<label for="{$driver_info->id}">
+					{$driver_info->last_name|escape}{$driver_info->first_name|escape}</label>
+			</div>
+		{/foreach}
+	<input type="hidden" name="company_id" value="{$id|escape}">
+	<input type="hidden" name="thread_id" value="{$data.thread_id}">
+	
+	<div align="center">
+	<button value="{$smarty.const.COMMON_SUBMIT}" type="submit" class="btn btn-large btn-ocher">{$smarty.const.COMMON_SUBMIT}</button>
+	</div>
+	</div>
+	</form>
+{/if}
+		
+<!-- 返信フォームここまで -->
+
+
+		{literal}
+			<script type="text/javascript">
+			<!--
+			function check(){
+				return confirm("この記録を消去して、本当によろしいですか？消去すると、元に戻りません。")
+			}
+			//-->
+			</script>	
+		{/literal}
+
+ 

@@ -1,0 +1,106 @@
+{*ルート詳細編集　確認画面*}
+<h1>{$smarty.const.COMMON_CONFIRM}</h1>
+<FORM METHOD="POST" action="index.php?action=/root_detail/putRootDetailDb"
+	name="profile">
+	
+	{foreach from=$datas key=k item="data"}
+		<div class="orange_button">
+			{$k+1}
+		</div>
+		<table class="report_table" id={$k}>
+		<tr>
+			<th width="90px">
+				{$smarty.const.COMMON_ID}
+			</th>
+			<th width="350px">
+				<font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+				{$smarty.const.DESTINATION_NAME}
+			</th>
+			<th>
+				<font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+				{$smarty.const.COMMON_JYUSYO}
+			</th>
+		</tr>
+		<tr>
+			<td>
+			{$data.id|escape} <input type=hidden name="id[{$k}]"
+					value="{$data.id|escape}">
+			</td>
+			<td>
+				{$data.destination_name}
+				<input type="hidden" name="destination_name[{$k}]" size="40" maxlength="100" 
+				id="destination_name"
+				value="{$data.destination_name|escape}{$pre_data.destination_name|escape}">
+			</td>
+			<td>
+					<div>{$smarty.const.CHANGE_ADDRESS_MANUALLY}</div>
+		 			<span id="address" style="display:none">{$data.address}</span>
+			<!-- 	<input type="hidden" name="address[{$k}]" 
+					value="{$data.address|escape}"
+					id="form_address"
+					 >  -->
+				<input type="text" name="address[{$k}]" id="address_input" size="60"
+			value="{$data.address|escape}" class="address_input">	 
+			</td>
+		</tr>
+		<tr>
+			<th>
+				&nbsp;
+			</th>
+			<th>
+				{$smarty.const.COMMON_LAT}
+			</th>
+			<th>
+				{$smarty.const.COMMON_LONG}
+			</th>
+		</tr>
+		<tr>
+			<td>
+				&nbsp;
+			</td>
+			<td>
+				<span id="lat">{$data.latitude|escape}</span>
+				<input id="latitude" type="hidden" name="latitude[{$k}]" value="{$data.latitude|escape}">
+			</td>
+			<td>
+				<span id="lng">{$data.longitude|escape}</span>
+				<input id="longitude" type="hidden" name="longitude[{$k}]" value="{$data.longitude|escape}">
+			</td>
+		</tr>
+		<tr>
+			<th>
+				{$smarty.const.DELIVER_TIME}
+			</th>
+			<th colspan="2">
+				{$smarty.const.COMMON_BIKOU}
+			</th>
+		</tr>
+		<tr>
+			<td>
+				{$data.hour}{$smarty.const.COMMON_HOUR}&nbsp;
+				{$data.minit}{$smarty.const.COMMON_MINIT}
+				<input type="hidden" name="hour[{$k}]" 
+					value="{$data.hour|escape}" >
+				<input type="hidden" name="minit[{$k}]" 
+					value="{$data.minit|escape}" >
+			</td>
+			<td colspan="2">
+				{$data.information}
+				<input type="hidden" name="information[{$k}]" 
+					value="{$data.information|escape}">
+			</td>
+		</tr>
+	</table>
+	
+	{/foreach}
+
+	<div align="center">
+		<input type=hidden name="company_id" value="{$company_id|escape}"> 
+		<input type=hidden name="root_id" value="{$root_id|escape}">
+		<button class="btn btn-large btn-ocher" type="submit" value="{$smarty.const.COMMON_SUBMIT}">
+		{$smarty.const.COMMON_SUBMIT}</button>
+		
+	</div>
+</form>
+<div align="center">{$smarty.const.MARKER_CHANGE}</div>
+<div id="map_canvas" style="width:100%; height: 700px"></div>

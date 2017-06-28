@@ -1,0 +1,358 @@
+{*ドライバー業務日誌*}
+<h1>{$smarty.const.DRIVER_RECORDS_MAP}：{$driver_name.last_name}&nbsp;{$driver_name.first_name}</h1>
+<p>
+	<a
+		href="index.php?action=worktime&driver_id={$driver_id}&company_id={$company_id}">{$smarty.const.WORK_RECORDS}</a>
+</p>
+<p>{if $record_no}最新{$record_no}件の表示をしています。{/if} {if
+	$time_from}{$time_from} から {$time_to}の表示をしています。{/if}</p>
+
+{*PCの場合、テーブルで閲覧できる*} {if $carrier==NULL}
+<table class="light_gray_table">
+	<!-- <tr>
+		<th>{$smarty.const.NUMBER_REFINE}</th>
+		<td>
+			<form method="get" action="index.php">
+				<select name="record_no">
+					<option value="10" {if $record_no==10}selected{/if}>10</option>
+					<option value="50" {if $record_no==50}selected{/if}>50</option>
+					<option value="100" {if $record_no==100}selected{/if}>100</option>
+					<option value="500" {if $record_no==500}selected{/if}>500</option>
+					<option value="1000" {if $record_no==1000}selected{/if}>1000</option>
+				</select>件表示する <input type="hidden" name="driver_id"
+					value={$driver_id}> <input type="hidden" name="company_id"
+					value={$company_id}> <input type="hidden" name="action"
+					value="driver_record_map"> <input type="submit" value="送信する">
+			</form>
+		</td>
+	</tr> -->
+	<tr>
+		<th>{$smarty.const.REFINE}</th>
+		<td>
+			<div class="float">
+				<form method="get" action="index.php">
+					{include file="elements/select_three_hours.html"} <input
+						type="hidden" name="driver_id" value={$driver_id}> <input
+						type="hidden" name="company_id" value={$company_id}> <input
+						type="hidden" name="action" value="driver_record_map"> <input
+						type="submit" value="3時間以内">
+				</form>
+			</div>
+			<div class="float">
+				<form method="get" action="index.php">
+					{include file="elements/select_today.html"} <input type="hidden"
+						name="driver_id" value={$driver_id}> <input type="hidden"
+						name="company_id" value={$company_id}> <input type="hidden"
+						name="action" value="driver_record_map"> <input type="submit"
+						value="今日">
+				</form>
+			</div>
+			<div class="float">
+				<form method="get" action="index.php">
+					{include file="elements/select_yesterday.html"} <input
+						type="hidden" name="driver_id" value={$driver_id}> <input
+						type="hidden" name="company_id" value={$company_id}> <input
+						type="hidden" name="action" value="driver_record_map"> <input
+						type="submit" value="昨日">
+				</form>
+			</div>
+			<div class="clear_both" style="height: 5px;"></div>
+			<div>
+				<form method="get" action="index.php">
+
+					{include file="select_y_m_d_h_m.html"} <input type="hidden"
+						name="driver_id" value={$driver_id}> <input type="hidden"
+						name="company_id" value={$company_id}> <input type="hidden"
+						name="action" value="driver_record_map"> <input type="submit"
+						value="送信する">
+				</form>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<th>{$smarty.const.CSV_REPORT}</th>
+		<td>
+			<form method="get" action="index.php">
+				{include file="select_y_m_d_h_m.html"} <input type="hidden"
+					name="driver_id" value={$driver_id}> <input type="hidden"
+					name="company_id" value={$company_id}> <input type="hidden"
+					name="action" value="driver_record_csv"> <input type="submit"
+					value="送信する">
+			</form>
+		</td>
+	</tr>
+	<tr>
+		<th>GeoJSON</th>
+		<td>
+			<form method="get" action="index.php">
+				{include file="select_y_m_d_h_m.html"} <input type="hidden"
+					name="driver_id" value={$driver_id}> <input type="hidden"
+					name="company_id" value={$company_id}> <input type="hidden"
+					name="action" value="driver/driver_record_geojson"> <input type="submit"
+					value="ダウンロード">
+			</form>
+		</td>
+	</tr>
+	<tr>
+		<th>輸送ルート</th>
+		<td>
+			<form method="post" action="index.php?action=/transport_route/putRoute&company_id={$company_id}&driver_id={$driver_id}">
+				{include file="select_y_m_d_h_m.html"} <input type="hidden"
+					name="driver_id" value={$driver_id}> <input type="hidden"
+					name="company_id" value={$company_id}><input type="submit" name="transport"
+					value="輸送ルート新規作成">
+			</form>
+		</td>
+	</tr>
+</table>
+{*Smartphoneの場合*} {else}
+<!-- <table class="light_gray_table"> -->
+<h2>{$smarty.const.NUMBER_REFINE}</h2>
+<form method="get" action="index.php">
+	<select name="record_no">
+		<option value="10" {if $record_no==10}selected{/if}>10</option>
+		<option value="50" {if $record_no==50}selected{/if}>50</option>
+		<option value="100" {if $record_no==100}selected{/if}>100</option>
+		<option value="500" {if $record_no==500}selected{/if}>500</option>
+		<option value="1000" {if $record_no==1000}selected{/if}>1000</option>
+	</select>件表示する <input type="hidden" name="driver_id" value={$driver_id}>
+	<input type="hidden" name="company_id" value={$company_id}> <input
+		type="hidden" name="action" value="driver_record_map"> <input
+		type="submit" value="送信する">
+</form>
+<h2>{$smarty.const.REFINE}</h2>
+<form method="get" action="index.php">
+	{include file="select_y_m_d_h_m.html"} <input type="hidden"
+		name="driver_id" value={$driver_id}> <input type="hidden"
+		name="company_id" value={$company_id}> <input type="hidden"
+		name="action" value="driver_record_map"> <input type="submit"
+		value="送信する">
+</form>
+<h2>{$smarty.const.CSV_REPORT}</h2>
+<form method="get" action="index.php">
+	{include file="select_y_m_d_h_m.html"} <input type="hidden"
+		name="driver_id" value={$driver_id}> <input type="hidden"
+		name="company_id" value={$company_id}> <input type="hidden"
+		name="action" value="driver_record_csv"> <input type="submit"
+		value="送信する">
+</form>
+
+{/if} {if $data} {*点と線を表示 Javascript*}
+<script type="text/javascript">
+{literal}
+/*****************************
+*	地図の設定
+******************************/
+var map;
+//中心の緯度経度
+var center_latitude={/literal}{$center_latitude}{literal};
+var center_longitude={/literal}{$center_longitude}{literal};
+
+
+/*****************************
+*	アニメーション用
+******************************/
+// 緯度経度の配列
+var animationLocations = new Array();
+var animatedPolyline;
+
+
+var size;
+var offset;
+
+var driver_info = [];
+var driver_info_consecutive_id = [];
+
+var datas;
+var routes;
+
+
+// 地図の初期化
+function initialize(center_latitude, center_longitude) {
+
+	{/literal}
+	    {*パラメーターの初期化とマップの描画は別ファイル*}
+	    {include file = "js_html/initialize_mapBoxGl_js.html"}
+
+		{* ドライバーデータのJSON配列を作成 *}
+		{include file = "js_html/makeDriverRecordsFeatureData.html"}
+
+
+		{if $transport_routes.0.geo_json != NULL}
+			{* ルートデータのJavascript配列を作成 *}
+			{include file = "js_html/makeTransportRoutesData.html"}
+		{/if}
+	{literal}
+
+	datas = makeDriverRecordsFeatureData();
+
+	resizeToFit(datas);
+
+	makePositionAndLine(datas);
+
+	var colorList = [
+        ["1", "#cf714a"],
+        ["2", "#ff00ff"],
+        ["3", "#4169e1"],
+        ["4", "#009944"],
+        ["5", "#cf714a"],
+       ];
+
+
+	addCirleMarker(datas, 'driver_records', colorList);
+	makeMapboxPopup('driver_records');
+	addRoutes(routes);
+	
+	//ナビエリア描画
+	{/literal}{if !empty($naviAreas)}{literal}
+		var unique_id = 0
+		{/literal}{foreach from=$naviAreas item="routeNaviAreas" key=k}{literal}
+			var color = randomColor({luminosity: 'bright'});
+			{/literal}{foreach from=$routeNaviAreas item="routeNaviArea" key=k2}{literal}
+				var coordinates = [{/literal}{$routeNaviArea.longitude|escape}{literal}, {/literal}{$routeNaviArea.latitude|escape}{literal}];{/literal}
+				var area_name = 'エリア名称：{$routeNaviArea.name|escape}</br>';
+				area_name += '半径：{$routeNaviArea.radius|escape}m</br>';
+				area_name += 'メッセージ内容：{$routeNaviArea.message|regex_replace:"/\r\n/":"</br>"}</br>';
+				
+				{literal}
+				var radius = {/literal}{$routeNaviArea.radius|escape} {literal};
+				unique_id++;
+				var area_id = "navi_area" + unique_id;
+			
+				addAreaPolygonAndPopup(coordinates, radius, area_name, color, area_id);
+			
+			{/literal}{/foreach}{literal}
+		{/literal}{/foreach}{literal}
+	{/literal}{/if}{literal}
+}
+{/literal}
+</script>
+
+<!-- 下記3つはルートポリゴン表示デモのために追加 -->
+<script src='https://api.mapbox.com/mapbox.js/plugins/turf/v2.0.2/turf.min.js'></script>
+<script src="templates/js/mapbox/addRoute.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addPolygon.js" type="text/javascript"></script>
+
+<script src="templates/js/mapbox/makePositionAndLine.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addLine.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addCircleMarker.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addPopup.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/animateMarker.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/focusPosition.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/statusToColor.js" type="text/javascript"></script>
+<script src="templates/js/randomColor.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/resizeToFit.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addAreaPolygonAndPopup.js" type="text/javascript"></script>
+
+
+<a name="map"></a>
+{*OSM Map本体*} {include file="osm_map.html"}
+<div
+	class="under_map_list">
+	<font color="#cf714a">{$smarty.const.RECTANGLE}</font>{$smarty.const.ACTION_1}&nbsp;
+	<font color="#ff00ff">{$smarty.const.RECTANGLE}</font>{$working_status->action_2}&nbsp;
+	<font color="#4169e1">{$smarty.const.RECTANGLE}</font>{$working_status->action_3}&nbsp;
+	<font color="#009944">{$smarty.const.RECTANGLE}</font>{$working_status->action_4}&nbsp;
+	<!-- <font color="#0e97f8">{$smarty.const.RECTANGLE}</font>{$smarty.const.DRIVER_OTHER} -->
+	<a href="javascript:resizeToFit();">全体表示</a>
+</div>
+
+{if $is_ban_editing == 0}
+<div align="left">
+	<a
+		href="index.php?action=driver_record_map_add&driver_id={$driver_id}&company_id={$company_id}"><img
+		src="templates/image/bt_add.png" alt="乗車記録の追加"></a> <a href="#map"
+		onclick="startRouteAnimation();"><img
+		src="templates/image/bt_play.png" alt="開始"></a> <a href="#map"
+		onclick="stopRouteAnimation();"><img src="templates/image/bt_stop.png"
+		alt="終了"></a>
+</div>
+{/if} {*複数ページへ渡る場合のリンク*} {foreach from=$links item="links"} {$links}
+{/foreach} {*PCの場合、テーブルで閲覧できる*} {if $carrier==NULL}
+<table class="report_table">
+	<tr>
+		<th>{$smarty.const.DRIVER_STATUS}</th>
+		<th>{$smarty.const.COMMON_JYUSYO}</th>
+		<th>{$smarty.const.SPEED}</th>
+		<th>{$smarty.const.START}</th>
+		<th>{$smarty.const.END}</th>
+
+		<th>{$smarty.const.COMMON_DATETIME}</th>
+		<th>{$smarty.const.COMMON_MAP}&nbsp;/&nbsp;{$smarty.const.EDIT}&nbsp;/&nbsp;{$smarty.const.DELETE}</th>
+	</tr>
+
+	{foreach from=$data item="data"}
+	<tr>
+		<td>{if $data.status==1 || $data.status==5}{$smarty.const.ACTION_1} {elseif
+			$data.status==2}{$working_status->action_2} {elseif
+			$data.status==3}{$working_status->action_3} {elseif
+			$data.status==4}{$working_status->action_4} {/if}</td>
+		<td>{$data.address}</td>
+		<td>{$data.speed}</td>
+		<td>{if $data.start != 0}{$smarty.const.CIRCLE}{/if}</td>
+		<td>{if $data.end != 0}{$smarty.const.CIRCLE}{/if}</td>
+		<td>{$data.created}</td>
+		<td><a href="#map" onclick="focusPosition({$data.id})"><img
+				src="templates/image/marker_icon.png" alt="地図上の場所"></a>
+				{if $is_ban_editing == 0 || $u_id ||$is_branch_manager}
+						 &nbsp; <a
+					href="index.php?action=driver_record_map_edit&id={$data.id}&driver_id={$driver_id}&company_id={$company_id}">
+						{$smarty.const.EDIT_ICON}</a> &nbsp; {if $carrier==NULL || $carrier
+					== 'Android'|| $carrier =='iPhone'} {literal} <script
+						type="text/javascript">
+					<!--
+					function check(){
+						return confirm("この記録を消去して、本当によろしいですか？消去すると、元に戻りません。")
+					}
+					//-->
+					</script> {/literal} {/if} <a
+					href="index.php?action=driver_record_map_delete&id={$data.id}&driver_id={$driver_id}&company_id={$company_id}"
+					{literal}onclick="return check()"{/literal}>{$smarty.const.COMMON_DELETE_ICON}</a>
+			{/if}
+		</td>
+	</tr>
+	{*データがない場合*} {foreachelse}
+	<div>{$smarty.const.TOP_NODATA}</div>
+	{/foreach}
+</table>
+{*スマートフォン、ガラケーの場合*} {else} {foreach from=$data item="data"}
+<div>
+	<b> {if $data.status==1 || $data.status==5}{$smarty.const.ACTION_1} {elseif
+		$data.status==2}{$working_status->action_2} {elseif
+		$data.status==3}{$working_status->action_3} {elseif
+		$data.status==4}{$working_status->action_4}{/if} </b>
+</div>
+{if $data.address}
+<div>{$data.address}</div>
+{/if} {if $data.sales}
+<div>{$smarty.const.DRIVER_SALES}: {$data.sales}{$smarty.const.YEN}</div>
+{/if} {if $data.detail}
+<div>{$data.detail}</div>
+{/if} {if $data.speed}
+<div>{$data.speed} km</div>
+{/if} {if $data.start != 0}
+<div class="green">{$smarty.const.START}</div>
+{/if} {if $data.end != 0}
+<div class="green">{$smarty.const.END}</div>
+{/if} {if $is_ban_editing == 0}
+<div>
+	<a href="#map" onclick="focusPosition({$data.id})">{$smarty.const.COMMON_MAP}</a>
+	| <a
+		href="index.php?action=driver_record_map_edit&id={$data.id}&driver_id={$driver_id}&company_id={$company_id}">
+		{$smarty.const.EDIT} </a>| <a
+		href="index.php?action=driver_record_map_delete&id={$data.id}&driver_id={$driver_id}&company_id={$company_id}"
+		{literal}onclick="return check()"{/literal}>{$smarty.const.COMMON_DELETE}</a>
+</div>
+{/if}
+
+<div>{$data.created}</div>
+<hr>
+{/foreach} {/if} {*リンクの設定*} {foreach from=$links item="links"} {$links}
+{/foreach} {else if}
+<div>{$smarty.const.TOP_NODATA}</div>
+{if $is_ban_editing == 0}
+<div align="left">
+	<a
+		href="index.php?action=driver_record_map_add&driver_id={$driver_id}&company_id={$company_id}">乗車記録の追加はこちらから</a>
+</div>
+{/if} {/if}

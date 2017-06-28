@@ -1,0 +1,116 @@
+{*トップ表示画面*}
+<!-- 
+<h1>会社情報検索</h1>
+<div>会社IDを入力してください</div>
+<form METHOD="POST" action="index.php?action=searchByCompany">
+ <input type="text" name="company_id">
+ <input type="submit" name="submit" value="{$smarty.const.COMMON_SUBMIT}">
+</form>
+ -->
+
+<h1>新着データ一覧</h1>
+<!-- <div><a href="index.php?action=putin">新規にデータを追加する</a></div> -->
+<div><span style="font-weight:bold;">請求書払いの契約している会社　台数状況</span></div>
+
+{*複数ページへ渡る場合のリンク*}
+{foreach from=$links item="links"}
+{$links}
+{/foreach}
+<table border="1" class="thread">
+<tr>
+<!-- <td width="25px">ID</td> -->
+<td width="30%">{$smarty.const.COMMON_COMPANY}</td>
+<td>iPhone台数</td>
+<td>Android台数</td>
+<td>実際のドライバー数</td>
+<td>契約開始日</td>
+<td>最新ドライバーステータス更新</td>
+</tr>
+{foreach from=$data item="data"}
+
+<tr>
+
+{*各項目はescapeでサニタイズ*}
+<!-- <td class="con_odd">{$data->id|escape}</td> -->
+<td class="con_even">{$data.company_name|escape}</td>
+<td class="con_odd">
+	{if $data.iphone_device_number}
+		{$data.iphone_device_number|escape} 台
+	{else}
+		0
+	{/if}
+</td>
+<td>
+	{if $data.android_device_number}
+		{$data.android_device_number|escape} 台
+	{else}
+		0
+	{/if}
+</td>
+<td class="con_odd">
+	{if ($data.driver_number > $data.drivers_number) || ($data.driver_number == $data.drivers_number) || $data.driver_number==0 } 
+		{$data.drivers_number|escape}
+	{else}
+		<font color="red">{$data->drivers_number|escape}</font>
+	{/if}
+</td>
+<td >{$data.created|escape}</td>
+<td >{$data.last_driver_status_created|escape}</td>
+<!-- <td class="con_odd">{$data->updated|escape}　</td> 
+<td>
+{*データ削除時のメッセージ*}
+{literal}
+<script type="text/javascript">
+<!--
+function check(){
+	return confirm("このデータを削除して、本当によろしいですか？削除すると、元に戻すことはできません。")
+}
+//-->
+<!-- 
+</script>	
+{/literal}
+{if $from_web==NULL}
+
+<FORM METHOD="POST" action="index.php?action=deleteData&id={$data->id}&from_web={$from_web}" >
+<input type="submit" value="削除"
+{literal}onclick="return check()"{/literal}
+>
+</FORM>
+<FORM METHOD="POST" action="index.php?action=putin&id={$data->id}" >
+<input type="submit" value="編集">
+</FORM>
+
+<FORM METHOD="POST" action="index.php?action=viewDrivers&id={$data->id}" >
+<input type="submit" value="ドライバー情報閲覧">
+</FORM>
+
+<FORM METHOD="POST" action="index.php?action=viewBranches&id={$data->id}" >
+<input type="submit" value="営業所情報閲覧">
+</FORM>
+<FORM METHOD="POST" action="index.php?action=putBranch&company_id={$data->id}">
+<input type="submit" value="営業所情報追加">
+</FORM>
+{/if}
+{if $from_web==1}
+<FORM METHOD="POST" action="index.php?action=putin&id={$data->id}&from_web={$from_web}" >
+<input type="submit" value="仮登録情報承認">
+</FORM>
+<FORM METHOD="POST" action="index.php?action=deleteData&id={$data->id}&from_web={$from_web}" >
+<input type="submit" value="削除"
+{literal}onclick="return check()"{/literal}
+>
+</FORM>
+{/if}
+
+</td>
+-->
+</tr>
+{*配列が空だった場合*}
+{foreachelse}
+<tr>
+<td colspan="10">
+現在記事がありません。
+</td>
+</tr>
+{/foreach}
+</table>

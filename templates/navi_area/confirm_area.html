@@ -1,0 +1,131 @@
+<h1>{$smarty.const.NAVI_AREA}
+	{if empty($navi_area_id)}
+		{$smarty.const.CONFIRM_NEW_REGISTER}
+	{else}
+		{$smarty.const.CONFIRM_DISPLAY}
+	{/if}
+</h1>
+
+{if $hasNoCompanysLatLng}
+<div class="red">会社の住所が正しく登録されていないため、会社の住所を地図の中心地に設定することができませんでした。</div>
+{/if}
+
+{*OSM Map本体*} {include file="elements/osm_mini_map.html"}
+
+<FORM METHOD="POST" action="index.php?action={$target}" name="profile">
+	<div class="item_name">
+		<font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$smarty.const.NAVI_AREA_NAME}</b>
+	</div>
+	<div>
+		{$name|escape} <input type=hidden name="name" value="{$name|escape}">
+	</div>
+
+	<div class="item_name">
+		<font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$smarty.const.RADIUS_FROM_CENTER}<br></b>
+	</div>
+	<div>
+		 半径 {$radius|escape} m<input type=hidden name="radius"
+			value="{$radius|escape}">
+	</div>
+
+	<div class="item_name">
+		<b>{$smarty.const.NAVI_MESSAGE}<br></b>
+	</div>
+	<div>
+		{$navi_message|escape} <input type=hidden name="navi_message"
+			value="{$navi_message|escape}">
+	</div>
+
+	<div class="item_name">
+		<b>{$smarty.const.LATITUDE}<br></b>
+	</div>
+	<div>
+		{$latitude|escape} <input type=hidden name="latitude"
+			value="{$latitude|escape}">
+	</div>
+
+	<div class="item_name">
+		<b>{$smarty.const.LONGITUDE}<br></b>
+	</div>
+	<div>
+		{$longitude|escape} <input type=hidden name="longitude"
+			value="{$longitude|escape}">
+	</div>
+
+	<div align="center">
+		<input type="hidden" name="transport_route_id" value="{$transport_route_id}">
+		<input type="hidden" name="company_id" value="{$company_id|escape}">
+		<input type="hidden" name="navi_area_id" value="{$navi_area_id|escape}">
+		<button class="btn btn-large btn-ocher" type="submit"value="{$smarty.const.COMMON_SUBMIT}">
+			{$smarty.const.COMMON_SUBMIT}
+		</button>
+	</div>
+
+</FORM>
+
+<script type="text/javascript">
+{literal}
+
+function initialize(center_latitude,center_longitude) {
+
+	{/literal}
+	{*パラメーターの初期化とマップの描画は別ファイル*}
+	{include file = "js_html/initialize_mapBoxGl_js.html"}
+
+	{if $geo_json != null}
+    	{literal}
+
+    	var route = {geo_json : {/literal}{$geo_json}{literal}};
+
+	    addRouteAndPopup(route, "transport_route", "{/literal}{$name}{literal}", "#e87272");
+
+	    var positionDatas = route.geo_json.features[0].geometry.coordinates;
+
+	    addLineOnStyleLoad(positionDatas, "#ff0000", "newRoute");
+
+	    resizeMapToLine(positionDatas);
+
+		{/literal}
+	{/if}
+	{literal}
+
+	//ナビエリア描画
+	{/literal}{foreach from=$naviAreas item="naviArea" key=k}
+	{if $naviArea.id != $navi_area_id}{literal}
+		var coordinates = [{/literal}{$naviArea.longitude|escape}{literal}, {/literal}{$naviArea.latitude|escape}{literal}];
+		var area_name = "{/literal}{$naviArea.name|escape}{literal}";
+		var radius = {/literal}{$naviArea.radius|escape} {literal};
+		var color = "#7bc1f3";
+		var area_id = "navi_area" + {/literal}{$k}{literal};
+	addAreaPolygonAndPopup(coordinates, radius, area_name, color, area_id);
+	{/literal}{/if}
+	{/foreach}{literal}
+
+	var coordinates = [{/literal}{$longitude|escape}{literal}, {/literal}{$latitude|escape}{literal}];
+	var area_name = "{/literal}{$name|escape}{literal}";
+	var radius = {/literal}{$radius|escape} {literal};
+	var color = "#7bc1f3";
+	var area_id = "navi_area00";
+
+	addForcusMarkerAndWindow(coordinates);
+
+	addAreaPolygonAndPopup(coordinates, radius, area_name, color, area_id);
+
+
+}
+{/literal}
+</script>
+<script src="templates/js/mapbox/addAreaPolygonAndPopup.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addRoute.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addPolygon.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/resizeToFit.js" type="text/javascript"></script>
+<script src="templates/js/randomColor.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addPopup.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addLine.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/focusPosition.js" type="text/javascript"></script>
+<script
+	src='https://api.mapbox.com/mapbox.js/plugins/turf/v2.0.2/turf.min.js'></script>
+<script src="templates/js/mapbox/resizeMapToLine.js"
+	type="text/javascript"></script>

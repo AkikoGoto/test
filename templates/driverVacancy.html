@@ -1,0 +1,20 @@
+{*ドライバーステータス登録画面*}
+
+<div>緯度：{$lat}</div>
+<div>経度：{$long}</div>
+	<div >あなたのステータスが
+	{if $status==1}空車
+	{elseif $status==2}乗車
+	{elseif $status==3}休み
+	{elseif $status==4}予約
+	{elseif $status==5}その他
+	{/if}になりました。</div>
+	{if $address !==NULL}
+		<div>
+			現在地：{$address}
+		</div>
+	{/if}
+	<div><a href="index.php?action=driver_status">メニューへ戻る</a>
+
+	{*Google Map*}
+		{include file="google_map.html"}	

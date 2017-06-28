@@ -1,0 +1,63 @@
+{*ルート、エリア一覧*}
+<h1>ドライバーへのルート一括設定：2017年4月24日</h1>
+<div class="div_list">
+<div>
+	<!-- <form method="get" action="index.php">
+			<input type="text" name="query" value="{$query}" size=20>
+			<input type="hidden" name="company_id" value={$company_id}>
+			<input type="hidden" name="action" value="/destination/viewDestinations">
+			<input type="submit" value="検索">
+	</form> -->
+	</div>
+	{if $data}
+	{*複数ページへ渡る場合のリンク*}
+	{foreach from=$links item="links"}
+		{$links}
+	{/foreach}
+	 {*PCの場合、テーブルで閲覧できる*}
+
+</div>
+<table class="report_table">
+	<tr>
+		<th>ドライバー</th>
+		<th>Aルート</th>
+		<th>Bルート</th>
+		<th>Cルート</th>
+	</tr>
+
+	<tr>
+		<td>齊藤公一</td>
+		<td><input type="radio" value="1" name="area[0]" checked></td>
+		<td><input type="radio" value="2" name="area[0]"></td>
+		<td><input type="radio" value="3" name="area[0]"></td>
+	</tr>
+	<tr>
+		<td>田中正彦</td>
+		<td><input type="radio" value="1" name="area[1]"></td>
+		<td><input type="radio" value="2" name="area[1]" checked></td>
+		<td><input type="radio" value="3" name="area[1]"></td>
+	</tr>
+	<tr>
+		<td>鈴木一郎</td>
+		<td><input type="radio" value="1" name="area[2]" checked></td>
+		<td><input type="radio" value="2" name="area[2]"></td>
+		<td><input type="radio" value="3" name="area[2]"></td>
+	</tr>
+	<tr>
+		<td>佐々木誠</td>
+		<td><input type="radio" value="1" name="area[3]"></td>
+		<td><input type="radio" value="2" name="area[3]"></td>
+		<td><input type="radio" value="3" name="area[3]"></td>
+	</tr>
+</table>
+
+	<div>
+		<input type=hidden name="company_id" value="{$company_id|escape}">
+		<button type="submit" name="submit" value="{$smarty.const.COMMON_SUBMIT}" class="btn btn-large btn-ocher" >
+		{$smarty.const.COMMON_SUBMIT}</button>
+	</div>
+
+{else if}
+<div>{$smarty.const.TOP_NODATA}</div>
+<div align="left"><a href="index.php?action=/destination/putDestination&company_id={$company_id}">配送先の追加はこちらから</a></div>
+{/if}

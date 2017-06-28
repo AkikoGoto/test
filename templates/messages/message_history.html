@@ -1,0 +1,54 @@
+{*メッセージやり取り画面 管理者画面*}
+
+<h1>{$smarty.const.MESSAGE_HISTORY}</h1>
+<div>
+	<a href="?action=/message/message_form&company_id={$id}">
+	{$smarty.const.MESSAGE}{$smarty.const.COMMON_BTN_SRCH}
+	</a>
+</div>
+
+
+{*複数ページへ渡る場合のリンク*}
+{foreach from=$links item="links"}
+{$links}
+{/foreach}
+
+{foreach from=$data item="data"}
+<div class = "each_message">
+	<div>
+		<div>
+			{$data.created}&nbsp;&nbsp;&nbsp;&nbsp;
+			<a href = "?action=/message/message_by_thread&company_id={$id}&thread_id={$data.thread_id}">
+				{$data.gcm_message|strip_tags|mb_truncate:40:"..."}
+			</a>
+
+		</div>
+		<div class="message_jyusyo">
+			{$smarty.const.DRIVER_STATUS}：{$data.status}&nbsp;&nbsp;&nbsp;&nbsp;
+		
+			{$smarty.const.DRIVER_NAME}：{$data.driver_names}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+			{$smarty.const.COMMON_JYUSYO}：
+			{if $data.address}
+				{$data.address}
+			{else}
+				{$smarty.const.COMMON_NO_INFO}
+			{/if}
+		</div>
+	</div>
+	{if $data.error_info}
+	<div class="error_info">
+		{$data.error_info}
+	</div>
+	{/if}
+	
+</div>
+{*配列が空だった場合*}
+	{foreachelse}
+	<div>
+		現在データがありません。
+	</div>
+	{/foreach}
+
+
+ 

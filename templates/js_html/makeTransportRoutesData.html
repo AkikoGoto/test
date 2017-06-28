@@ -1,0 +1,25 @@
+{* 輸送ルートのデータをJavascriptのデータにする *}
+routes = [];
+
+
+{foreach from=$transport_routes item=transport_route key=k}
+	{if $transport_route.geo_json != null}
+		{literal}	
+		
+		var geo_json = JSON.parse({/literal}'{$transport_route.geo_json}'{literal});
+	
+			var route = {
+			"id" : {/literal}{$transport_route.id}{literal},
+			"name" : "{/literal}{$transport_route.name}{literal}",
+			{/literal}{if $transport_route.destination_id != null}{literal}"destination_id" : {/literal}{$transport_route.destination_id},{/if}{literal}
+			"geo_json" : geo_json
+			{/literal}{if $transport_route.destinations_name != null}{literal},"destination_name" : "{/literal}{$transport_route.destinations_name}"{/if}{literal}
+			}; 
+	
+		routes.push(route);
+	
+		{/literal}
+	{/if}
+{/foreach}
+
+

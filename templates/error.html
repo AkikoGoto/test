@@ -1,0 +1,14 @@
+{*エラー表示画面*}
+
+<h1>{$smarty.const.ERROR_TITLE}</h1>
+<ul>
+
+
+{foreach from=$errors item="errors"}
+{*各項目はescapeでサニタイズ*}
+<li>{$errors|escape}</li>
+{/foreach}
+</ul>
+
+<A HREF="javascript:history.back()"><div style="padding-left:30px">
+{$smarty.const.COMMON_CANCEL}</div></a>

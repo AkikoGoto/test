@@ -1,0 +1,31 @@
+<h1>ドライバーへのルート一括設定確認画面：{$date|substr:0:4}年{$date|substr:4:2}月{$date|substr:6:2}日</h1>
+
+<form METHOD="POST" action="index.php?action=transport_route/putindbTransportRouteDrivers">
+	<table class="report_table">
+		<tr>
+			<th>ドライバー</th>
+			<th>ルート</th>
+			<th>備考</th>
+		</tr>
+		{foreach from=$drivers item="driver" key=k}
+			<tr>
+				<td>
+					{$driver.last_name}{$driver.first_name}
+				</td>
+				<td>
+					{assign var="transportRouteId" value=$smarty.session.transportRouteDrivers[$date][$driver.id].transportRoute}{*変数にいったん置き換えないと機能しない*}
+					{$transportRoutes[$transportRouteId].name}
+				</td>
+				<td>
+					{$smarty.session.transportRouteDrivers[$date][$driver.id].information}
+					<input type="hidden" name="information[{$driver.id}]" value="{$smarty.session.transportRouteDrivers[$date][$driver.id].information}">
+				</td>
+			</tr>
+		{/foreach}
+	</table>
+	<div align="center">
+		<input type="hidden" name="company_id" value="{$company_id|escape}">
+		<input type="hidden" name="date" value="{$date|escape}">
+		<button class="btn btn-large btn-ocher" type="submit" value="{$smarty.const.COMMON_SUBMIT}">{$smarty.const.COMMON_SUBMIT}</button>
+	</div>
+</form>

@@ -1,0 +1,3 @@
+<IfModule mod_php5.c>
+  php_value include_path ".;C:\xampp\htdocs\smart_location_admin_edison\action\;C:\xampp\htdocs\smart_location_admin_edison\class\;C:\xampp\htdocs\smart_location_admin_edison\language\;C:\xampp\php\PEAR\;C:\xampp\php\Smarty\libs\;"
+</IfModule>

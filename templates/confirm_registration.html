@@ -1,0 +1,131 @@
+{*登録内容確認フォーム*}
+<h1>{$smarty.const.COMFIRM_RES_TITLE}</h1>
+<FORM METHOD="POST" action="index.php?action={$target}" name="profile">
+			
+	<div class="item_name"><b>
+    		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>{$smarty.const.COMMON_IS_COMPANY}<br>
+    		</b></div>
+		<div>
+		{if $is_company==0}
+        	{$smarty.const.COMMON_CORPORATE}
+        {elseif $is_company==1}	
+        	{$smarty.const.COMMON_INDIVIDUAL}
+        {else}
+        	{$smarty.const.ERROR_TITLE}        	
+        {/if}      
+        <input type=hidden name="is_company" value="{$is_company|escape}">  	        		
+			</div>
+			
+	<div class="item_name"><b>    	
+    		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>{$smarty.const.COMMON_COMPANY}<br></b></div>
+		<div>
+		{$company_name|escape}
+		 <input type=hidden name="company_name" value="{$company_name|escape}">  	      
+       	</div>
+   <!-- Geographic -->
+
+	<div class="item_name"><b><font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+	{$smarty.const.COMMON_POSTAL}</b></div>
+		<div>
+		{$postal|escape}
+			<input type="hidden" name="postal" value="{$postal|escape}">
+		</div>
+
+	<div class="item_name"><b><font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+	{$smarty.const.COMMON_PREFECTURE}</b></div>
+		<div>
+		{$prefecture_name|escape}
+			<input type="hidden" name="prefecture" value="{$prefecture|escape}">
+		</div>
+
+	<div class="item_name"><b>{$smarty.const.COMMON_CITY}</b></div>
+		<div>
+		{$city|escape}
+			<input type="hidden" name="city" value="{$city|escape}">
+		</div>
+	<div class="item_name"><b>{$smarty.const.COMMON_WARD}
+	</b></div>
+	<div>
+		{$ward|escape}
+		<input type="hidden" name="ward" value="{$ward|escape}">
+	</div>
+
+	<div class="item_name"><b><font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+	{$smarty.const.COMMON_TOWN}</b></div>
+		<div>
+		{$town|escape}
+			<input type="hidden" name="town" value="{$town|escape}">
+		</div>
+
+	<div class="item_name"><b><font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+	{$smarty.const.COMMON_ADDRESS}</b></div>
+		<div>
+		{$address|escape}
+			<input type="hidden" name="address" value="{$address|escape}">
+		</div>
+		
+	<div class="item_name"><b><font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+	{$smarty.const.COMMON_LAT}</b></div>
+		<div>		
+		  <div id="lat"></div>
+			<input type="hidden" name="latitude">
+		</div>
+
+	<div class="item_name"><b><font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+	{$smarty.const.COMMON_LONG}</b></div>
+		<div>
+		  <div id="lng"></div>
+			<input type="hidden" name="longitude" >
+		</div>
+		
+	<div class="item_name"><b><font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+	{$smarty.const.COMMON_TEL}</b></div>
+		<div>
+		{$tel|escape}
+			<input type="hidden" name="tel" value="{$tel|escape}">
+		</div>
+
+	<div class="item_name"><b><font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+	{$smarty.const.COMMON_EMAIL}</b></div>
+		<div>
+		{$email|escape}
+			<input type="hidden" name="email" value="{$email|escape}">
+		</div>
+
+	<div class="item_name"><b><font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+	{$smarty.const.COMMON_PWD}</b></div>
+		<div>
+		{$smarty.const.PWD_NO_DISPLAY}
+			<input type="hidden" name="passwd" value="{$passwd|escape}">
+		</div>
+	<div class="item_name"><b><font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+	{$smarty.const.COMMON_CONTACT_PERSON}</b></div>
+		<div>
+		{$contact_person|escape}
+			<input type="hidden" name="contact_person" value="{$contact_person|escape}">
+		</div>
+
+	<div class="item_name"><b><font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+	{$smarty.const.COMMON_CONTACT_TEL}</b></div>
+		<div>
+		{$contact_tel|escape}
+			<input type="hidden" name="contact_tel" value="{$contact_tel|escape}">
+		</div>
+
+	<div class="item_name"><b>
+		{$smarty.const.COMMON_NOTE}</b></div>
+		<div>
+		{$note|escape|nl2br}
+			<input type="hidden" name="note" value="{$note|escape}">
+		</div>
+
+
+	<div align="center">
+		<input type="hidden" name="from_web" value="1">
+		<input type="submit" name="submit" value="{$smarty.const.COMMON_SUBMIT}">
+		<br>
+			{$smarty.const.FORM_BACK}</div>
+			
+</form>
+    <div id="map_canvas" style="width: 500px; height: 300px"></div>
+    

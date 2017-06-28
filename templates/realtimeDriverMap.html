@@ -1,0 +1,112 @@
+{*近い営業所データを表示*}
+
+<h1>{$smarty.const.REALTIME_DRIVER_MAP}</h1>
+
+{if $jvList != null}
+	<div>		
+		{foreach from=$jvList item="jv" key=k name="jv"}
+			<a href="index.php?action=realtimeDriverMap&company_id={$jv.id}">{$jv.company_name}</a>
+				{if !$smarty.foreach.jv.last}
+					|
+				{/if}
+		{*配列が空だった場合*}
+		{foreachelse}
+			現在JVはありません
+		{/foreach}
+	</div>
+{/if}
+
+
+{if $branch_list && $u_id}
+<div class="under_map_list">
+	<a href="index.php?action=realtimeDriverMap&company_id={$company_id}">全車両表示</a>&nbsp;
+	{foreach from=$branch_list item="branch"}
+	<a href="index.php?action=realtimeDriverMap&company_id={$company_id}&branch_id={$branch->geographic_id}{if $show_destinations!==NULL}&show_destinations={$show_destinations}{/if}">{$branch->name}</a>&nbsp;
+	{/foreach}
+	&nbsp;
+	<div id="updated">
+		0000/00/00 00:00:00
+	</div>
+</div>
+{/if}
+
+{*空車アイコン表示のJavascript*}
+{*OSM Map本体*} 
+{include file="osm_map.html"}
+
+
+<div class="under_map_list">
+<font color="#cf714a">{$smarty.const.RECTANGLE}</font>{$working_status->action_1}&nbsp; 
+<font color="#ff00ff">{$smarty.const.RECTANGLE}</font>{$working_status->action_2}&nbsp;
+<font color="#4169e1">{$smarty.const.RECTANGLE}</font>{$working_status->action_3}&nbsp;
+<font color="#009944">{$smarty.const.RECTANGLE}</font>{$working_status->action_4}
+{if $carrier==NULL}&nbsp;
+{elseif $carrier == 'Android'|| $carrier =='iPhone'}
+<br>
+{/if}
+ 
+<a href="index.php?action=realtimeDriverMap&company_id={$company_id}{if $branch_id}&branch_id={$branch_id}{/if}&show_route=1&show_destinations=1">ルートと配送先を合わせて表示</a> |
+<a href="index.php?action=realtimeDriverMap&company_id={$company_id}{if $branch_id}&branch_id={$branch_id}{/if}&show_destinations=1">ルートの非表示</a> |
+{if ($smarty.get.show_destinations)}
+	<a href="index.php?action=realtimeDriverMap&company_id={$company_id}{if $branch_id}&branch_id={$branch_id}{/if}&show_route=1">配送先を非表示</a>
+{else}
+	<a href="index.php?action=realtimeDriverMap&company_id={$company_id}{if $branch_id}&branch_id={$branch_id}{/if}&show_destinations=1">配送先を合わせて表示</a>
+{/if}
+</div>
+<link href="https://api.tiles.mapbox.com/mapbox.js/v2.1.4/mapbox.css" rel='stylesheet' />
+<script src='https://api.tiles.mapbox.com/mapbox.js/v2.0.1/mapbox.js'></script>
+<script type="text/javascript">
+const ZENSU_LINK_PRODUCTION = "{$smarty.const.ZENSU_LINK_PRODUCTION}";
+const ZENSU_LINK_PRACTICE = "{$smarty.const.ZENSU_LINK_PRACTICE}"
+</script>
+<script type="text/javascript" src="templates/js/realtime_map.js?20170424"></script>
+<script src="templates/js/mapbox/addArrow.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addPopup.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addRoute.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addPolygon.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/makeDestinationFeatureData.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addCircleAndSymbolMarker.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addSymbolMarker.js" type="text/javascript"></script>
+<script src="templates/js/randomColor.js" type="text/javascript"></script>
+<script src='https://api.mapbox.com/mapbox.js/plugins/turf/v2.0.2/turf.min.js'></script>
+
+<script src="templates/js/getMarkerIconUrlByStatus.js" type="text/javascript"></script>
+<script type="text/javascript">
+var template_url = "{$smarty.const.TEMPLATE_URL}";
+var socketio_server_host = "{$smarty.const.SOCKETIO_SERVER_HOST}";
+var socketio_server_path = "{$smarty.const.SOCKETIO_REALTIMEMAP_PATH}";
+var map;
+var routes;
+
+var is_mobile = false;
+var showDestination;
+
+var company_lat = {$company_lat};
+var company_long = {$company_long};
+ 
+
+{if $carrier == 'Android'|| $carrier =='iPhone'}
+is_mobile = true;
+{/if}
+
+{if $transport_routes != null}
+{* 輸送ルートのJavascriptのObjectを作成 *}
+{include file = "js_html/makeTransportRoutesData.html"}
+
+{/if}
+
+{if $destinationList != null}
+{literal}
+showDestination = true;
+{/literal}
+
+{* 配送先のJSON配列を作成 *}
+{include file = "js_html/makeDestinationsFeatureData.html"}
+
+{/if}
+
+
+
+</script>
+
+

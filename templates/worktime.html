@@ -1,0 +1,214 @@
+{*ドライバー業務日誌*}
+<h1>{$smarty.const.WORK_RECORDS}：{$driver_name.last_name}&nbsp;{$driver_name.first_name}</h1>
+
+{*PCの場合、テーブルで閲覧できる*} {if $carrier==NULL}
+<table class="light_gray_table">
+	<tr>
+		<th>
+		{$smarty.const.WORKTIME_REFINE}
+		</th>
+		<td>
+			<form method="post" action="index.php?action=worktime_calculate">
+				{include file="select_y_m_d.html"}
+			
+				 <select name="status">
+					 <option value="all_select">{$smarty.const.ALL_SELECT}</option>	 
+					 <option value="1">{$working_status->action_1}</option>
+					 <option value="2">{$working_status->action_2}</option>	 
+					 <option value="3">{$working_status->action_3}</option>
+					 <option value="4">{$working_status->action_4}</option>	 
+				 </select>
+			
+				<input type="hidden" name="driver_id" value={$driver_id}> 
+				<input type="hidden" name="company_id" value={$company_id}>
+				<input type="submit" value="送信する">
+			</form>
+		</td>
+	</tr>
+	<tr>
+		<th>
+			{$smarty.const.DAY_REPORT_PDF}
+		</th>
+		<td>
+			<form method="post" action="index.php?action=/day_report/day_report_pdf">
+				{include file="select_y_m_d.html"}
+				<input type="hidden" name="status" value="day_report"> 
+				<input type="hidden" name="driver_id" value={$driver_id}> 
+				<input type="hidden" name="company_id" value={$company_id}>
+				<input type="submit" value="送信する">
+			</form>
+		</td>
+	</tr>
+	<tr>
+		<th>
+			{$smarty.const.CSV_REPORT}
+		</th>
+		<td>
+			<form method="post" action="index.php?action=/day_report/day_report_csv">
+				{include file="select_y_m_d.html"}
+				<input type="hidden" name="status" value="day_report"> 
+				<input type="hidden" name="driver_id" value={$driver_id}> 
+				<input type="hidden" name="company_id" value={$company_id}>
+				<input type="submit" value="送信する">
+			</form>
+		</td>
+	</tr>
+</table>
+{*Smartphoneの場合*}
+{else}
+<h2>{$smarty.const.WORKTIME_REFINE}</h2>
+<form method="post" action="index.php?action=worktime_calculate">
+	{include file="select_y_m_d.html"}
+
+	 <select name="status">
+		 <option value="all_select">{$smarty.const.ALL_SELECT}</option>	 
+		 <option value="1">{$working_status->action_1}</option>
+		 <option value="2">{$working_status->action_2}</option>	 
+		 <option value="3">{$working_status->action_3}</option>
+		 <option value="4">{$working_status->action_4}</option>	 
+	 </select>
+
+	<input type="hidden" name="driver_id" value={$driver_id}> 
+	<input type="hidden" name="company_id" value={$company_id}>
+	<input type="submit" value="送信する">
+</form>
+<h2>{$smarty.const.DAY_REPORT_PDF}</h2>
+<form method="post" action="index.php?action=/day_report/day_report_pdf">
+	{include file="select_y_m_d.html"}
+	<input type="hidden" name="status" value="day_report"> 
+	<input type="hidden" name="driver_id" value={$driver_id}> 
+	<input type="hidden" name="company_id" value={$company_id}>
+	<input type="submit" value="送信する">
+</form>
+<h2>{$smarty.const.CSV_REPORT}</h2>
+<form method="post" action="index.php?action=/day_report/day_report_csv">
+	{include file="select_y_m_d.html"}
+	<input type="hidden" name="status" value="day_report"> 
+	<input type="hidden" name="driver_id" value={$driver_id}> 
+	<input type="hidden" name="company_id" value={$company_id}>
+	<input type="submit" value="送信する">
+</form>
+{/if}
+<h2>{$smarty.const.THIS_MONTH_WORK_TIME}:{$selected_total_time}</h2>
+<p>{$smarty.const.HUNDRED_WORK_TIME}</p>
+
+{*直近100件のデータ*}
+{*複数ページへ渡る場合のリンク*}
+ {foreach from=$links item="links"} {$links}{/foreach}
+
+ <div align="left" class="div_list">
+ <a href="index.php?action=worktime_edit&driver_id={$driver_id}&company_id={$company_id}">
+ 作業時間の追加</a>
+ &nbsp;| &nbsp;
+<a href="index.php?action=/day_report/day_report_data&driver_id={$driver_id}&company_id={$company_id}">
+ 日報用メーターや給油量データの追加・編集</a>
+ 
+ <br>（注：作業時間の追加、編集は業務日誌MAPの個々のデータと連動していません。）</div>
+ 
+{*PCの場合、テーブルで閲覧する*} {if $carrier==NULL}
+	{foreach from=$data item="data"}
+<table class="report_table">
+	<tr>
+		<th width="90px">{$smarty.const.DRIVER_STATUS}</th>
+		<th width="120px">{$smarty.const.PLATE_NUMBER}</th>
+		<th width="180px">{$smarty.const.START_TIME}</th>
+		<th width="350px">{$smarty.const.START_ADDRESS}</th>
+		<th width="70px">{$smarty.const.TOTAL_TIME}</th>
+		<th width="70px">{$smarty.const.TOLL_FEE}</th>
+		<td rowspan="{if $data.comment}6{else}4{/if}">
+		<div align="center"></div>
+		<a href="index.php?action=worktime_edit&id={$data.id}&driver_id={$driver_id}&company_id={$company_id}">
+		{$smarty.const.EDIT_ICON}</a>
+		{if $carrier==NULL}
+		{literal}
+			<script type="text/javascript">
+			<!--
+			function check(){
+				return confirm("この記録を消去して、本当によろしいですか？消去すると、元に戻りません。")
+			}
+			//-->
+			</script>	
+			{/literal}
+		{/if}
+		<br>
+		<a href="index.php?action=worktime_delete&id={$data.id}&driver_id={$driver_id}&company_id={$company_id}" 
+				{literal}onclick="return check()"{/literal}>{$smarty.const.COMMON_DELETE_ICON}</a>
+		</div>		
+		</td>
+	</tr>
+	<tr>
+		<td>{if $data.status==1}{$working_status->action_1} {elseif
+			$data.status==2}{$working_status->action_2} {elseif
+			$data.status==3}{$working_status->action_3} {elseif
+			$data.status==4}{$working_status->action_4} {elseif
+			$data.status==5}{$smarty.const.DRIVER_OTHER} {/if}</td>
+		<td>{$data.plate_number}</td>
+		<td>{$data.start}</td>
+		<td>{$data.start_address}</td>
+		<td>{if $data.end != '0000-00-00 00:00:00'}{$data.total_time}{else}00:00:00{/if}</td>
+		<td>{if $data.toll_fee}{$data.toll_fee}{$smarty.const.YEN}{/if}</td>
+
+	</tr>
+	<tr>
+		<th>{$smarty.const.DESTINATION_COMPANY_NAME}</th>
+		<th>{$smarty.const.AMOUNT}</th>
+		<th>{$smarty.const.END_TIME}</th>
+		<th>{$smarty.const.END_ADDRESS}</th>
+		<th>{$smarty.const.DISTANCE}</th>		
+		<th>{$smarty.const.COMMON_MESSAGE}</th>
+	</tr>
+	<tr>
+		<td>{$data.destination_company_name}</td>
+		<td>{if $data.amount}{$data.amount}t{/if}</td>
+		<td>{$data.end}</td>
+		<td>{$data.end_address}</td>
+		<td>{if $data.distance != null}{$data.distance}Km{/if}</td>
+		<td>{$data.drive_memo}</td>
+	</tr>
+	{if $data.comment}
+	<tr>
+		<th colspan="6">{$smarty.const.COMMENT}</th>
+	</tr>
+	<tr>
+		<td colspan="6">{$data.comment}</td>
+	</tr>
+	{/if}
+</table>
+	{*データがない場合*} {foreachelse}
+	<div>{$smarty.const.TOP_NODATA}</div>
+	{/foreach}
+{*スマートフォン、ガラケーの場合*} {else} {foreach from=$data item="data"}
+<div>
+	<b> {if $data.status==1}{$working_status->action_1} {elseif
+		$data.status==2}{$working_status->action_2} {elseif
+		$data.status==3}{$working_status->action_3} {elseif
+		$data.status==4}{$working_status->action_4}  {/if} </b>
+</div>
+{if $data.start}
+<div>{$data.start}</div>
+{/if} ~
+{if $data.end}
+<div>
+	{$data.end}
+</div>
+{/if} 
+<div>
+{if $data.end != '0000-00-00 00:00:00'}
+{$data.total_time}{else}00:00:00{/if}
+</div>
+
+
+{*ドライバーがログインしている、かつ、グループがドライバーに編集を許可していない場合、以下を表示しない*}
+{if $is_ban_editing != 1 }
+<div>
+	<a href="index.php?action=worktime_edit&id={$data.id}&driver_id={$driver_id}&company_id={$company_id}">
+	{$smarty.const.EDIT}
+	</a>
+	|
+	<a href="index.php?action=worktime_delete&id={$data.id}&driver_id={$driver_id}&company_id={$company_id}" 
+					{literal}onclick="return check()"{/literal}>{$smarty.const.DELETE}</a>
+</div>
+{/if}
+<hr>
+{/foreach} {/if} {*リンクの設定*} {foreach from=$links item="links"} {$links}
+{/foreach}

@@ -1,0 +1,262 @@
+<h1>{$root_date} {$smarty.const.ROOT_DETAIL} {if $status=='EDIT'}
+	{$smarty.const.EDIT_DATA} {else} {$smarty.const.NEW_DATA} {/if}</h1>
+	<p>{$smarty.const.ROOT_DETAIL_OVER10}</p>
+	<FORM METHOD="POST" action="index.php?action=/root_detail/tryRootDetail">
+	
+	<div>
+		<div align="center">
+		<button class="btn btn-large btn-ocher" type="submit" value="{$smarty.const.COMMON_SUBMIT}">
+			{$smarty.const.COMMON_SUBMIT}
+		</button>
+	</div>
+	
+	<label><input type="radio" name="root_making_way" value="_1_" checked/>入力順で作成<br /></label>
+    <label><input type="radio" name="root_making_way" value="_2_" />最短経路を自動計算で作成（最初の場所から出発し、最初の場所に戻るように計算します）<br /></label>
+	
+	<p>
+		<label>
+			<input type="checkbox" id="openAdditionalDestinations"
+				{ if $pre_data[10].destination_name|escape }
+					checked
+				{/if}
+			>さらに10件追加する
+		</label>
+    </p>
+    
+	<table class="report_table root_detail" style="margin-bottom: 0px;">
+		<tr>
+			{if $status=='EDIT'}
+				<th>
+					{$smarty.const.COMMON_ID}
+				</th>
+			{/if}
+			<th>
+				{$smarty.const.DELIVER_TIME}
+			</th>
+			<th >
+				<font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+				{$smarty.const.DESTINATION_NAME}
+			</th>
+			<th>
+				<font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+				{$smarty.const.COMMON_JYUSYO}
+			</th>
+			<th>
+				{$smarty.const.COMMON_BIKOU}
+				&nbsp;
+				({$smarty.const.INFORMATION_MAX}
+				{$smarty.const.DATE_VERI_CHAORLE})
+			</th>
+			<th>
+				{$smarty.const.CHOOSE_FROM_DEST}
+			</th>
+			<th>
+				{$smarty.const.DELETE}
+			</th>
+		</tr>
+	{section name=cnt start=0 loop=10}
+		<tr id="section_{$smarty.section.cnt.index}">
+			{if $status=='EDIT'}
+				<td>
+					{$data.id|escape} <input type=hidden name="id"
+						value="{$data.id|escape}">
+				</td>
+			{/if}
+			<td>
+				<select name="{$smarty.section.cnt.index}-hour">
+					<option value="">なし</option>
+					{foreach from=$select_menu_hour item='each_hour'}
+						<option value="{$each_hour|escape}"
+							{if $each_hour==$pre_data[$smarty.section.cnt.index].hour|escape}
+								selected
+							{/if}
+						>{$each_hour|escape}
+						</option>
+					{/foreach}
+				</select>時
+				 
+				<select name="{$smarty.section.cnt.index}-minit">
+					<option value="">なし</option>
+			 		{foreach from=$select_menu_minit item='each_minit'}
+						<option value="{$each_minit|escape}"
+								{if $each_minit==$pre_data[$smarty.section.cnt.index].minit|escape}
+									selected
+								{/if}>{$each_minit|escape}
+						</option>
+					{/foreach}				 
+				</select>分
+			</td>
+			<td>
+					<input type="text" name="{$smarty.section.cnt.index}-destination_name" size="40" maxlength="100" 
+						id="destination_name_{$smarty.section.cnt.index}"
+						value="{$pre_data[$smarty.section.cnt.index].destination_name|escape}">
+			</td>
+			<td>
+					<input type="text" name="{$smarty.section.cnt.index}-address" size="50"
+						maxlength="80"
+						value="{$pre_data[$smarty.section.cnt.index].address|escape}"
+						id="address_{$smarty.section.cnt.index}" >
+			</td>
+			<td>
+				<input type="text" name="{$smarty.section.cnt.index}-information" size="125"
+					maxlength="{$smarty.const.INFORMATION_MAX}"
+					value="{$pre_data[$smarty.section.cnt.index].information|escape}" id="information_{$smarty.section.cnt.index}">
+			</td>
+			<td align="center">
+				{*Pretty Popinで配送先から取得するリンク*}
+				<a href="index.php?action=/destination/viewDestinationsPopUp&company_id={$company_id}" 
+					rel="destinations"
+				 id="{$smarty.section.cnt.index}" onclick="root_detail_id={$smarty.section.cnt.index};"
+					
+				>
+				<img src="templates/image/from_destination_bt.png">
+				</a>
+			</td>
+			<td align="center">
+				{*入力値を削除するリンク*}
+				<div class="delete_section" onclick="root_detail_id={$smarty.section.cnt.index};" data-section-id="{$smarty.section.cnt.index}">{$smarty.const.COMMON_DELETE_ICON}</div>
+			</td>
+		</tr>
+	{/section}
+	</table>
+	
+	<!-- additional 10 destinations -->
+	<div class="addtional_destinations_selection">
+		<table class="report_table root_detail">
+			{section name=cnt start=10 loop=20}
+				<tr id="section_{$smarty.section.cnt.index}">
+					{if $status=='EDIT'}
+						<td>
+							{$data.id|escape} <input type=hidden name="id"
+								value="{$data.id|escape}">
+						</td>
+					{/if}
+					<td>
+						<select name="{$smarty.section.cnt.index}-hour">
+							<option value="">なし</option>
+							{foreach from=$select_menu_hour item='each_hour'}
+								<option value="{$each_hour|escape}"
+									{if $each_hour==$pre_data[$smarty.section.cnt.index].hour|escape}
+										selected
+									{/if}
+								>{$each_hour|escape}
+								</option>
+							{/foreach}
+						</select>時
+						 
+						<select name="{$smarty.section.cnt.index}-minit">
+							<option value="">なし</option>
+					 		{foreach from=$select_menu_minit item='each_minit'}
+								<option value="{$each_minit|escape}"
+										{if $each_minit==$pre_data[$smarty.section.cnt.index].minit|escape}
+											selected
+										{/if}>{$each_minit|escape}
+								</option>
+							{/foreach}				 
+						</select>分
+					</td>
+					<td>
+							<input type="text" name="{$smarty.section.cnt.index}-destination_name" size="40" maxlength="100" 
+								id="destination_name_{$smarty.section.cnt.index}"
+								value="{$pre_data[$smarty.section.cnt.index].destination_name|escape}">
+					</td>
+					<td>
+							<input type="text" name="{$smarty.section.cnt.index}-address" size="50"
+								maxlength="80"
+								value="{$pre_data[$smarty.section.cnt.index].address|escape}"
+								id="address_{$smarty.section.cnt.index}" >
+					</td>
+					<td>
+						<input type="text" name="{$smarty.section.cnt.index}-information" size="125"
+							maxlength="{$smarty.const.INFORMATION_MAX}"
+							value="{$pre_data[$smarty.section.cnt.index].information|escape}" id="information_{$smarty.section.cnt.index}">
+					</td>
+					<td align="center">
+						{*Pretty Popinで配送先から取得するリンク*}
+						<a href="index.php?action=/destination/viewDestinationsPopUp&company_id={$company_id}" 
+							rel="destinations"
+						 id="{$smarty.section.cnt.index}" onclick="root_detail_id={$smarty.section.cnt.index};"
+							
+						>
+						<img src="templates/image/from_destination_bt.png">
+						</a>
+					</td>
+					<td align="center">
+						{*入力値を削除するリンク*}
+						<div class="delete_section" onclick="root_detail_id={$smarty.section.cnt.index};" data-section-id="{$smarty.section.cnt.index}">{$smarty.const.COMMON_DELETE_ICON}</div>
+					</td>
+				</tr>
+			{/section}
+		</table>
+	</div>
+								
+	<div align="center">
+		<input type=hidden name="company_id" value="{$company_id|escape}">
+		<input type=hidden name="date" value="{$root_date|escape}">
+		<input type=hidden name="root_id" value="{$root_id|escape}">
+				<button class="btn btn-large btn-ocher" type="submit" value="{$smarty.const.COMMON_SUBMIT}">
+			{$smarty.const.COMMON_SUBMIT}
+		</button>
+	</div>
+</div>
+	
+<!-- 配送先から選択する際のポップアップ -->
+{literal}
+<script type="text/javascript" charset="utf-8">
+	equipment = new Array();
+	var destination_name = null;
+	var address = null;
+	var information = null;
+	var root_detail_id = null;
+	var i=0;
+	
+	$(document).ready(function(){
+		$("a[rel^='destinations']").prettyPopin({
+			modal : true,
+			width : 1000,
+			//height: 400,
+			opacity: 0.5,
+			animationSpeed: 'fast', 
+			followScroll: false,
+			loader_path: 'templates/images/prettyPopin/loader.gif',
+			callback: function(){
+
+				var number = "#section_"+root_detail_id;
+				$('#destination_name_'+root_detail_id).val(destination_name);
+				$('#address_'+root_detail_id).val(address);
+				$('#information_'+root_detail_id).val(information);
+
+			}
+		});
+		
+		$("div.delete_section").click(function(){
+			$('#destination_name_'+root_detail_id).val("");
+			$('#address_'+root_detail_id).val("");
+			$('#information_'+root_detail_id).val("");
+		} );
+		
+		/********************************************
+		*	クリックトグル
+		*********************************************/
+		//公開ドライバー用
+		$('#openAdditionalDestinations').click(function() {
+		    //クリックイベントで要素をトグルさせる
+		    $(".addtional_destinations_selection").slideToggle(this.checked, function() {
+		        if ($(this).is(':visible'))
+		        	$(this).css('display','inline');
+		    });
+		});
+
+		/*「リアルタイムマップを一般公開する」にチェックを入れて、次の画面から戻ってきたとき*/
+		/*これのチェック状態によって、ドライバーの選択欄が表示されるようにする*/
+		if($("#openAdditionalDestinations").prop('checked')) {
+	    	$(".addtional_destinations_selection").css('display','inline');
+		}
+	});
+
+</script>
+{/literal}
+
+
+</FORM>
+

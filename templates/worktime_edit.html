@@ -1,0 +1,293 @@
+<FORM METHOD="POST" action="index.php?action=worktime_confirm" >
+
+	<div class="item_name"><b>{$smarty.const.DRIVER_STATUS}</b></div>
+	 <select name="status">
+	 	{if $smarty.const.MODE =="CONCRETE"}
+	 		<option value="1" {if $worktime_status==1 || $data.status==1}selected{/if}>{$smarty.const.OFFICE_START}</option>
+			<option value="2" {if $worktime_status==2 || $data.status==2}selected{/if}>{$smarty.const.SCENE_START}</option>
+		 	<option value="3" {if $worktime_status==3 || $data.status==3}selected{/if}>{$smarty.const.FROM_SCENE_START}</option>	 
+		 	<option value="4" {if $worktime_status==4 || $data.status==4}selected{/if}>{$smarty.const.OFFICE_RETURN}</option>
+		  	<option value="5" {if $worktime_status==5 || $data.status==5}selected{/if}>{$smarty.const.LUNCH}</option>
+		  	<option value="6" {if $worktime_status==6 || $data.status==6}selected{/if}>{$smarty.const.CONTACT_HOLD}</option>
+			<option value="7" {if $worktime_status==7 || $data.status==7}selected{/if}>{$smarty.const.CAR_WASH_HOLD}</option>
+		 	<option value="8" {if $worktime_status==8 || $data.status==8}selected{/if}>{$smarty.const.CAR_WASH}</option>	 
+		 	<option value="9" {if $worktime_status==9 || $data.status==9}selected{/if}>{$smarty.const.FEED}</option>
+		  	<option value="10" {if $worktime_status==10 || $data.status==10}selected{/if}>{$smarty.const.COPY}</option>
+		  	<option value="11" {if $worktime_status==11 || $data.status==11}selected{/if}>{$smarty.const.OTHER}</option>
+		{else}
+			<option value="1" {if $worktime_status==1 || $data.status==1}selected{/if}>{$working_status->action_1}</option>
+			<option value="2" {if $worktime_status==2 || $data.status==2}selected{/if}>{$working_status->action_2}</option>
+		 	<option value="3" {if $worktime_status==3 || $data.status==3}selected{/if}>{$working_status->action_3}</option>	 
+		 	<option value="4" {if $worktime_status==4 || $data.status==4}selected{/if}>{$working_status->action_4}</option>
+		  	<option value="5" {if $worktime_status==5 || $data.status==5}selected{/if}>{$smarty.const.DRIVER_OTHER}</option>
+		{/if}
+	 </select>
+
+
+<!-- START_TIME -->
+	<div class="item_name"><b>{$smarty.const.START_TIME}</b></div>
+ 		<select name="time_from_year">
+				{foreach from=$select_menu_year item='each_year'}
+					<option value="{$each_year|escape}"
+					{if $worktime_from_year}
+						{if $each_year == $worktime_from_year}
+							selected="selected"
+						{/if}
+					{elseif $start_year}
+						{if $each_year == $start_year}
+							selected="selected"
+						{/if}
+					{elseif $this_year}
+						{if $each_year == $this_year}
+							selected="selected"
+						{/if}
+					{/if}>{$each_year|escape}</option>
+				{/foreach}
+			</select>年
+		
+			<select name="time_from_month">
+				{foreach from=$select_menu_month item='each_month'}
+					<option value="{$each_month|escape}"
+					{if $worktime_from_month}
+						{if $each_month==$worktime_from_month}
+							selected="selected"
+						{/if}
+					{elseif $start_month}
+						{if $each_month == $start_month}
+						 	selected="selected"
+						 {/if}
+					{elseif $this_month}
+						{if $each_month == $this_month}
+						 	selected="selected"
+						 {/if}
+					{/if}>{$each_month|escape}</option>
+				{/foreach}
+			</select>月
+			
+			<select name="time_from_day">
+				{foreach from=$select_menu_day item='each_day'}
+					<option value="{$each_day|escape}"
+					{if $worktime_from_day}
+						{if $each_day == $worktime_from_day}
+							selected="selected"
+						{/if}
+					{elseif $start_day}
+						{if $each_day == $start_day}
+							selected="selected"
+						{/if}
+					{elseif $today}
+						{if $each_day == $today}
+							selected="selected"
+						{/if}					
+					{/if}>{$each_day|escape}</option>
+				{/foreach}
+			</select>日
+		
+			<select name="time_from_hour">
+				{foreach from=$select_menu_hour item='each_hour'}
+				<option value="{$each_hour|escape}"
+					{if $worktime_from_hour}
+						{if $each_hour==$worktime_from_hour}
+							selected
+						{/if}
+					{elseif $start_hour}
+						{if $each_hour==$start_hour}
+							selected
+						{/if}
+					{/if}>{$each_hour|escape}</option>
+				{/foreach}
+			</select>時
+		
+			<select name="time_from_minit">
+				{foreach from=$select_menu_minit item='each_minit'}
+				<option value="{$each_minit|escape}"
+					{if $worktime_from_minit}
+						{if $each_minit==$worktime_from_minit}
+							selected
+						{/if}
+					{elseif $start_minit}
+						{if $each_minit==$start_minit}
+							selected
+						{/if}
+					{/if}>{$each_minit|escape}</option>
+				{/foreach}
+			</select>分
+			<select name="time_from_second">
+				{foreach from=$select_menu_second item='each_second'}
+				<option value="{$each_second|escape}"
+					{if $worktime_from_second}
+						{if $each_minit==$worktime_from_second}
+							selected
+						{/if}
+					{elseif $start_second}
+						{if $each_second==$start_second}
+							selected
+						{/if}
+					{/if}>{$each_second|escape}</option>
+				{/foreach}
+			</select>秒
+			
+<!-- END_TIME -->
+	<div class="item_name"><b>{$smarty.const.END_TIME}</b></div>
+ 		<select name="time_to_year">
+				{foreach from=$select_menu_year item='each_year'}
+					<option value="{$each_year|escape}"
+					{if $worktime_to_year}
+						{if $each_year==$worktime_to_year}
+							selected
+						{/if}
+					{elseif $end_year}
+						{if $each_year==$end_year}
+							selected
+						{/if}
+					{elseif $this_year}
+						{if $each_year == $this_year}
+							selected
+						{/if}
+					{/if}>{$each_year|escape}</option>
+				{/foreach}
+			</select>年
+		
+			<select name="time_to_month">
+				{foreach from=$select_menu_month item='each_month'}
+					<option value="{$each_month|escape}"
+					{if $worktime_to_month}
+						{if $each_month==$worktime_to_month}
+							selected
+						{/if}
+					{elseif $end_month}
+						{if $each_month == $end_month}
+							selected
+						{/if}
+					{elseif $this_month}
+						{if $each_month == $this_month}
+							selected
+						{/if}
+					{/if}>{$each_month|escape}</option>
+				{/foreach}
+			</select>月
+			
+			<select name="time_to_day">
+				{foreach from=$select_menu_day item='each_day'}
+					<option value="{$each_day|escape}"
+					{if $worktime_to_day}
+						{if $each_day==$worktime_to_day}
+							selected
+						{/if}
+					{elseif $end_day}
+						{if $each_day == $end_day}
+							selected
+						{/if}
+					{elseif $today}
+						{if $each_day == $today}
+							selected
+						{/if}					
+					{/if}>{$each_day|escape}</option>
+				{/foreach}
+			</select>日
+		
+			<select name="time_to_hour">
+				{foreach from=$select_menu_hour item='each_hour'}
+				<option value="{$each_hour|escape}"
+					{if $worktime_to_hour}
+						{if $each_hour==$worktime_to_hour}
+							selected
+						{/if}
+					{elseif $end_hour}
+						{if $each_hour==$end_hour}
+							selected
+						{/if}
+					{/if}>{$each_hour|escape}</option>
+				{/foreach}
+			</select>時
+		
+			<select name="time_to_minit">
+				{foreach from=$select_menu_minit item='each_minit'}
+				<option value="{$each_minit|escape}"
+					{if $worktime_to_minit}
+						{if $each_minit==$worktime_to_minit}
+							selected
+						{/if}
+					{elseif $end_minit}
+						{if $each_minit==$end_minit}
+							selected
+						{/if}
+					{/if}>{$each_minit|escape}</option>
+				{/foreach}
+			</select>分
+			
+			<select name="time_to_second">
+				{foreach from=$select_menu_second item='each_second'}
+				<option value="{$each_second|escape}"
+					{if $worktime_to_second}
+						{if $each_second==$worktime_to_second}
+							selected
+						{/if}
+					{elseif $end_second}
+						{if $each_second==$end_second}
+							selected
+						{/if}
+					{/if}>{$each_second|escape}</option>
+				{/foreach}
+			</select>秒
+			
+
+	<div class="item_name"><b>{$smarty.const.PLATE_NUMBER}</b></div>
+     <div>        	        		
+		<input type="text" name="plate_number" size="50" maxlength="50" 
+			value="{if $session.plate_number}{$session.plate_number}{else if}{$data.plate_number}{/if}">
+     </div> 
+	<div class="item_name"><b>{$smarty.const.START_ADDRESS}</b></div>
+     <div>        	        		
+		<input type="text" name="start_address" size="50" maxlength="50" 
+			value="{if $session.start_address}{$session.start_address}{else if}{$data.start_address}{/if}">
+     </div> 
+	<div class="item_name"><b>{$smarty.const.END_ADDRESS}</b></div>
+     <div>        	        		
+		<input type="text" name="end_address" size="50" maxlength="50" 
+			value="{if $session.end_address}{else if}{$session.end_address}{$data.end_address}{/if}">
+     </div> 
+	<div class="item_name"><b>{$smarty.const.DISTANCE}</b></div>
+     <div>        	        		
+		<input type="text" name="distance" size="50" maxlength="50" 
+			value="{if $session.distance}{$session.distance}{else if}{$data.distance}{/if}"> Km
+		&nbsp;{$smarty.const.NOTICE_FLOAT}
+     </div> 
+	<div class="item_name"><b>{$smarty.const.DESTINATION_COMPANY_NAME}</b></div>
+     <div>        	        		
+		<input type="text" name="destination_company_name" size="50" maxlength="50" 
+		value="{if $session.destination_company_name}{$session.destination_company_name}{else if}{$data.destination_company_name}{/if}">
+     </div> 
+	<div class="item_name"><b>{$smarty.const.AMOUNT}</b></div>
+     <div>        	        		
+		<input type="text" name="amount" size="50" maxlength="50" 
+			value="{if $session.amount}{$session.amount}{else if}{$data.amount}{/if}"> t 
+		&nbsp;{$smarty.const.NOTICE_FLOAT}
+		
+     </div> 
+	<div class="item_name"><b>{$smarty.const.TOLL_FEE}</b></div>
+     <div>        	        		
+		<input type="text" name="toll_fee" size="50" maxlength="50" 
+			value="{if $session.toll_fee}{$session.toll_fee}{else if}{$data.toll_fee}{/if}">{$smarty.const.YEN}
+		&nbsp;{$smarty.const.NOTICE_INT}
+     </div> 
+	<div class="item_name"><b>{$smarty.const.COMMON_MESSAGE}</b></div>
+     <div>        	        		
+		<input type="text" name="drive_memo" size="50" maxlength="50" 
+			value="{if $session.drive_memo}{$session.drive_memo}{else if}{$data.drive_memo}{/if}">
+     </div> 
+
+	<div align="center">
+	<input type=hidden name="edit" value="{$edit}">
+	<input type=hidden name="start_latitude" value="{$data.start_latitude}">
+	<input type=hidden name="start_longitude" value="{$data.start_longitude}">
+	<input type=hidden name="end_latitude" value="{$data.end_latitude}">
+	<input type=hidden name="end_longitude" value="{$data.end_longitude}">
+	<input type=hidden name="id" value="{$id}">
+	<input type="hidden" name="driver_id" value={$driver_id}>
+	<input type="hidden" name="company_id" value={$company_id}>
+	<button class="btn btn-large btn-ocher" type="submit" name="submit" value="{$smarty.const.COMMON_SUBMIT}">
+	{$smarty.const.COMMON_SUBMIT}</button>
+	</div>
+
+</FORM>

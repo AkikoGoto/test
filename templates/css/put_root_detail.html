@@ -1,0 +1,144 @@
+<h1>{$smarty.const.ROOT_DETAIL} {if $status=='EDIT'}
+	{$smarty.const.EDIT_DATA} {else} {$smarty.const.NEW_DATA} {/if}</h1>
+	<p>{$smarty.const.ROOT_DETAIL_OVER10}</p>
+	<FORM METHOD="POST" action="index.php?action=/root_detail/tryRootDetail">
+	<div align="center">
+		<input type="submit" name="submit" value="{$smarty.const.COMMON_SUBMIT}">
+	</div>
+	
+	
+	{section name=cnt start=0 loop=10}
+
+	<table class="report_table" id={$smarty.section.cnt.index}>
+		<tr>
+			<th width="170px">
+				{$smarty.const.COMMON_ID}
+			</th>
+			<th >
+				<font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+				{$smarty.const.DESTINATION_NAME}
+			</th>
+			<th width="450px">
+				<font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+				{$smarty.const.COMMON_JYUSYO}
+			</th>
+		</tr>
+		<tr>
+			<td>
+				{if $status=='EDIT'}
+					{$data.id|escape} <input type=hidden name="id"
+						value="{$data.id|escape}">
+				{/if}
+			</td>
+			<td>
+					<input type="text" name="{$smarty.section.cnt.index}-destination_name" size="40" maxlength="100" 
+						id="destination_name"
+						value="{$pre_data[$smarty.section.cnt.index].destination_name|escape}">
+			</td>
+			<td>
+					<input type="text" name="{$smarty.section.cnt.index}-address" size="50"
+						maxlength="80"
+						value="{$pre_data[$smarty.section.cnt.index].address|escape}"
+						id="address" >
+				{*Pretty Popinで配送先から取得するリンク*}
+				<a href="index.php?action=/destination/viewDestinationsPopUp&company_id={$company_id}" 
+					rel="destinations"
+				 id="{$smarty.section.cnt.index}" onclick="root_detail_id={$smarty.section.cnt.index};"
+					 class="link_button" 
+				>
+					{$smarty.const.CHOOSE_FROM_DEST}
+				</a>
+			</td>
+		</tr>
+		<tr>
+			<th>
+				{$smarty.const.DELIVER_TIME}
+			</th>
+			<th colspan="2">
+				{$smarty.const.COMMON_BIKOU}
+				&nbsp;
+				({$smarty.const.INFORMATION_MAX}
+				{$smarty.const.DATE_VERI_CHAORLE})
+			</th>
+		</tr>
+		<tr>
+			<td>
+				 <select name="{$smarty.section.cnt.index}-hour">
+				 <option value="">なし</option>
+				 
+				 {foreach from=$select_menu_hour item='each_hour'}
+					<option value="{$each_hour|escape}"
+						{if $each_hour==$pre_data[$smarty.section.cnt.index].hour|escape}
+							selected
+						{/if}
+					>{$each_hour|escape}
+					</option>
+				{/foreach}
+					 
+				 </select>時
+				 
+				 <select name="{$smarty.section.cnt.index}-minit">
+				 <option value="">なし</option>
+		 		{foreach from=$select_menu_minit item='each_minit'}
+					<option value="{$each_minit|escape}"
+							{if $each_minit==$pre_data[$smarty.section.cnt.index].minit|escape}
+								selected
+							{/if}
+						>{$each_minit|escape}
+					</option>
+				{/foreach}				 
+				 </select>分
+				 
+			</td>
+			<td colspan="2">
+					<input type="text" name="{$smarty.section.cnt.index}-information" size="125"
+						maxlength="{$smarty.const.INFORMATION_MAX}"
+						value="{$pre_data[$smarty.section.cnt.index].information|escape}" id="information">
+			</td>
+		</tr>
+	</table>
+	{/section}
+								
+	<div align="center">
+		<input type=hidden name="company_id" value="{$company_id|escape}">
+		<input type=hidden name="root_id" value="{$root_id|escape}">
+		<input type="submit" name="submit" value="{$smarty.const.COMMON_SUBMIT}">
+	</div>
+<!-- 配送先から選択する際のポップアップ -->
+{literal}
+<script type="text/javascript" charset="utf-8">
+	equipment = new Array();
+	var destination_name = null;
+	var address = null;
+	var information = null;
+	var root_detail_id = null;
+	var i=0;
+	
+	$(document).ready(function(){
+			$("a[rel^='destinations']").prettyPopin({
+			modal : true,
+			width : 1000,
+			//height: 400,
+			opacity: 0.5,
+			animationSpeed: 'fast', 
+			followScroll: false,
+			loader_path: 'templates/images/prettyPopin/loader.gif',
+			callback: function(){
+
+				var number = "#"+root_detail_id;
+				$(number).find('#destination_name').val(destination_name);
+				$(number).find('#address').val(address);
+				$(number).find('#information').val(information);
+
+			}
+		});
+		
+	});
+
+
+</script>
+{/literal}
+
+
+</FORM>
+

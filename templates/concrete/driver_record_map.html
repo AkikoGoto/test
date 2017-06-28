@@ -1,0 +1,595 @@
+{*ドライバー業務日誌*}
+<h1>{$smarty.const.DRIVER_RECORDS_MAP}：{$driver_name.last_name}&nbsp;{$driver_name.first_name}</h1>
+<p>
+{if $smarty.const.MODE =="CONCRETE"}
+	<a href="index.php?action=concrete/worktime&driver_id={$driver_id}&company_id={$company_id}">{$smarty.const.WORK_RECORDS}</a>
+{else}
+	<a href="index.php?action=worktime&driver_id={$driver_id}&company_id={$company_id}">{$smarty.const.WORK_RECORDS}</a>
+{/if}
+</p>
+<p>{if $record_no}最新{$record_no}件の表示をしています。{/if}
+{if $time_from}{$time_from} から {$time_to}の表示をしています。{/if}
+</p>
+
+{*PCの場合、テーブルで閲覧できる*} {if $carrier==NULL}
+<table class="light_gray_table">
+	<tr>
+		<th>{$smarty.const.NUMBER_REFINE}</th>
+		<td>
+			<form method="get" action="index.php">
+				<select name="record_no">
+					<option value="10" {if $record_no==10}selected{/if}>10</option>
+					<option value="50" {if $record_no==50}selected{/if}>50</option>
+					<option value="100" {if $record_no==100}selected{/if}>100</option>
+					<option value="500" {if $record_no==500}selected{/if}>500</option>
+					<option value="1000" {if $record_no==1000}selected{/if}>1000</option>
+				</select>件表示する <input type="hidden" name="driver_id" value={$driver_id}> <input
+					type="hidden" name="company_id" value={$company_id}> <input
+					type="hidden" name="action" value="{if $smarty.const.MODE =="CONCRETE"}concrete/{/if}driver_record_map"> <input
+					type="submit" value="送信する">
+			</form>
+		</td>
+	</tr>
+	<tr>
+		<th>{$smarty.const.REFINE}</th>
+		<td>
+	<form method="get" action="index.php">
+		{include file="select_y_m_d_h_m.html"}
+		<input type="hidden" name="driver_id" value={$driver_id}>
+		<input type="hidden" name="company_id" value={$company_id}>
+		<input type="hidden" name="action" value="{if $smarty.const.MODE =="CONCRETE"}concrete/{/if}driver_record_map">
+		<input type="submit" value="送信する">
+	</form>
+	</td>
+	</tr>
+	<tr>
+		<th>{$smarty.const.CSV_REPORT}</th>
+		<td>		
+			<form method="get" action="index.php">
+					{include file="select_y_m_d_h_m.html"}
+					<input type="hidden" name="driver_id" value={$driver_id}> 
+					<input type="hidden" name="company_id" value={$company_id}>
+					<input type="hidden" name="action" value="driver_record_csv">
+					<input type="submit" value="送信する">
+			</form>
+		</td>
+	</tr>
+</table>
+{*Smartphoneの場合*}
+{else}
+<!-- <table class="light_gray_table"> -->
+<h2>{$smarty.const.NUMBER_REFINE}</h2>
+<form method="get" action="index.php">
+	<select name="record_no">
+		<option value="10" {if $record_no==10}selected{/if}>10</option>
+		<option value="50" {if $record_no==50}selected{/if}>50</option>
+		<option value="100" {if $record_no==100}selected{/if}>100</option>
+		<option value="500" {if $record_no==500}selected{/if}>500</option>
+		<option value="1000" {if $record_no==1000}selected{/if}>1000</option>
+	</select>件表示する
+	<input type="hidden" name="driver_id" value={$driver_id}>
+	<input type="hidden" name="company_id" value={$company_id}>
+	<input type="hidden" name="action" value="driver_record_map">
+	<input type="submit" value="送信する">
+</form>
+<h2>{$smarty.const.REFINE}</h2>
+<form method="get" action="index.php">
+	{include file="select_y_m_d_h_m.html"}
+	<input type="hidden" name="driver_id" value={$driver_id}>
+	<input type="hidden" name="company_id" value={$company_id}>
+	<input type="hidden" name="action" value="driver_record_map">
+	<input type="submit" value="送信する">
+</form>
+<h2>{$smarty.const.CSV_REPORT}</h2>
+<form method="get" action="index.php">
+	{include file="select_y_m_d_h_m.html"}
+	<input type="hidden" name="driver_id" value={$driver_id}> 
+	<input type="hidden" name="company_id" value={$company_id}>
+	<input type="hidden" name="action" value="driver_record_csv">
+	<input type="submit" value="送信する">
+</form>
+{/if}
+
+{if $data}
+{*点と線を表示　Javascript*}
+<script type="text/javascript">
+{literal}
+	/*****************************
+	*	地図の設定
+	******************************/
+	var map;
+	//中心の緯度経度
+	var center_latitude={/literal}{$center_latitude}{literal};
+	var center_longitude={/literal}{$center_longitude}{literal};
+		
+	/*****************************
+	*	点
+	******************************/
+	var template_url = "{/literal}{$smarty.const.TEMPLATE_URL}{literal}";
+	var marker_red = template_url+'templates/image/map_marker_red.gif';
+	var marker_blue = template_url+'templates/image/map_marker_blue.gif';
+	var marker_green = template_url+'templates/image/map_marker_green.gif';
+	var marker_purple = template_url+'templates/image/map_marker_purple.gif';
+	var marker_dark_yellow = template_url+'templates/image/map_marker_dark_yellow.gif';
+	var marker_red_purple = template_url+'templates/image/map_marker_red_purple.gif';
+	var marker_dark_green = template_url+'templates/image/map_marker_dark_green.gif';
+	var marker_burn_brown = template_url+'templates/image/map_marker_burn_brown.gif';
+	var marker_thin_red_purple = template_url+'templates/image/map_marker_thin_red_purple.gif';
+	var marker_orange = template_url+'templates/image/map_marker_orange.gif';
+	var marker_black = template_url+'templates/image/map_marker_black.gif';
+			
+	//マーカーレイヤー
+	var marker_layer = new OpenLayers.Layer.Markers( "Markers_Layer" );
+	
+	/*****************************
+	*	ルート線
+	******************************/
+	// ルート線
+	var lineFeatures = new Array();
+	
+	//　前回ルートを描いた点
+	var last_lat;
+	var last_lng;
+	
+	/*****************************
+	*	アニメーション用
+	******************************/
+	// 緯度経度の配列
+	var animationLocations = new Array();
+
+	var center_position;
+	var fromProjection;
+	var toProjection;
+
+	var size;
+	var offset;
+
+	// 地図の初期化
+	function initialize(center_latitude, center_longitude) {
+			
+
+   		//ライン
+		var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
+        renderer = (renderer) ? [renderer] : OpenLayers.Layer.Vector.prototype.renderers;
+        var vectorLayer = new OpenLayers.Layer.Vector("Driver History Line Layer");
+			
+
+		{/literal}
+			{*パラメーターの初期化とマップの描画は別ファイル*}
+			{include file = "js_html/initialize_map_js.html"}
+		{literal}
+
+		this.center_position = position;
+		this.fromProjection = fromProjection;
+		this.toProjection = toProjection;  
+
+		//マーカーのサイズ
+		this.size = new OpenLayers.Size(10,10);
+	    this.offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
+	    
+		//空車アイコンを表示
+		addMarkerAndWindow();
+		resizeToFit();
+	        
+        // 線を引く
+        vectorLayer.addFeatures(lineFeatures);
+        map.addLayer(vectorLayer);
+		map.addLayer(marker_layer);
+
+
+	}
+	
+	// ウィンドウつきの点を地図に表示
+	function addMarkerAndWindow() {
+		{/literal}
+			// ドライバーの移動履歴を取得し、配列に格納
+			{foreach from=$driver_locations item=driver_location key=k}
+				//緯度・経度がNULL、0でなければ線と点を表示
+				{if $driver_location.longitude >0 && $driver_location.latitude >0 } 
+					/* ===========================
+					**　ドライバーの履歴を配列に格納	{$k}
+					 ===========================*/
+					//ドライバーステータスを日本語に変換
+					{if $driver_location.status==1}{literal}var status_ja="{/literal}{$smarty.const.OFFICE_START}{literal}"; var driver_icon = marker_red;{/literal}
+						{elseif $driver_location.status==2}{literal}var status_ja="{/literal}{$smarty.const.SCENE_START}{literal}"; var driver_icon = marker_blue;{/literal}
+						{elseif $driver_location.status==3}{literal}var status_ja="{/literal}{$smarty.const.FROM_SCENE_START}{literal}"; var driver_icon = marker_green; {/literal}
+						{elseif $driver_location.status==4}{literal}var status_ja="{/literal}{$smarty.const.OFFICE_RETURN}{literal}"; var driver_icon = marker_purple; {/literal}
+						{elseif $driver_location.status==5}{literal}var status_ja="{/literal}{$smarty.const.LUNCH}{literal}"; var driver_icon = marker_dark_yellow; {/literal}
+						{elseif $driver_location.status==6}{literal}var status_ja="{/literal}{$smarty.const.CONTACT_HOLD}{literal}"; var driver_icon = marker_red_purple; {/literal}
+						{elseif $driver_location.status==7}{literal}var status_ja="{/literal}{$smarty.const.CAR_WASH_HOLD}{literal}"; var driver_icon = marker_dark_green; {/literal}
+						{elseif $driver_location.status==8}{literal}var status_ja="{/literal}{$smarty.const.CAR_WASH}{literal}"; var driver_icon = marker_burn_brown; {/literal}
+						{elseif $driver_location.status==9}{literal}var status_ja="{/literal}{$smarty.const.FEED}{literal}"; var driver_icon = marker_thin_red_purple; {/literal}
+						{elseif $driver_location.status==10}{literal}var status_ja="{/literal}{$smarty.const.COPY}{literal}"; var driver_icon = marker_orange; {/literal}
+						{elseif $driver_location.status==11}{literal}var status_ja="{/literal}{$smarty.const.OTHER}{literal}"; var driver_icon = marker_black; {/literal}
+					{/if}
+					//緯度経度を取得、代入
+					{literal} 
+					var longitude = {/literal} {$driver_location.longitude}{literal}; 
+					var latitude = {/literal} {$driver_location.latitude}{literal};
+
+					//ドライバーの位置を設定
+					var position = new OpenLayers.LonLat( longitude, latitude).transform( fromProjection, toProjection);
+					 
+					var driver{/literal}{$k}{literal} = position;
+					//ドライバー情報の連想配列を作成
+					var driver_info{/literal}{$k}{literal} ={
+						"LatLng":driver{/literal}{$k}{literal},
+						"latitude":{/literal} {$driver_location.longitude}{literal},
+						"longitude":{/literal} {$driver_location.latitude}{literal},
+						"status_ja":status_ja,
+						"status":{/literal}"{$driver_location.status}"{literal},
+						"created":{/literal}"{$driver_location.created}"{literal},
+						"address":{/literal}{if $driver_location.address}"{$driver_location.address}"{else}null{/if}{literal}
+					};
+					
+					var locationForAnimation = new Array();
+					locationForAnimation['lat'] = latitude;
+					locationForAnimation['lng'] = longitude;
+					animationLocations.push( locationForAnimation );
+					
+					//2点間に線を引く 一個前のデータが開始なら線をひかない
+					//選択されているデータが終了なら次のデータとの間に線を引かない
+					var driver_start{/literal}{$k}{literal} = "{/literal}{$driver_location.start}{literal}";
+					var driver_end{/literal}{$k}{literal} = "{/literal}{$driver_location.end}{literal}";{/literal}
+					
+					/* ===========================
+					**　点を表示
+					 ===========================*/
+					{literal}
+						//表示する点
+						
+						if(driver_icon != null ){
+							var icon = new OpenLayers.Icon(driver_icon, size, offset);
+						}else{
+							var icon = new OpenLayers.Icon( template_url+'templates/image/car_icon.gif', size, offset);
+						}
+						
+						var driver_position{/literal}{$k}{literal} = new OpenLayers.LonLat(longitude, latitude).transform( fromProjection, toProjection);
+						var marker{/literal}{$k}{literal} = new OpenLayers.Marker(driver_position{/literal}{$k}{literal}, icon.clone());
+						var contentString{/literal}{$k}{literal} = '<div id="content" style="width:200px">'+ driver_info{/literal}{$k}{literal}.created +'&nbsp;'+driver_info{/literal}{$k}{literal}.status_ja +  '</div>';
+						
+						//マウスオーバー時のウィンドウ表示
+						marker{/literal}{$k}{literal}.events.register(
+								{/literal}
+								{* PCの場合はマウスオーバー、スマートフォンの場合はタッチ *}
+								{if $carrier==null}{literal}
+									'mouseover',
+								{/literal}{else if $carrier=="iPhone"||$carrier=="Android"}{literal}
+									'touchstart',
+								{/literal}{/if}{literal}
+							 marker{/literal}{$k}{literal}, function(evt) {
+						
+						    popup = new OpenLayers.Popup.FramedCloud("Popup",
+						    driver_position{/literal}{$k}{literal},
+						    	null,
+						        contentString{/literal}{$k}{literal},
+						        null,
+						        true);
+						    map.addPopup(popup);
+						});
+
+						//情報ウィンドウを隠す	
+						marker{/literal}{$k}{literal}.events.register('mouseout', marker{/literal}{$k}{literal}, function(evt) {popup.hide();})
+						
+						marker_layer.addMarker(marker{/literal}{$k}{literal});
+					{/literal}
+
+					/* ===========================
+					**　線を追加
+					===========================*/
+					{* 0個以上の場合のみ実行する　開始と終了の判定は、時系列の進みと配列の数字が逆なので気をつける　*}
+					{if $k>0}
+						{literal}
+							if((driver{/literal}{$k-1}{literal} != null)&&
+							((driver_start{/literal}{$k-1}{literal} == "0000-00-00 00:00:00")||
+							(driver_start{/literal}{$k-1}{literal} == ""))&&
+							((driver_end{/literal}{$k}{literal} == "0000-00-00 00:00:00")||
+							(driver_end{/literal}{$k}{literal} == ""))){
+								
+								var lastRoutePoint = new OpenLayers.Geometry.Point( driver_info{/literal}{$k-1}{literal}.latitude, 
+																					driver_info{/literal}{$k-1}{literal}.longitude);
+								var newRoutePoint = new OpenLayers.Geometry.Point( longitude, latitude);
+						
+								var list = new Array();
+								list.push(lastRoutePoint);
+								list.push(newRoutePoint);
+
+								// ラインのスタイル
+								var layer_style{/literal}{$k}{literal} = OpenLayers.Util.applyDefaults(layer_style{/literal}{$k}{literal}, OpenLayers.Feature.Vector.style['default']);
+								// ラインの色
+								layer_style{/literal}{$k}{literal}.strokeColor = {/literal}
+								{if $driver_location.status == 1 }"#FF0000",
+								{elseif $driver_location.status == 2 }"#0e97f8",
+								{elseif $driver_location.status == 3 }"#0ef850",
+								{elseif $driver_location.status == 4 }"#760ef8",
+								{else}"#FF0000",
+								{/if}
+								{literal}
+								
+								//ラインの太さ
+								layer_style{/literal}{$k}{literal}.strokeWidth = 2;
+								
+						        var lineFeature = new OpenLayers.Feature.Vector(
+						            new OpenLayers.Geometry.LineString(list).transform(
+						                new OpenLayers.Projection("EPSG:4326"),
+						                new OpenLayers.Projection("EPSG:900913")),null, layer_style{/literal}{$k}{literal});
+						        lineFeatures.push(lineFeature);
+							}
+						{/literal}
+					{/if}
+				{else if}
+					{literal}
+						driver{/literal}{$k}{literal} = null;
+					{/literal}
+				{/if}
+			{/foreach}
+		{literal}
+	}
+			
+	function resizeToFit() {
+		// マーカーをすべて表示させるため、マーカーを持つレイヤーのデータを取得する
+		var newBound = marker_layer.getDataExtent();
+		var new_zoom = map.getZoomForExtent(newBound, false);
+		var new_lon_lat = newBound.getCenterLonLat();
+		map.setCenter(new_lon_lat);
+		map.zoomTo(new_zoom);
+	}
+	
+	/*
+	*	アニメーション
+	*/
+	//線のスタイル
+	var animationLineStyle = {
+		strokeColor: "#0500bd",
+		strokeWidth: 12,
+		strokeOpacity: 0.5,
+		strokeColor: '#0000ff'
+	};
+	// アニメーションの状態
+	const INACTIVE = 0;
+	const RUNNING = 1;
+	const STOP = 2;
+	const STOP_AND_GO = 3;
+	var animationStatus = INACTIVE;
+	//アニメーションを行うための緯度経度配列の要素番号
+	var startAnimationOrder;
+	//点と点の間の歩数
+	ANIMATION_STEP = 1;
+	//点と点の間の移動時間
+	ANIMATION_TIME = 50;
+	
+	//アニメーション開始
+	function startRouteAnimation() {
+		//すでにアニメーションが動いていたら、そのアニメーションを消す
+		if ( animationStatus == RUNNING ) {
+			animationStatus = STOP_AND_GO; //現在のアニメーションを最後のアニメーションに設定する
+		} else {
+			//新しいアニメーションを開始する
+			animationStatus = RUNNING;
+			//アニメーションは逆向きに走らせるので、逆からカウント
+			if(animationLocations.length > 1){
+				startAnimationOrder = animationLocations.length　-　1;
+			}else{
+				startAnimationOrder = 0;
+			}
+			eachAnimationToEachPoint();
+		}
+	}
+	
+	//アニメーションをストップする
+	function stopRouteAnimation() {
+		animationStatus = STOP;
+	}
+	
+	//アニメーションで描いた線を削除する
+	function removeAnimatedLayersIfLastAnimation( fn ) {
+		var vec_name = "Animation_Layer";
+		var animatedLayers = map.getLayersByName(vec_name);
+		for (i = 0; i < animatedLayers.length; i++) {
+			map.removeLayer(animatedLayers[i]);
+		}
+		// アニメーションを削除後、引数の関数を呼び出す
+		if (fn) fn();
+	}
+	
+	//アニメーションで線を描く緯度経度のポイントをつくる
+	function eachAnimationToEachPoint () {
+		
+		//アニメーションが終わっている場合、
+		if (startAnimationOrder ==0 ||
+			animationStatus != RUNNING) {
+			if (animationStatus == STOP_AND_GO) {
+				removeAnimatedLayersIfLastAnimation( startRouteAnimation() );
+			} else {
+				animationStatus = STOP;
+				removeAnimatedLayersIfLastAnimation();
+			}
+			return;
+		}
+		
+		//出発地点と終着地点の緯度経度
+		var location = animationLocations[startAnimationOrder];
+		//逆向きに走らせる
+		startAnimationOrder = startAnimationOrder - 1;
+		var next_location = animationLocations[startAnimationOrder];
+		
+		//出発地点と終着地点の緯度経度がどちらもある場合、線を描く
+		if (location != null &&
+			next_location != null ) {
+			//出発地点と終着地点のマップに対応した緯度経度に変換
+			var position = new OpenLayers.LonLat(location['lng'], location['lat']).transform( fromProjection, toProjection);
+			var next_position = new OpenLayers.LonLat(next_location['lng'], next_location['lat']).transform( fromProjection, toProjection);
+			
+			//出発地点と終着地点のマップ上のポイントを生成
+			var point = new OpenLayers.Geometry.Point(position.lon, position.lat);
+			var next_point = new OpenLayers.Geometry.Point(next_position.lon, next_position.lat);
+			
+			//出発地点から終着地点までの線を描く。
+			//描いた後、もう一度このメソッドを呼び出して、次の線を描く。
+			drawAnimatedLine( point, next_point, animationLineStyle, ANIMATION_STEP, ANIMATION_TIME, function () {
+			    eachAnimationToEachPoint();
+			});
+		}
+	}
+	
+	//アニメーションつきで線を描く
+	function drawAnimatedLine(startPt, endPt, style, steps, time, fn) {
+	    var directionX = (endPt.x - startPt.x) / steps;
+	    var directionY = (endPt.y - startPt.y) / steps;
+	    var i = 0;
+	    var prevLayer;
+	    var ivlDraw = setInterval(function () {
+	        if (i > steps) {
+	            clearInterval(ivlDraw);
+	            if (fn) fn();
+	            return;
+	        }
+	        var newEndPt = new OpenLayers.Geometry.Point(startPt.x + i * directionX, startPt.y + i * directionY);
+	        var line = new OpenLayers.Geometry.LineString([startPt, newEndPt]);
+	        var fea = new OpenLayers.Feature.Vector(line, {}, style);
+	        var vec = new OpenLayers.Layer.Vector();
+	        var vec_name = "Animation_Layer";
+	        vec.setName(vec_name);
+	        vec.addFeatures([fea]);
+	        map.addLayer(vec);
+			if(prevLayer) map.removeLayer(prevLayer); prevLayer = vec;
+	        i++;
+	    }, time / steps);
+	}
+	
+</script>
+{/literal}
+<a name="map"></a>
+{*OSM Map本体*} 
+{include file="osm_map.html"}
+
+<font color="#FF0000">{$smarty.const.RECTANGLE}</font>{$smarty.const.OFFICE_START}&nbsp; 
+<font color="#0e97f8">{$smarty.const.RECTANGLE}</font>{$smarty.const.SCENE_START}&nbsp;
+<font color="#0ef850">{$smarty.const.RECTANGLE}</font>{$smarty.const.FROM_SCENE_START}&nbsp;
+<font color="#760ef8">{$smarty.const.RECTANGLE}</font>{$smarty.const.OFFICE_RETURN}&nbsp;
+<font color="#f2d619">{$smarty.const.RECTANGLE}</font>{$smarty.const.LUNCH}&nbsp; 
+<font color="#f219db">{$smarty.const.RECTANGLE}</font>{$smarty.const.CONTACT_HOLD}&nbsp;
+<font color="#1c9a4c">{$smarty.const.RECTANGLE}</font>{$smarty.const.CAR_WASH_HOLD}&nbsp;
+<font color="#8f3e30">{$smarty.const.RECTANGLE}</font>{$smarty.const.CAR_WASH}&nbsp;
+<font color="#d7cff0">{$smarty.const.RECTANGLE}</font>{$smarty.const.FEED}&nbsp; 
+<font color="#fea100">{$smarty.const.RECTANGLE}</font>{$smarty.const.COPY}&nbsp;
+<font color="#0e0e0d">{$smarty.const.RECTANGLE}</font>{$smarty.const.OTHER}&nbsp;
+<br>
+<!-- <font color="#0e97f8">{$smarty.const.RECTANGLE}</font>{$smarty.const.DRIVER_OTHER} -->
+<a href="javascript:resizeToFit();">全体表示</a>
+<br>
+{if $is_ban_editing == 0}
+<div align="left">
+	<a href="index.php?action=driver_record_map_add&driver_id={$driver_id}&company_id={$company_id}"><img src="{$smarty.const.TEMPLATE_URL}templates/image/bt_add.png" alt="乗車記録の追加"></a>
+	<a href="#map" onclick="startRouteAnimation();"><img src="{$smarty.const.TEMPLATE_URL}templates/image/bt_play.png" alt="開始"></a>
+	<a href="#map" onclick="stopRouteAnimation();"><img src="{$smarty.const.TEMPLATE_URL}templates/image/bt_stop.png" alt="終了"></a>
+</div>
+{/if}
+{*複数ページへ渡る場合のリンク*} {foreach from=$links item="links"} {$links}
+{/foreach} {*PCの場合、テーブルで閲覧できる*} {if $carrier==NULL}
+<table class="report_table">
+	<tr>
+		<th>{$smarty.const.DRIVER_STATUS}</th>
+		<th>{$smarty.const.COMMON_JYUSYO}</th>
+		<th>{$smarty.const.SPEED}</th>
+		<th>{$smarty.const.START}</th>
+		<th>{$smarty.const.END}</th>
+
+		<th>{$smarty.const.COMMON_DATETIME}</th>
+		<th>{$smarty.const.EDIT}/{$smarty.const.DELETE}</th>
+	</tr>
+	{foreach from=$data item="data"}
+	<tr>
+		<td>{if $data.status==1}{$smarty.const.OFFICE_START}{elseif
+			$data.status==2}{$smarty.const.SCENE_START} {elseif
+			$data.status==3}{$smarty.const.FROM_SCENE_START} {elseif
+			$data.status==4}{$smarty.const.OFFICE_RETURN} {elseif
+			$data.status==5}{$smarty.const.LUNCH} {elseif
+			$data.status==6}{$smarty.const.CONTACT_HOLD} {elseif
+			$data.status==7}{$smarty.const.CAR_WASH_HOLD} {elseif
+			$data.status==8}{$smarty.const.CAR_WASH} {elseif
+			$data.status==9}{$smarty.const.FEED} {elseif
+			$data.status==10}{$smarty.const.COPY} {elseif
+			$data.status==11}{$smarty.const.OTHER} {elseif
+			$data.status==12}{$smarty.const.DRIVER_OTHER}{/if}</td>
+			
+		<td>{$data.address}</td>
+		<td>{$data.speed}</td>
+		<td>
+			{if $data.start != 0}{$smarty.const.CIRCLE}{/if}
+		</td>
+		<td>
+			{if $data.end != 0}{$smarty.const.CIRCLE}{/if}
+		</td>
+		<td>{$data.created}</td>
+		<td><a href="index.php?action=driver_record_map_edit&id={$data.id}&driver_id={$driver_id}&company_id={$company_id}" >
+		{$smarty.const.EDIT_ICON}</a>
+		{if $carrier==NULL || $carrier == 'Android'|| $carrier =='iPhone'}
+		{literal}
+			<script type="text/javascript">
+			<!--
+			function check(){
+				return confirm("この記録を消去して、本当によろしいですか？消去すると、元に戻りません。")
+			}
+			//-->
+			</script>	
+			{/literal}
+		{/if}
+		<a href="index.php?action=driver_record_map_delete&id={$data.id}&company_id={$company_id}"  
+		{literal}onclick="return check()"{/literal}>{$smarty.const.COMMON_DELETE_ICON}</a></td>
+	</tr>
+	{*データがない場合*}
+	{foreachelse}
+	<div>{$smarty.const.TOP_NODATA}</div>
+	{/foreach}
+</table>
+{*スマートフォン、ガラケーの場合*} {else}
+
+{foreach from=$data item="data"}
+<div>
+	<b> {if $data.status==1}{$working_status->action_1} {elseif
+		$data.status==2}{$working_status->action_2} {elseif
+		$data.status==3}{$working_status->action_3} {elseif
+		$data.status==4}{$working_status->action_4} {elseif
+		$data.status==5}{$smarty.const.DRIVER_OTHER} {/if} </b>
+</div>
+{if $data.address}
+<div>{$data.address}</div>
+{/if} {if $data.sales}
+<div>{$smarty.const.DRIVER_SALES}:
+	{$data.sales}{$smarty.const.YEN}</div>
+{/if} 
+{if $data.detail}
+	<div>{$data.detail}</div>
+{/if}
+{if $data.speed}
+	<div>{$data.speed} km</div>
+{/if}
+{if $data.start != 0}
+	<div class="green">{$smarty.const.START}</div>
+{/if}
+{if $data.end != 0}
+	<div class="green">{$smarty.const.END}</div>
+{/if}
+
+{if $is_ban_editing == 0}
+<div>
+	<a href="index.php?action=driver_record_map_edit&id={$data.id}&driver_id={$driver_id}&company_id={$company_id}" >
+	{$smarty.const.EDIT}
+	</a>|
+	<a href="index.php?action=driver_record_map_delete&id={$data.id}&company_id={$company_id}"  
+		{literal}onclick="return check()"{/literal}>{$smarty.const.COMMON_DELETE}</a>
+</div>
+{/if}
+
+<div>{$data.created}</div>
+<hr>
+{/foreach} {/if} {*リンクの設定*} {foreach from=$links item="links"} {$links}
+{/foreach}
+
+{else if}
+<div>{$smarty.const.TOP_NODATA}</div>
+{if $is_ban_editing == 0}
+<div align="left"><a href="index.php?action=driver_record_map_add&driver_id={$driver_id}&company_id={$company_id}">乗車記録の追加はこちらから</a></div>
+{/if}
+{/if}

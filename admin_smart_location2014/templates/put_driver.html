@@ -1,0 +1,113 @@
+<h1>{$smarty.const.COMMON_DRIVER_ADD}</h1>
+<FORM METHOD="POST" action="index.php?action=tryPutDriver&driver_id={$driver_id}" enctype="multipart/form-data">
+ <TABLE  class="thread" border="1" id="middle_box">
+<TBODY>
+	<tr><th>    	
+    		{$smarty.const.COMMON_COMPANY}<br></th>
+		<td class="con_odd">
+		{if $companyData}
+ 			{$companyData->company_name|escape}
+ 			<input type=hidden name="company_id" value="{$company_id|escape}">  	
+ 		{/if}
+       	</td></tr>
+        	
+	<tr><th>
+		<span class="hissu">{$smarty.const.COMMON_INDISP}</span>
+	{$smarty.const.COMMON_LAST_NAME} &nbsp;| &nbsp; {$smarty.const.COMMON_FIRST_NAME}</th>
+        <td class="con_odd">
+        	<input type="text" name="last_name" size="20" maxlength="30" value="{$driverData->last_name|escape}">
+        	<input type="text" name="first_name" size="20" maxlength="30" value="{$driverData->first_name|escape}">
+        </td></tr>
+
+	<tr><th>
+		<span class="hissu">{$smarty.const.COMMON_INDISP}</span>
+	{$smarty.const.COMMON_FURIGANA}</th>
+        <td class="con_odd">
+        	<input type="text" name="furigana" size="20" maxlength="30" value="{$driverData->furigana|escape}">
+        </td></tr>
+        	
+	<tr><th>
+	{$smarty.const.COMMON_EXPERIENCE}</th>
+		<td class="con_odd">
+        	<input type="text" name="experience" size="5" maxlength="5" value="{$driverData->experience|escape}">{$smarty.const.COMMON_YEAR}</td></tr>
+
+	<tr><th>
+	{$smarty.const.COMMON_NO_ACCIDENT}</th>
+		<td class="con_odd">
+        	<input type="text" name="no_accident" size="5" maxlength="5" value="{$driverData->no_accident|escape}">{$smarty.const.COMMON_YEAR}</td></tr>
+        	
+	<tr><th>{$smarty.const.COMMON_CAR_TYPE}</th>
+		<td class="con_odd">
+        	<input type="text" name="car_type" size="50" maxlength="100" value="{$driverData->car_type|escape}">
+		</td></tr>
+	{*画像アップロード 本体は記述が多いため、edit_image.htmlへ*}
+	<tr><td colspan="2">
+	<div class="item_name"><b>{$smarty.const.COMMON_IMAGE}</b>&nbsp;{$smarty.const.IMAGE_NOTICE}</div>
+		{include file="../../templates/edit_image.html"}
+	</td></tr>	
+		
+	<tr><th>{$smarty.const.COMMON_EQUIPMENT}</th>
+		<td class="con_odd">
+        	<input type="text" name="equipment" size="50" maxlength="100" value="{$driverData->equipment|escape}">
+		</td></tr>
+
+
+	<tr><th>{$smarty.const.COMMON_COL_SEX}</th>
+		<td class="con_odd">
+	       	<input type="radio" name="sex" value="0"
+	       	{if $driverData->sex == 0}checked{/if}
+	       	>{$smarty.const.COMMON_COL_MAN}<br>
+        	<input type="radio" name="sex" value="1"
+        	{if $driverData->sex == 1}checked{/if}
+        	>{$smarty.const.COMMON_COL_WOMAN}<br>        	
+		</td></tr>
+		
+	<tr><th>{$smarty.const.COMMON_BIRTHDAY}</th>
+		<td class="con_odd">
+        	<input type="text" name="birthday" size="50" maxlength="100" value="{$driverData->birthday|escape}">
+		</td></tr>
+
+	<tr><th>{$smarty.const.COMMON_EREA}</th>
+		<td class="con_odd">
+        	<input type="text" name="erea" size="50" maxlength="100" value="{$driverData->erea|escape}">
+		</td></tr>
+
+	<tr><th>{$smarty.const.COMMON_REGIST_NUMBER}</th>
+		<td class="con_odd">
+        	<input type="text" name="regist_number" size="50" maxlength="100" value="{$driverData->regist_number|escape}">
+		</td></tr>
+
+	<tr><th>{$smarty.const.COMMON_MESSAGE}</th>
+		<td class="con_odd">
+        	<textarea name="driver_message" rows="20" cols="75" >{$driverData->driver_message|escape}
+        	</textarea>
+		</td></tr>
+	<tr><th>{$smarty.const.ASSIGNED_BRANCH}</th>
+		<td class="con_odd">
+		   	<select name="geographic_id">
+			{foreach from=$branchList item="branchList"}
+				<option value="{$branchList->id|escape}" 
+				{if $driverData->geographic_id==$branchList->id} selected{/if}
+				{if $session.branch_id==$branchList->id} selected{/if}
+				
+				>
+                	{$branchList->name|escape}</option>
+			{/foreach}
+			</select>
+		</td></tr>
+	<tr><th>ID</th>
+		<td class="con_odd">
+        	<input type="text" name="login_id" size="50" maxlength="100" value="{$driverData->login_id|escape}">
+		</td></tr>
+	<tr><th>{$smarty.const.COMMON_PWD}</th>
+		<td class="con_odd">
+        	<input type="password" name="passwd" size="50" maxlength="100" value="">
+		</td></tr>
+
+	<tr><th colspan="2" align="center">
+			<input type="submit" name="submit" value="{$smarty.const.COMMON_SUBMIT}"></th>
+	</tr>
+	</TBODY>
+	</TABLE>
+ 
+</FORM>

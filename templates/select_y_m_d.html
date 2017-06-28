@@ -1,0 +1,103 @@
+{*年月日~年月日のセレクトフォーム　運転（履歴）日報画面で使用　*}
+	 <select name="time_from_year">
+	  {php} 
+	     $this_year=date('Y');
+	       for($i=$this_year-5; $i<$this_year+1; $i++){
+	          echo "<option value=\"$i\"";
+		     				if($_SESSION['time_from_year']){
+								if($i==$_SESSION['time_from_year']){
+									 echo "selected=selected";	
+								}
+							}elseif($i==$this_year){
+				 				echo " selected";	
+							}
+			echo ">$i</option>";
+		}
+	  {/php}
+	 </select>年
+	 <select name="time_from_month">
+	   {php} 
+		$this_month=date('n');
+		 	for($j=1; $j<13; $j++){
+				echo "<option value=\"$j\"";
+		     				if($_SESSION['time_from_month']){
+								if($j==$_SESSION['time_from_month']){
+									 echo "selected=selected";	
+								}
+							}elseif($j==$this_month){
+					 			echo "selected=selected";	
+							}
+				echo ">$j</option>";
+								
+			}
+	  {/php}		
+	  </select>月
+	 <select name="time_from_day">
+	  {php} 
+		$today=date('d');
+			for($k=1; $k<32; $k++){
+				echo "<option value=\"$k\"";
+						   if($_SESSION['time_from_day']){
+								if($k==$_SESSION['time_from_day']){
+									 echo "selected=selected";	
+								}
+							}elseif($k==$today){
+						 		echo "selected=selected";	
+							}
+				echo ">$k</option>";
+			}
+	 {/php}		
+	 </select>日
+
+	 ~
+ 	 {if $carrier=='Android'||$carrier=='iPhone'}
+		 <br>
+	 {/if}
+	 <select name="time_to_year">
+	  {php} 
+	       for($i=$this_year-5; $i<$this_year+1; $i++){
+	          echo "<option value=\"$i\"";
+	         	if($_SESSION['time_to_year']){
+					if($i==$_SESSION['time_to_year']){
+						 echo "selected=selected";	
+					}
+				}elseif($i==$this_year){
+				 echo " selected";	
+					}
+			echo ">$i</option>";
+			
+		}
+	  {/php}
+	 </select>年
+	 <select name="time_to_month">
+	   {php} 
+		 	for($j=1; $j<13; $j++){
+				echo "<option value=\"$j\"";
+			    	if($_SESSION['time_to_month']){
+						if($j==$_SESSION['time_to_month']){
+							 echo "selected=selected";	
+						}
+					}elseif($j==$this_month){
+					 echo "selected=selected";	
+				}
+				echo ">$j</option>";
+								
+			}
+	  {/php}		
+	  </select>月
+	 <select name="time_to_day">
+	  {php} 
+		$today=date('d');
+			for($k=1; $k<32; $k++){
+				echo "<option value=\"$k\"";
+					if($_SESSION['time_to_day']){
+						if($k==$_SESSION['time_to_day']){
+							 echo "selected=selected";	
+						}
+					}elseif($k==$today){
+						 echo "selected=selected";	
+						}
+				echo ">$k</option>";
+			}
+	 {/php}		
+	 </select>日

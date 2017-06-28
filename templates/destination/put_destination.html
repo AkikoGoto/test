@@ -1,0 +1,187 @@
+<h1>{$smarty.const.DESTINATION} {if $status=='EDIT'}
+	{$smarty.const.EDIT_DATA} {else} {$smarty.const.NEW_DATA} {/if}</h1>
+
+<ul class="change_tab">
+	<li class="select">{$smarty.const.DESTINATION_SELF_UPLOAD}</li>
+	<li>{$smarty.const.DESTINATION_EASY_UPLOAD}</li>
+</ul>
+
+<ul class="tab_content">
+
+	<li>
+		<FORM METHOD="POST" action="index.php?action=/destination/tryDestination">
+			{if $status=='EDIT'}
+			<div class="item_name">
+				{$smarty.const.COMMON_ID}
+			</div>
+			<div>
+				{$data.id|escape} <input type=hidden name="id"
+					value="{$data.id|escape}">
+			</div>
+			{/if}
+			<div class="item_name">
+				<font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+					{$smarty.const.DESTINATION_NAME}
+			</div>
+			<div>
+				<input type="text" name="destination_name" size="50" maxlength="100"
+					value="{if $status=='EDIT'}{$data.destination_name|escape}{else}{$pre_data.destination_name|escape}{/if}">
+			</div>
+
+			<div class="item_name">
+					{$smarty.const.COMMON_FURIGANA}
+			</div>
+			<div>
+				<input type="text" name="destination_kana" size="50" maxlength="100"
+					value="{if $status=='EDIT'}{$data.destination_kana|escape}{else}{$pre_data.destination_kana|escape}{/if}">
+			</div>
+		
+			<div class="item_name">
+					{$smarty.const.COMMON_POSTAL}
+			</div>
+			<div>
+				<input type="text" name="postal" size="8" maxlength="10" class="mini_input" 
+					value="{if $status=='EDIT'}{$data.postal|escape}{else}{$pre_data.postal|escape}{/if}">
+			</div>
+
+			<div class="item_name">
+				{if $status != 'EDIT'}
+				<font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+				{/if}
+					{$smarty.const.COMMON_JYUSYO}
+			</div>
+			<div>
+				<input type="text" name="address" size="60"
+					maxlength="80"
+					value="{if $status=='EDIT'}{$data.address|escape}{else}{$pre_data.address|escape}{/if}">
+			</div>
+
+
+			<div class="item_name">
+					{$smarty.const.COMMON_TEL}
+			</div>
+			<div>
+				<input type="text" name="tel" size="12" maxlength="20" class="mini_input" 
+					value="{if $status=='EDIT'}{$data.tel|escape}{else}{$pre_data.tel|escape}{/if}">
+			</div>
+
+			<div class="item_name">
+					{$smarty.const.COMMON_FAX}
+			</div>
+			<div>
+				<input type="text" name="fax" size="12" maxlength="20" class="mini_input" 
+					value="{if $status=='EDIT'}{$data.fax|escape}{else}{$pre_data.fax|escape}{/if}">
+			</div>
+
+			<div class="item_name">
+					{$smarty.const.COMMON_DEPARTMENT}
+			</div>
+			<div>
+				<input type="text" name="department" size="60" maxlength="80" 
+					value="{if $status=='EDIT'}{$data.department|escape}{else}{$pre_data.department|escape}{/if}">
+			</div>
+
+			<div class="item_name">
+					{$smarty.const.COMMON_CONTACT_PERSON_NAME}
+			</div>
+			<div>
+				<input type="text" name="contact_person" size="60" maxlength="80" 
+					value="{if $status=='EDIT'}{$data.contact_person|escape}{else}{$pre_data.contact_person|escape}{/if}">
+			</div>
+
+			<div class="item_name">
+					{$smarty.const.COMMON_EMAIL}
+			</div>
+			<div>
+				<input type="text" name="email" size="60" maxlength="80" 
+					value="{if $status=='EDIT'}{$data.email|escape}{else}{$pre_data.email|escape}{/if}">
+			</div>
+
+
+			<div class="item_name">
+					{$smarty.const.DESTINATION_CATEGORY}
+			</div>
+			<div>
+				{foreach from=$categoryList item="category"}
+				<div class="div_list">
+				<input type="checkbox" name="category[]" value="{$category.id}"
+					{if $session.category==$category.id}checked{/if}
+					
+					{* 編集の場合、カテゴリーが選択されたものか調べる *}
+					{foreach from=$existed_categoryList item="existed_category"}	
+						{if $existed_category==$category.id}checked{/if}
+					{/foreach}		
+				>{if $category.color !=null }<font color="{$category.color}">■</font>{/if}{$category.name}
+				</div>
+				{*カテゴリーがない場合*}
+				{foreachelse}
+				現在登録されているカテゴリーがありません。
+				{/foreach}
+				<p>{$smarty.const.DESTINATION_CATEGORY_NOTICE}</p>
+				<a href="index.php?action=/destination_category/putDestinationCategory&company_id={$company_id}" 
+				 class="link_button" 
+				>
+				{$smarty.const.DESTINATION_CATEGORY}{$smarty.const.COMMON_ADD}
+				</a>	
+			</div>
+		
+			{if $status=='EDIT'}
+			<div class="item_name">
+					{$smarty.const.COMMON_LAT}
+			</div>
+			<div>
+				<input type="text" name="latitude" size="60"
+					maxlength="80"
+					value="{if $status=='EDIT'}{$data.latitude|escape}{else}{$pre_data.latitude|escape}{/if}">
+			</div>
+			<div class="item_name">
+					{$smarty.const.COMMON_LONG}
+			</div>
+			<div>
+				<input type="text" name="longitude" size="60"
+					maxlength="80"
+					value="{if $status=='EDIT'}{$data.longitude|escape}{else}{$pre_data.longitude|escape}{/if}">
+			</div>
+			{/if}
+		
+			<div class="item_name">
+					{$smarty.const.DRIVER_OTHER}
+			</div>
+			<div>
+				<input type="text" name="information" size="100"
+					maxlength="120"
+					value="{if $status=='EDIT'}{$data.information|escape}{else}{$pre_data.information|escape}{/if}">
+			</div>
+		
+			<div align="center">
+				<input type=hidden name="company_id" value="{$company_id|escape}">
+				<button class="btn btn-large btn-ocher"
+					type="submit" name="submit" value="{$smarty.const.COMMON_SUBMIT}">
+					{$smarty.const.COMMON_SUBMIT}
+					</button>
+			</div>
+		
+		</FORM>
+	</li>
+	<li class="hide">
+		<div class="row">
+			<div class="csv_illustration">
+				<div>CSVファイルで一括で配送先を登録することができます。</div>
+				<div>CSVファイルの形式は、以下のサンプルに従って作成して下さい。</div>
+				<a class="csv_illustration_sample_download" href="https://doutaikanri.com/files/destinations_sample_format.csv">配送先CSVサンプル</a>
+			</div>
+			<div class="well">
+				<div id="dragandrophandler">
+					{$smarty.const.DESTINATION_DRAG_UPLOAD}
+				</div>
+				<br>
+				<div id="status1"></div>
+			</div>
+			<div id="error"></div>
+	
+		</div>
+	</li>
+</ul>
+
+<script type="text/javascript" src="{$smarty.const.TEMPLATE_URL}templates/js/csv_drag_upload.js"></script>
+<script type="text/javascript" src="{$smarty.const.TEMPLATE_URL}templates/js/tab.js"></script>

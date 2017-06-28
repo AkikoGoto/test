@@ -1,0 +1,63 @@
+<h2>{$smarty.const.TARGET}
+	{if $id}
+		{$smarty.const.EDIT}
+	{else}
+		{$smarty.const.COMMON_ADD}
+	{/if}
+</h2>
+<FORM METHOD="POST" action="index.php?action=/target/target_putindb" name="profile">
+
+	<div class="item_name"><font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$smarty.const.TARGET_ID}</b></div>
+	<div>{$target_id}</div>
+	<input type="hidden" name="target_id" 
+		value="{$target_id}">
+
+	<div class="item_name"><b>{$smarty.const.COMMON_JYUSYO}</b></div>
+	<div>{$address}</div>
+	<input type="hidden" name="address" 
+		value="{$address}">
+
+	<div class="item_name"><b><font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+	{$smarty.const.COMMON_LAT}</b></div>
+		<div>		
+		  <div id="lat"></div>
+			<input type="hidden" name="latitude">
+		</div>
+
+	<div class="item_name"><b><font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+	{$smarty.const.COMMON_LONG}</b></div>
+		<div>
+		  <div id="lng"></div>
+			<input type="hidden" name="longitude" >
+		</div>
+		
+
+	<div class="item_name"><b>{$smarty.const.DRIVER_NAME}</b></div>
+	<div>{$driver_name}</div>
+	<input type="hidden" name="driver_id" 
+		value="{$driver_id}">
+
+	<div class="item_name"><b>{$smarty.const.TARGET_SET_DATE}</b></div>
+	<div>{$target_set_date}</div>
+	<input type="hidden" name="target_set_date" 
+		value="{$target_set_date}">
+
+	<div class="item_name"><b>{$smarty.const.IS_PICKED}</b></div>
+	<div>{if $is_picked}{$smarty.const.IS_PICKED}{else}{$smarty.const.NOT_PICKED}{/if}</div>
+	<input type="hidden" name="is_picked" value="{$is_picked}">
+
+	<div class="item_name"><b>{$smarty.const.TARGET_PICKED_DATE}</b></div>
+	<div>{$picked_date}</div>
+	<input type="hidden" name="picked_date" value="{$picked_date}">
+
+	<!-- Google Map -->	
+    <div id="map_canvas" style="width: 500px; height: 300px"></div>
+ 			
+	<div align="center">
+	<input type="hidden" name="driver_id" value={$driver_id}>
+	<input type="hidden" name="company_id" value={$company_id}>
+	<input type="hidden" name="id" value={$id}>
+	<input type="submit" name="submit" value="{$smarty.const.COMMON_SUBMIT}"></div>
+
+</FORM>

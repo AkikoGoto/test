@@ -1,0 +1,51 @@
+{*配送先一覧　ポップアップのフォーム表示*}
+<h1>{$smarty.const.DESTINATION}{$smarty.const.VIEW_ALL}</h1>
+<div>
+<form method="GET" action="index.php">
+	<input type="text" name="query" value="{$query}" size=20>
+	<input type="hidden" name="company_id" value={$company_id}>
+	<input type="hidden" name="action" value="destination/viewDestinationsPopUp">
+	<input type="submit" value="検索">
+</form>
+</div>
+{if $data}
+{*複数ページへ渡る場合のリンク*} 
+{foreach from=$links item="links"} 
+	{$links}
+{/foreach}
+ {*PCの場合、テーブルで閲覧できる*}
+ <!-- 
+ <form id="DestinationId" onsubmit="return false;">
+ -->
+<table class="report_table">
+	<tr>
+		<th width="50px"></th>
+		<th>{$smarty.const.DESTINATION_CATEGORY}</th>
+		<th>{$smarty.const.DESTINATION_NAME}</th>
+		<th>{$smarty.const.COMMON_JYUSYO}</th>
+		<th>{$smarty.const.DRIVER_OTHER}</th>
+	</tr>
+	{foreach from=$data item="data"}
+	<tr>
+		<td>
+		<a rel="close" class="link_button" 
+		onclick="destination_name='{$data.destination_name}';address = '{$data.address}';information='{$data.information}';">選択</a>
+		
+		</td>
+		<td>{$data.category_name}</td>
+		<td>{$data.destination_name}</td>
+		<td>{$data.address}</td>
+		<td>{$data.information}</td>
+	</tr>
+	{*データがない場合*} {foreachelse}
+	<div>{$smarty.const.TOP_NODATA}</div>
+	{/foreach}
+</table>
+<!-- 
+</form>
+ -->
+{else if}
+<div>{$smarty.const.TOP_NODATA}</div>
+<div align="left"><a href="index.php?action=/destination/putDestination&company_id={$company_id}">配送先の追加はこちらから</a></div>
+{/if}
+

@@ -1,0 +1,61 @@
+{*近い営業所データを表示*}
+
+<h1>{$smarty.const.JV_SELECT}</h1>
+
+{if $jvList != null}
+	<form method="get" action="index.php">
+		<div class="jv" >
+			<input type="hidden" name="action" value="realtimeDriverMap">
+			<select class="jv_select" name="company_id">
+				{foreach from=$jvList item="jv" key=k name="jv"}
+					
+						<option class="jv_select_detail" value="{$jv.id}">
+							{$jv.company_name}			
+						</option>
+						
+						{if !$smarty.foreach.jv.last}
+							|
+						{/if}
+				{*配列が空だった場合*}
+				{foreachelse}
+					現在JVはありません
+				{/foreach}
+			</select>
+		</div>
+		<div class="jv_submit">
+			<button class="btn btn-large btn-ocher" value="送信" name="submit" type="submit"> 送信</button>
+		</div>
+	</form>
+	<div class="clear_both"></div>
+	
+{/if}
+
+<!-- 
+{if $branch_list && $u_id}
+<div class="under_map_list">
+	{foreach from=$branch_list item="branch"}
+	<a href="index.php?action=realtimeDriverMap&company_id={$company_id}&branch_id={$branch->geographic_id}">{$branch->name}</a>&nbsp;
+	{/foreach}
+</div>
+{/if}
+
+{*空車アイコン表示のJavascript*}
+{*OSM Map本体*} 
+<iframe id="iframe_realtime_map" width="100%" height="800px" src="http://edison.doutaikanri.com:13000/map?cid={$company_id}&key={$key}&branch_id={$branch_id}" style="border:none;">
+</iframe>
+<div class="under_map_list">
+<font color="#cf714a">{$smarty.const.RECTANGLE}</font>{$working_status->action_1}&nbsp; 
+<font color="#4169e1">{$smarty.const.RECTANGLE}</font>{$working_status->action_2}&nbsp;
+<font color="#ff00ff">{$smarty.const.RECTANGLE}</font>{$working_status->action_3}&nbsp;
+<font color="#009944">{$smarty.const.RECTANGLE}</font>{$working_status->action_4}
+{if $carrier==NULL}&nbsp;
+{elseif $carrier == 'Android'|| $carrier =='iPhone'}
+<br>
+{/if}
+ 
+<!-- 
+<a href="javascript:var iframe = document.getElementById('youriframe');iframe.src = iframe.src;;">全体表示</a> | 
+<a href="index.php?action=getDriverAndDestinationMap&company_id={$company_id}">配送先を合わせて表示</a>
+ -->
+<!-- </div> -->
+

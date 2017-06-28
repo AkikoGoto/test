@@ -1,0 +1,86 @@
+<FORM METHOD="POST" action="index.php?action=komatsu_trySetting">
+	
+	<h1>{$smarty.const.WORK_CUSTOMIZE}</h1>
+	<!-- 作業ステータス１ -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$smarty.const.ACTION_STATUS}１</b>
+	</div>
+	<div>   	   		
+		<input type="text" name="action_1" size="15" maxlength="15" value="{$data->action_1}{$session.action_1}">
+	</div>
+	
+	<!-- 作業ステータス２ -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$smarty.const.ACTION_STATUS}２</b>
+	</div>
+	<div>   	   		
+		<input type="text" name="action_2" size="15" maxlength="15" value="{$data->action_2}{$session.action_2}">
+	</div>
+	
+	<!-- 作業ステータス３ -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$smarty.const.ACTION_STATUS}３</b>
+	</div>
+	<div>   	   		
+		<input type="text" name="action_3" size="15" maxlength="15" value="{$data->action_3}{$session.action_3}">
+	</div>
+	
+	<!-- 作業ステータス４ -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$smarty.const.ACTION_STATUS}４</b>
+	</div>
+	<div>   	   		
+		<input type="text" name="action_4" size="15" maxlength="15" value="{$data->action_4}{$session.action_4}">
+	</div>
+	
+	<!-- 位置情報を取得する間隔を設定 -->
+	<h1>{$smarty.const.GPS_CUSTOMIZE}</h1>
+	<!-- 距離間隔 -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>移動{$smarty.const.DISTANCE}</b>
+	</div>
+	<div>   	   		
+		<input type="text" name="distance" size="5" maxlength="5" value="{$data->distance}{$session.distance}"> m
+	</div>
+	
+	<!-- 時間間隔 -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>移動{$smarty.const.TIME}</b>
+	</div>
+	<div>
+		<input type="text" name="time" size="5" maxlength="5" value="{$time}{$session.time}"> 分
+	</div>
+	
+	<!-- 写真を撮影する間隔を設定 -->
+	<h1>写真を撮影する間隔を{$smarty.const.SETTING}</h1>
+	<!-- 距離間隔 -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>移動{$smarty.const.DISTANCE}</b>
+	</div>
+	<div>   	   		
+		<input type="text" name="photo_interval_distance" size="5" maxlength="5" value="{$photo_interval_distance}{$session.photo_interval_distance}"> m
+	</div>
+	
+	<!-- 時間間隔 -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>移動{$smarty.const.TIME}</b>
+	</div>
+	<div>
+		<input type="text" name="photo_interval_time" size="5" maxlength="5" value="{$photo_interval_time}{$session.photo_interval_time}"> 分
+	</div>
+	<div>
+		{*隠し項目として、備考を渡しておく　顧客には編集・閲覧できないが、これを入れておかないと、備考が消えてしまうため*}
+		<input type="hidden" name="from_web" value="1">
+		<input type="hidden" name="company_id" value="{$company_id}">
+		<input type="submit" name="submit" value="{$smarty.const.COMMON_SUBMIT}">
+	</div>
+	
+</FORM>

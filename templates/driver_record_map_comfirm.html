@@ -1,0 +1,89 @@
+<h1>{$smarty.const.COMFIRM_RES_TITLE}</h1>
+<FORM METHOD="POST" action="index.php?action={$target}" name="profile" >
+
+	<div class="item_name"><b>{$smarty.const.DRIVER_STATUS}</b></div>
+	<div>
+		{if $status==1}{if $smarty.const.MODE =="CONCRETE"}{$smarty.const.OFFICE_START}{else}{$working_status->action_1}{/if}{/if}
+		{if $status==2}{if $smarty.const.MODE =="CONCRETE"}{$smarty.const.SCENE_START}{else}{$working_status->action_2}{/if}{/if}
+		{if $status==3}{if $smarty.const.MODE =="CONCRETE"}{$smarty.const.FROM_SCENE_START}{else}{$working_status->action_3}{/if}{/if}
+		{if $status==4}{if $smarty.const.MODE =="CONCRETE"}{$smarty.const.OFFICE_RETURN}{else}{$working_status->action_4}{/if}{/if}
+		{if $status==5}{if $smarty.const.MODE =="CONCRETE"}{$smarty.const.LUNCH}{else}{$smarty.const.DRIVER_OTHER}{/if}{/if}
+		{if $status==6}{$smarty.const.CONTACT_HOLD}{/if}
+		{if $status==7}{$smarty.const.CAR_WASH_HOLD}{/if}
+		{if $status==8}{$smarty.const.CAR_WASH}{/if}
+		{if $status==9}{$smarty.const.FEED}{/if}
+		{if $status==10}{$smarty.const.COPY}{/if}
+		{if $status==11}{$smarty.const.OTHER}{/if}
+<input type=hidden name="status" value="{$status|escape}"></div>
+
+	<div class="item_name"><b>
+	{$smarty.const.COMMON_JYUSYO}</b></div>
+		<div >
+			{$address}
+ <input type=hidden name="address" value="{$address}">
+ 		</div>
+
+
+
+	<div class="item_name"><b>{$smarty.const.COMMON_LAT}</b></div>
+		<div>		
+		  <div id="lat"></div>
+			<input type="hidden" name="latitude">
+		</div>
+
+	<div class="item_name"><b>{$smarty.const.COMMON_LONG}</b></div>
+		<div>
+		  <div id="lng"></div>
+			<input type="hidden" name="longitude" >
+		</div>
+
+
+				
+	<div class="item_name"><b>{$smarty.const.SPEED}</b></div>
+		<div>
+			{$speed|escape}
+<input type=hidden name="speed" value="{$speed|escape}">
+		</div>
+<!-- 		
+	<div class="item_name"><b>{$smarty.const.DRIVER_SALES}</b></div>
+		<div>
+		{$sales|escape}
+<input type=hidden name="sales" value="{$sales|escape}">
+		</div>
+		
+	<div class="item_name"><b>{$smarty.const.DRIVER_MEMO}</b></div>
+		<div>
+			{$detail|escape}
+<input type=hidden name="detail" value="{$detail|escape}"> 
+		</div>
+ -->		
+	<div class="item_name"><b>{$smarty.const.COMMON_DATETIME}</b></div>
+	  	<div>
+	  		{$start|escape}
+	  		{$end|escape}
+	  	
+	  	{$time_from_year|escape}年
+	  	{$time_from_month|escape}月
+	  	{$time_from_day|escape}日
+	  	{$time_from_hour|escape}時
+	  	{$time_from_minit|escape}分
+<!--   	{$time_from_seconds|escape}秒 -->
+<input type=hidden name="recreated" value="{$recreated|escape}">
+<input type=hidden name="start" value="{$start|escape}">
+<input type=hidden name="end" value="{$end|escape}">
+</div>
+
+	<div align="center">
+	<input type=hidden name="id" value="{$record_data.id}">
+	<input type=hidden name="driver_id" value="{$driver_id}">
+	<input type=hidden name="company_id" value="{$company_id}">
+	<input type=hidden name="edit" value="{$edit}">
+	<input type="submit" name="submit" value="{$smarty.const.COMMON_SUBMIT}"></div>
+	<div align="center">{$smarty.const.FORM_BACK}</div>
+</FORM>
+
+{if $carrier=='Android'||$carrier=='iPhone'}
+    <div id="map_canvas" style="width: 300px; height: 200px"></div>
+{else}
+    <div id="map_canvas" style="width: 500px; height: 300px"></div>
+{/if}

@@ -1,0 +1,47 @@
+{* ドライバーのデータをJSONにする *}
+
+datas = [];
+
+{foreach from=$driver_locations item=driver_location key=k}
+	{literal}
+
+		var data = {
+		"type" : "Feature",
+		"geometry" : {
+			"type" : "Point",
+			"coordinates" : [ {/literal}{$driver_location.longitude}{literal}, {/literal}{$driver_location.latitude}{literal} ]
+			},
+		"properties" : {
+			"name" : {/literal}"{$driver_location.driver_name}"{literal},
+			"status" : {/literal}"{$driver_location.status}"{literal},
+			"created" : {/literal}"{$driver_location.created}"{literal},
+			"marker-symbol" : {/literal}"{$driver_location.marker}"{literal},
+			
+			"direction" : {/literal}{if $driver_location.direction}"{$driver_location.direction}"{else}null{/if}{literal},
+			"image" : {/literal}"{if $driver_location.image_name != NULL}{$driver_location.image_name}{/if}"{literal},
+			"is_old" : {/literal}{if $driver_location.is_old}true{else}false{/if}{literal},
+			"url": {/literal}"{$driver_location.url}"{literal},
+			"car_type" : {/literal}"{$driver_location.car_type}"{literal}
+			}
+		}; 
+
+	datas.push(data);
+
+	//表からのリンク用
+	driver_info_consecutive_id[{/literal}{$driver_location.driver_id}{literal}] = data;	
+
+	var same_position = {/literal}{if $driver_location.same_position}"{$driver_location.same_position}"{else}null{/if}{literal};
+	
+	//同じ場所にいるかどうか
+	if(same_position !=null){
+		var popup = new mapboxgl.Popup({closeOnClick: false})
+	    .setLngLat([{/literal}{$driver_location.longitude}{literal}, {/literal}{$driver_location.latitude}{literal}])
+	    .setHTML('<div class="popup_window">'+same_position+'と'+{/literal}"{$driver_location.driver_name}"{literal}+'が同じ場所にいます</div>')
+	    .addTo(map);
+	
+	}
+	
+	{/literal}
+{/foreach}
+
+

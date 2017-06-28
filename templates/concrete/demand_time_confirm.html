@@ -1,0 +1,55 @@
+<FORM METHOD="POST" action="index.php?action=concrete/demand_time_db">
+<h1>{$smarty.const.COMFIRM_RES_TITLE}</h1>
+
+	<!-- 開始時間 -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$date}</b>
+	</div>
+	<table class="demand_table">
+		<tr class="tr_border">
+			<td class="exist_border">{$smarty.const.BEFORE_REPAIR_TIME}{$smarty.const.TIME}</td>
+			<td>{$before_repair_start_hour}</td>
+			<td>時</td>
+			<td>{$before_repair_start_minit}</td>
+			<td>分</td>
+			<td class="exist_border">～</td>
+			<td>{$after_repair_end_hour}</td>
+			<td>時</td>
+			<td>{$after_repair_end_minit}</td>
+			<td>分</td>
+			
+   		<tr class="tr_border">
+   			<td class="exist_border">{$smarty.const.AFTER_REPAIR_TIME}{$smarty.const.TIME}</td>
+			<td>
+				{$start_hour}<input type="hidden" name="start_hour" value="{$start_hour}">
+			</td>
+			<td>時</td>
+			<td>
+				{$start_minit}<input type="hidden" name="start_minit" value="{$start_minit}">
+			</td>
+			<td>分</td>
+			<td class="exist_border">～</td>
+			<td>
+				{$end_hour}<input type="hidden" name="end_hour" value="{$end_hour}">
+			</td>
+			<td>時</td>
+			<td>
+				{$end_minit}<input type="hidden" name="end_minit" value="{$end_minit}">
+			</td>
+			<td>分</td>
+		</tr>
+	</table>
+	
+	<div align="center">
+	<input type="hidden" name="start_year" value="{$start_year}">
+	<input type="hidden" name="start_month" value="{$start_month}">
+	<input type="hidden" name="start_day" value="{$start_day}">
+	<input type="hidden" name="end_year" value="{$end_year}">
+	<input type="hidden" name="end_month" value="{$end_month}">
+	<input type="hidden" name="end_day" value="{$end_day}">
+	<input type="hidden" name="concrete_attendance_id" value="{$concrete_attendance_id}">
+	<input type="hidden" name="demand_time_id" value="{$demand_time_id}">
+	<input type="submit" name="submit" value="{$smarty.const.COMMON_SUBMIT}">
+	</div>
+</FORM>

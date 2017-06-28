@@ -1,0 +1,74 @@
+{*全体のテンプレートファイル*} {if $carrier==NULL}
+<!DOCTYPE html>
+{/if}
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<TITLE>{$page_title} Smart動態管理 {if $is_lite}LITE版{/if}</TITLE> {$css} {if
+$carrier==NULL||$carrier=="iPhone"||$carrier=="Android"}
+<script type="text/javascript" src="{$smarty.const.TEMPLATE_URL}templates/js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="{$smarty.const.TEMPLATE_URL}templates/js/accordion.js"></script>
+<script type="text/javascript" src="{$smarty.const.TEMPLATE_URL}templates/js/jquery.slimmenu.js"></script>
+<script type="text/javascript" src="{$smarty.const.TEMPLATE_URL}templates/js/config.js"></script>
+<link rel="stylesheet" href="{$smarty.const.TEMPLATE_URL}templates/css/slimmenu.css" 
+			type="text/css" media="screen">
+<link rel="stylesheet" href="{$smarty.const.TEMPLATE_URL}templates/css/spinner.css" 
+			type="text/css" media="screen">
+<link rel="stylesheet" href="{$smarty.const.TEMPLATE_URL}templates/css/print.css" 
+			type="text/css" media="print">
+
+<link rel="shortcut icon" href="/favicon.ico">
+{$js} {/if} {if $carrier==iPhone||$carrier=="Android"}
+<link rel="apple-touch-icon" href="/apple_touch_icon.png" />
+{/if}
+{literal}
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31593032-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+
+</script>
+<!-- MapBox -->
+<link href='https://api.tiles.mapbox.com/mapbox.js/v1.6.4/mapbox.css' rel='stylesheet' />
+
+{/literal}
+</head>
+<body {$onload_js}>
+	{if
+	$carrier==NULL||$carrier=="iPhone"||$carrier=="Android"}{$geocode_address}{/if}
+		<div class="head_navi">
+			<div class="logo">
+				<a href="http://doutaikanri.com/" target="_blank">
+					<img src="{$smarty.const.TEMPLATE_URL}templates/image/logo.png"
+						alt="Smart動態管理　ロゴ"/>
+				</a>
+			</div>
+			<div class="info_bar">
+				<a href="http://onlineconsultant.jp" target="_blank">開発会社について</a>
+			</div>
+		</div>
+	<div class="oc_outline_box">
+
+		<div class="clear_both"></div>
+		
+		{*コンテンツ*} {include file=$filename} {if $carrier=="NULL"}
+		<hr>
+		{/if}
+		<div class="footer">
+			<a href="http://doutaikanri.com">Smart動態管理 - 最も簡単に、リアルタイムに位置情報を管理 -</a>
+		</div>
+		<div align="center" class="copy_right">
+			{$smarty.const.COMMON_VERSION}
+		</div>
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+{*メッセージ送信確認画面*}
+<h1>{$smarty.const.COMMON_CONFIRM}</h1>
+<FORM METHOD="POST" action="index.php?action=/message/message"
+	name="profile">
+
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		{$smarty.const.MESSAGE}
+	</div>
+	<div>
+		{$gcm_message|escape|nl2br} <input type="hidden" name="gcm_message"
+			value="{$gcm_message|escape}">
+	</div>
+
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		{$smarty.const.MESSAGE_TO}
+	</div>
+	<ul>
+		{foreach from=$drivers item="driver"}
+		<li>{$driver.name}</li>
+		<input type="hidden" name="driver_id[]" value="{$driver.id|escape}">
+		{/foreach}
+	</ul>
+
+	<div align="center">
+		<input type=hidden name="company_id" value="{$company_id|escape}">
+		<input type=hidden name="thread_id" value="{$thread_id|escape}">
+		<button value="{$smarty.const.COMMON_SUBMIT}" type="submit" class="btn btn-large btn-ocher">{$smarty.const.COMMON_SUBMIT}</button>
+	</div>
+</form>

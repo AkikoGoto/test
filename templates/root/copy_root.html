@@ -1,0 +1,54 @@
+<h1>{$smarty.const.ROOT} {$smarty.const.COMMON_COPY}</h1>
+<p>{$copied_driver_name.last_name}&nbsp;{$copied_driver_name.first_name}さんの{$data.date}のルートを下記にコピーします。</p>
+
+<FORM METHOD="POST" action="index.php?action=/root/tryCopyRoot">
+
+	<div class="item_name">
+		<font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+			{$smarty.const.DELIVER_DATE}
+	</div>
+	<div>
+			{include file="input_y_m_d.html"}						
+	</div>
+
+	<div class="item_name">
+		<font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+			{$smarty.const.COMMON_DRIVER}
+	</div>
+	<div>
+		  	<select name="driver_id">
+			{foreach from=$dataList item="driver"}
+				<option value="{$driver->id|escape}" 
+				{if $driver->id == $data.driver_id} selected{/if}
+				{if $driver->id == $pre_data.id} selected{/if}
+
+				{if $driver->id == $session.driver_id} selected{/if}>
+					{if $driver->last_name}                	
+                		{$driver->last_name|escape} {$driver->first_name|escape}
+                	{/if}
+               	</option>
+			{/foreach}
+				<option value="null" >{$smarty.const.NO_REGIST}</option>
+			</select>		
+	</div>
+
+	<div class="item_name">
+			{$smarty.const.DRIVER_OTHER}
+	</div>
+	<div>
+		<input type="text" name="information" size="100"
+			maxlength="120"
+			value="{$data.information|escape}{$pre_data.information|escape}">
+	</div>
+
+	<div align="center">
+		<input type=hidden name="company_id" value="{$company_id|escape}"> 
+		<input type=hidden name="copied_driver_last_name" value="{$copied_driver_name.last_name|escape}"> 
+		<input type=hidden name="copied_driver_first_name" value="{$copied_driver_name.first_name|escape}"> 
+		<input type=hidden name="copied_driver_id" value="{$data.driver_id|escape}"> 
+		<input type=hidden name="copied_date" value="{$data.date|escape}"> 
+		<button class="btn btn-large btn-ocher" type="submit" value="{$smarty.const.COMMON_SUBMIT}">
+		{$smarty.const.COMMON_SUBMIT}</button>
+	</div>
+
+</FORM>

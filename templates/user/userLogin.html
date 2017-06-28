@@ -1,0 +1,29 @@
+{if !$u_id}
+<div class="login">
+<div>
+	<b>{$smarty.const.FOR_USER}{$smarty.const.COMMON_LOGIN}</h1>
+</div>
+{* 簡単ログイン  ガラケーのみ表示*}
+{if $is_garapagos}
+	<form method = "post" action = "index.php?action=user/userLoginEasy" utn>
+	  <input type ="hidden" name="utn" value="utn"/>
+	  <input type ="submit" value="かんたんログイン">
+	</form>
+{/if}
+{* action は自分自身です *}
+	<form method = "post" action = "index.php?action=user/userLogin" class="form-signin">
+		<input class="form-control" type="text" autofocus="" required=""
+			placeholder="ログインID" name="login_id"> 
+		<input class="form-control"
+			type="password" required="" placeholder="パスワード" name="passwd">
+		<div class="margin20"> 
+			<label class="checkbox"> <input type="checkbox" name="autologin" value="1">
+				{$smarty.const.AUTO_LOGIN} </label>
+		</div>
+		{* ボタン群 *}
+	    <div>
+		<input type ="submit" value="{$smarty.const.COMMON_LOGIN}">
+		</div>
+	</form>
+</div>
+{/if}

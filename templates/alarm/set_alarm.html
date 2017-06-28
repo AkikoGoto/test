@@ -1,0 +1,219 @@
+{php}
+session_start();
+{/php}
+{if $status == 'NEW'}
+<FORM METHOD="POST" action="index.php?action=alarm/trySetAlarm&company_id={$id}">
+<h1>{$smarty.const.DRIVER_CUSTIMIZE}</h1>
+{elseif $status == 'EDIT'}
+<FORM METHOD="POST" action="index.php?action=alarm/trySetAlarm&set_alarmId={$datas.0}&set_driverId={$datas.id}&company_id={$id}">
+<h1>{$smarty.const.DRIVER_CUSTIMIZE_EDIT}</h1>
+{/if}
+	
+	<!-- ドライバーを選択 -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$smarty.const.DRIVER_CHOICE}</b>
+	</div>
+	<div>	
+		<!-- 新規 -->
+		{if $status == 'NEW'}
+			<select name="driver_id">
+				{foreach from=$dataList item="driver"}
+					
+					<!-- セッションのドライバーIDがあり、かつセッションドライバーIDがドライバーIDと同じであればselected -->
+					{if $session.driver_id && $session.driver_id==$driver->id}
+												
+						<option value="{$driver->id|escape}" selected="{$session.driver_id}">
+						
+						{if $driver->last_name}                	
+	                		{$driver->last_name|escape} {$driver->first_name|escape}
+	                	{/if}
+					
+					<!-- セッションのドライバーIDがある場合 -->
+					{elseif $session.driver_id}
+						
+						<option value="{$driver->id|escape}">
+					
+						{if $driver->last_name}                	
+	                		{$driver->last_name|escape} {$driver->first_name|escape}
+	                	{/if}
+					
+					<!-- セッションのドライバーIDがない場合 -->
+					{elseif !($session.driver_id)}
+						<option value="{$driver->id|escape}">
+	                	{*営業所名があれば、名称、なければ住所*}
+						{if $driver->last_name}                	
+	                		{$driver->last_name|escape} {$driver->first_name|escape}
+	                	{/if}
+	               	
+					{/if}
+						</option>
+				{/foreach}
+			</select>	
+			
+			<!-- 編集-->
+		{elseif $status == 'EDIT'}
+			
+			{$datas.last_name} {$datas.first_name}
+			<input type="hidden" name="driver_id" value="{$datas.driver_id}">
+		
+		{/if}
+         
+	</div>
+	<!-- 指定時間 -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$smarty.const.CHOOSE}{$smarty.const.TIME}</b>
+	</div>
+	<div>			
+		{include file="select_m_d_h_m.html"}
+	</div>
+	{$smarty.const.SEND_TIMING}
+	
+	<!-- 指定時間にいるべき場所 -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$smarty.const.CHOOSE}{$smarty.const.TIME}{$smarty.const.MUST_ADDRESS}</b>
+	</div>
+	<div id={$smarty.section.cnt.index}>   	   		
+		{if $status == 'NEW'}
+			<input type="text" name="address" size="50"	maxlength="80" 
+				value="{$data->address}{$session.address}" id="address">
+		
+		
+				{*Pretty Popinで配送先から取得するリンク*}
+				<a href="index.php?action=/destination/viewDestinationsPopUp&company_id={$id}" 
+					rel="destinations"
+				 id="{$smarty.section.cnt.index}" 
+					 class="link_button" 
+				>{$smarty.const.CHOOSE_FROM_DEST}
+				</a>		
+			
+			<!-- 編集-->
+		{elseif $status == 'EDIT'}
+			
+			<input type="text" name="address" size="50"	maxlength="80" value="{$datas.address}" id="address">
+			
+			{*Pretty Popinで配送先から取得するリンク*}
+				<a href="index.php?action=/destination/viewDestinationsPopUp&company_id={$id}" 
+					rel="destinations"
+				 id="{$smarty.section.cnt.index}" onclick="root_detail_id={$smarty.section.cnt.index};"
+					 class="link_button" 
+				>
+					{$smarty.const.CHOOSE_FROM_DEST}
+				</a>		
+		
+		{/if}
+				
+		<!-- <input type="text" name="address" maxlength="100" size="50"> -->
+	</div>
+	
+	<!-- 誤差の範囲 -->
+	<div class="item_name">
+		<b>{$smarty.const.ACCURACY}</b>
+	</div>
+	<div>   	   		
+		{if $status == 'NEW'}
+		
+			<input type="text" name="accuracy" value="{if $session.accuracy}{$session.accuracy}
+						{elseif !($session.accuracy)}1000{/if}"> M<br>
+		
+		{elseif $status == 'EDIT'}
+		
+			<input type="text" name="accuracy" value="{$datas.accuracy}"> M<br>
+		
+		{/if}
+		
+		{$smarty.const.THIRTY_M}{$smarty.const.ACCURACY}{$smarty.const.NOT_DISIGNATION}
+	</div><br>
+	<!-- 指定した時間にいるかいないか -->
+	<div>
+		{if $status == 'NEW'}
+		
+			<!-- セッション情報があるかないか -->
+			{if !($session.alert_when_there)}
+				<!-- 指定時間にいる場合 -->
+				<input type="radio" name="alert_when_there" value="1" checked>{$smarty.const.NOT_TIME_SENDMAIL}<br>
+				<!-- 指定時間にいない場合 -->
+				<input type="radio" name="alert_when_there" value="2">{$smarty.const.TIME_SENDMAIL}
+			{elseif $session.alert_when_there==1}
+				<!-- 指定時間にいる場合 -->
+				<input type="radio" name="alert_when_there" value="{$session.alert_when_there}" checked>{$smarty.const.NOT_TIME_SENDMAIL}<br>
+				<!-- 指定時間にいない場合 -->
+				<input type="radio" name="alert_when_there" value="2">{$smarty.const.TIME_SENDMAIL}
+			{elseif $session.alert_when_there==2}
+				<!-- 指定時間にいる場合 -->
+				<input type="radio" name="alert_when_there" value="1">{$smarty.const.NOT_TIME_SENDMAIL}<br>
+				<!-- 指定時間にいない場合 -->
+				<input type="radio" name="alert_when_there" value="{$session.alert_when_there}" checked>{$smarty.const.TIME_SENDMAIL}
+			{/if} 
+		
+		{elseif $status == 'EDIT'}
+			
+			{if $datas.alert_when_not_there}
+			<!-- 指定時間にいない場合 -->
+			<input type="radio" name="alert_when_there" value="1" checked> {$smarty.const.NOT_TIME_SENDMAIL}<br>
+			<!-- 指定時間にいる場合 -->
+			<input type="radio" name="alert_when_there" value="2"> {$smarty.const.TIME_SENDMAIL}
+			{/if}
+			
+			{if $datas.alert_when_there}
+			<!-- 指定時間にいない場合 -->
+			<input type="radio" name="alert_when_there" value="1"> {$smarty.const.NOT_TIME_SENDMAIL}<br>
+			<!-- 指定時間にいる場合 -->
+			<input type="radio" name="alert_when_there" value="2" checked> {$smarty.const.TIME_SENDMAIL}
+			{/if}
+				
+		{/if}
+		
+	</div>
+	
+	<!-- 管理者メールアドレス以外に送信したいメールアドレス -->
+	<div class="item_name">
+		<b>{$smarty.const.NOT_ADMIN_SENDMAIL}</b>
+	</div>
+	<div>
+		{if $status == 'NEW'}
+			<input type="text" name="email_other_admin" maxlength="100" size="50" value="{$datas.email_other_admin}{$session.email_other_admin}">
+		{elseif $status == 'EDIT'}
+			<input type="text" name="email_other_admin" value="{$datas.email_other_admin}"maxlength="100" size="50">
+		{/if}
+	</div>
+	<div>{$smarty.const.EMAIL_COUNT}</div>
+	<br>
+	<input type="hidden" name="mail_time" value="{$mail_time}">
+	<input type="hidden" name="status" value="{$status}">
+	<input type="hidden" name="company_id" value="{$id}">
+	<button type="submit" name="submit" value="{$smarty.const.COMMON_SUBMIT}" class="btn btn-large btn-ocher" >
+	{$smarty.const.COMMON_SUBMIT}</button>
+	
+	<!-- 配送先から選択する際のポップアップ -->
+{literal}
+<script type="text/javascript" charset="utf-8">
+	equipment = new Array();
+	var destination_name = null;
+	var address = null;
+	var information = null;
+	var root_detail_id = null;
+	var i=0;
+	
+	$(document).ready(function(){
+			$("a[rel^='destinations']").prettyPopin({
+			modal : true,
+			width : 1000,
+			//height: 400,
+			opacity: 0.5,
+			animationSpeed: 'fast', 
+			followScroll: false,
+			loader_path: 'templates/images/prettyPopin/loader.gif',
+			callback: function(){
+				$('#address').val(address);
+			}
+		});
+		
+	});
+
+
+</script>
+{/literal}
+</FORM>

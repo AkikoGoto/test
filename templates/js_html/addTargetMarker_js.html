@@ -1,0 +1,98 @@
+{* ドライバーのアイコンとウィンドウを表示　*}
+{literal}
+	function addMarkerAndWindow(){
+
+		{/literal}
+		{foreach from=$target_locations item=target_location key=k}
+
+				{literal}
+
+				var company_id = {/literal}{$company_id}{literal};
+				var longitude = {/literal}{$target_location.longitude}{literal};
+				var latitude = {/literal}{$target_location.latitude}{literal};
+				var target_id = {/literal}"{$target_location.target_id}"{literal};
+				var target_name = {/literal}"{$target_location.target_name}"{literal};
+				var address = {/literal}"{$target_location.address}"{literal};
+				var created = {/literal}"{$target_location.created}"{literal};
+									
+				var target_info{/literal}{$k}{literal}={
+						"longitude":longitude,
+						"latitude":latitude,
+						"target_name":target_name,
+						"target_id":target_id,
+						"address":address,	
+						"created":created
+				};
+				
+				var contentString{/literal}{$k}{literal} = target_id +'<br>'+ address +'<br>'+ created+'</div>';
+				
+				
+				{/literal}
+	
+		{/foreach}
+
+		{* ドライバーのアイコンが指定のものがあれば表示、なければステータスで色分け *}
+
+			{literal}
+
+				myLayer = L.mapbox.featureLayer().addTo(map);
+					
+					var geoJson = [
+									
+					{/literal}
+
+						{foreach from=$target_locations item=target_location key=k}{literal}
+											
+						{
+						    "type": "Feature",
+						    "geometry": {
+						        "type": "Point",
+						        "coordinates": [{/literal}{$target_location.longitude}{literal}, 
+						        				{/literal}{$target_location.latitude}{literal}]
+						    },
+						    "properties": {
+						        "title": {/literal}"{$target_location.target_name}"{literal},
+						        "description" :contentString{/literal}{$k}{literal}	
+								{/literal},
+								
+								{literal}
+									'marker-color' : '#008000',
+									'marker-size' : 'medium',							
+									'marker-symbol' : 'grocery'
+								{/literal}{literal}				        
+						    }
+						},
+						{/literal}{/foreach}{literal}
+					
+					];
+					
+				
+					// Set a custom icon on each marker based on feature properties.
+					myLayer.on('layeradd', function(e) {
+						var marker = e.layer;
+					    feature = marker.feature;
+					    
+					    if(marker.feature.properties.icon){
+						    marker.setIcon(L.icon(feature.properties.icon));
+						}					   
+					    
+					});
+					
+					markerLayer =  myLayer.setGeoJSON(geoJson);
+					
+					{/literal}{if $target_locations|@count >1}{literal}
+					//マーカーが一個の時は、fitBoundsが正しく動作しない
+						var bounds = markerLayer.getBounds();
+						map.fitBounds(bounds);
+					{/literal}{else if}{literal}
+					//マーカーが一個の時は、マーカーの場所を地図の中心にセット
+					map.setView([latitude, longitude]);
+					{/literal}{/if}{literal}
+					
+	
+				{/literal}
+
+
+	}
+
+			

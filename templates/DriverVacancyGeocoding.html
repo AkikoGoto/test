@@ -1,0 +1,47 @@
+{*緯度経度データから住所を取得*}
+		{literal}
+		<script type="text/javascript">
+		<!-- 
+				//空車検索用のJS
+				var lat;
+				var long;			
+				var geocoder;
+				var map;
+				
+				function initialize(lat,long) {
+					
+					geocoder = new google.maps.Geocoder();
+			
+				    var myLatlng = new google.maps.LatLng(lat, long);
+				    var myOptions = {
+				      zoom: 12,
+				      center: myLatlng,
+				      mapTypeId: google.maps.MapTypeId.ROADMAP
+				    }
+				    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+				    
+				    geocoder.geocode({'latLng': myLatlng}, function(results, status) {
+			            if (status == google.maps.GeocoderStatus.OK) {
+			              if (results[2]) {
+			                marker = new google.maps.Marker({
+			                    map: map, 
+			                    position: myLatlng
+			                });
+			                
+			                //日本を削除
+			                var info_address=results[1].formatted_address.split(",",2);	
+		                
+				            $("#present_location").text(info_address[1]);
+			              }
+			            } else {
+			              alert("Geocoder failed due to: " + status);
+			            }
+			          });
+
+
+
+	
+					};
+	//-->	
+	</script>
+{/literal}

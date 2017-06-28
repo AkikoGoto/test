@@ -1,0 +1,50 @@
+{*ドライバー業務日誌目次画面*}
+<h1>{$smarty.const.MESSAGE}</h1>
+<div><a href="?action=/message/message_history&company_id={$id}">{$smarty.const.MESSAGE_HISTORY}</a></div>
+<form method="post" action="index.php?action=/message/tryMessage&company_id={$id}">
+<div class="item_name"><font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+	{$smarty.const.MESSAGE}　{$smarty.const.MESSAGE_MAX}{$smarty.const.CHAR_LIMIT}</div>
+<textarea name="gcm_message" cols=40 rows=4>
+</textarea>
+
+<div class="item_name"><font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+	{$smarty.const.MESSAGE_TO}</div>
+<p>スマートフォンがGoogleのサーバー、Appleのサーバーに登録されているドライバーしか表示されません。こちらに表示されない場合は、スマートフォンアプリ側で一度ログインし直してください。</p>
+
+<div class="message_recipients">
+	{foreach from=$dataList item="each_dataList"}
+			{foreach from=$each_dataList item="branch_data"}
+				<div class="recipients">
+					<div class="breanch_name_of_recepit">{$branch_data.geo_name}</div>
+					<div class="recpient_drivers">
+						<input type="checkbox" id="{$branch_data.geo_id}" class="checkAll" value="全員にチェックする">
+						<label for="{$branch_data.geo_id|escape}"><b>すべてチェックする</b></label>
+						{foreach from=$branch_data.drivers item="data"}
+							<div>
+								<input class="{$branch_data.geo_id|escape}" type="checkbox" name="driver_id[]" id="{$data->id|escape}" value="{$data->id|escape}"> 
+								<label for="{$data->id|escape}">{$data->last_name|escape}{$data->first_name|escape}</label>
+							</div>
+						{/foreach}
+					</div> 
+				</div>
+			{/foreach}
+	{/foreach}
+</div>
+
+<input type="hidden" name="company_id" value="{$id|escape}">
+<input type="hidden" name="branch_id" value="{$branch_id|escape}">
+<div align="center">
+	<button value="{$smarty.const.COMMON_SUBMIT}" type="submit" class="btn btn-large btn-ocher">{$smarty.const.COMMON_SUBMIT}</button>
+</div>
+</form>
+
+<script type="text/javascript">
+{literal}
+$(document).ready(function() {
+	$('.checkAll').click(function () {
+		var geo_id = $(this).attr("id");
+		$("input:checkbox."+geo_id).not(this).prop('checked', this.checked);
+	});
+});
+{/literal}
+</script> 

@@ -1,0 +1,66 @@
+<h1>{$smarty.const.ROUTE_AND_TRANSPOERT_ROUTE_DETAIL}</h1>
+
+<b>{$transportRoute.name}{if isset($transportRoute.destination_name)}（{$transportRoute.destination_name}）{/if}</b>
+<a href="index.php?action=/transport_route/putRoute&company_id={$company_id}&transport_route_id={$transportRoute.id}">ルート編集</a>|
+<a href="index.php?action=/navi_area/putArea&company_id={$company_id}&transport_route_id={$transportRoute.id}">新規エリア作成</a>|
+<a href="index.php?action=transport_route/viewRoutes&company_id={$company_id}">ルート一覧へ戻る</a>
+{if !empty($transportRoute.information)}
+    <p>{$smarty.const.ROUTE_INFOEMATION}：{$transportRoute.information}</p>
+{/if}
+
+{*OSM Map本体*}
+{include file="elements/osm_mini_map.html"}
+
+<script src="templates/js/mapbox/addRoute.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addPolygon.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/resizeToFit.js" type="text/javascript"></script>
+<script src="templates/js/randomColor.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addPopup.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addLine.js" type="text/javascript"></script>
+<script src='https://api.mapbox.com/mapbox.js/plugins/turf/v2.0.2/turf.min.js'></script>
+<script src="templates/js/mapbox/resizeMapToLine.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/focusPosition.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addAreaPolygonAndPopup.js" type="text/javascript"></script>
+<script type="text/javascript">
+{literal}
+var center_latitude ={/literal}{$company_lat}{literal};
+var center_longitude ={/literal}{$company_long}{literal};
+
+function initialize(center_latitude,center_longitude) {
+
+       {/literal}
+       {*パラメーターの初期化とマップの描画は別ファイル*}
+       {include file = "js_html/initialize_mapBoxGl_js.html"}
+       
+       {literal}
+       	var route = {geo_json : {/literal}{$transportRoute.geo_json}{literal}}; 
+
+    	addRouteAndPopup(route, "transport_route", "{/literal}{$name}{literal}", "#e87272"); 
+
+    	var positionDatas = route.geo_json.features[0].geometry.coordinates;
+    	
+    	addLineOnStyleLoad(positionDatas, "#ff0000", "newRoute");
+
+    	resizeMapToLine(positionDatas);
+    	
+    	
+    	//ナビエリア描画
+    	{/literal}{foreach from=$naviAreas item="naviArea" key=k}{literal}
+    	var coordinates = [{/literal}{$naviArea.longitude|escape}{literal}, {/literal}{$naviArea.latitude|escape}{literal}];{/literal}
+    	var area_name = 'エリア名称：{$naviArea.name|escape}</br>';
+    	area_name += '半径：{$naviArea.radius|escape}m</br>';
+    	area_name += 'メッセージ内容：{$naviArea.message|regex_replace:"/\r\n/":"</br>"}</br>';
+    	area_name += '<a href="index.php?action=/navi_area/putArea&company_id={$company_id}&transport_route_id={$transportRoute.id}&navi_area_id={$naviArea.id}">編集</a>';
+    	
+    	{literal}
+    	var radius = {/literal}{$naviArea.radius|escape} {literal};
+    	var color = "#7bc1f3";
+    	var area_id = "navi_area" + {/literal}{$k}{literal};
+
+    	addAreaPolygonAndPopup(coordinates, radius, area_name, color, area_id);
+    	
+    	{/literal}{/foreach}{literal}
+}
+{/literal}
+</script>
+

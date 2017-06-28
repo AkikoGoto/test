@@ -1,0 +1,185 @@
+<h1>{$smarty.const.COMMON_DRIVER}
+{if $status=='EDIT'}
+	{$smarty.const.EDIT_DATA}
+ {else}
+	{$smarty.const.NEW_DATA}
+{/if}
+</h1>
+<FORM METHOD="POST" action="index.php?action=tryPutDriver" enctype="multipart/form-data"　>
+
+{if $driverData->id}
+	<div class="item_name">
+		<b>{$smarty.const.COMMON_ID}</b>
+	</div>
+	<div>
+		{$driverData->id|escape}
+		<input type=hidden name="id" value="{$driverData->id|escape}">
+		<input type=hidden name="is_group_manager" value="{$driverData->is_group_manager|escape}">
+	</div>
+{/if}
+	<div class="item_name"><b>    	
+    		{$smarty.const.COMMON_COMPANY}</b></div>
+		<div>
+	{$companyData->company_name|escape}
+       <input type=hidden name="company_id" value="{$company_id|escape}">  	        		
+       	</div>
+	<div class="item_name"><b>    	
+    		{$smarty.const.ASSIGNED_BRANCH}</b></div>
+		<div>
+		  	<select name="geographic_id">
+			{foreach from=$branchList item="branch"}
+				<option value="{$branch->id|escape}" 
+				{if $branch->id == $pre_data.geographic_id} selected
+				{elseif $branch->id==$driverData->geographic_id} selected
+				{elseif $session.geographic_id==$branch->id} selected{/if}>
+                	{*営業所名があれば、名称、なければ住所*}
+					{if $branch->name}                	
+                		{$branch->name|escape}
+                	{else}
+                		{$branch->city|escape}{$branch->ward|escape}{$branch->town|escape}{$branch->address|escape}
+                	{/if}</option>
+			{/foreach}
+				<option value="null" >{$smarty.const.NO_REGIST}</option>
+			</select>		
+			
+			<div class="setting_branch_manager">
+				<label>
+					<input type="checkbox" name="is_branch_manager" size="20" maxlength="30" value="1"
+						{if $pre_data.is_branch_manager}
+							checked
+						{elseif $driverData->is_branch_manager}
+							checked
+						{/if}>
+					{$smarty.const.IS_BRANCH_MANAGER}
+				</label>
+			</div>
+			
+	   	</div>
+        	
+	<div class="item_name"><b>
+		<font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+	{$smarty.const.COMMON_LAST_NAME} &nbsp;| &nbsp; {$smarty.const.COMMON_FIRST_NAME}</b></div>
+        <div>
+        	<input type="text" name="last_name" size="20" maxlength="30" 
+        		value="{if $pre_data.last_name}{$pre_data.last_name|escape}{elseif $driverData->last_name}{$driverData->last_name|escape}{/if}">
+        	<input type="text" name="first_name" size="20" maxlength="30" 
+        		value="{if $pre_data.first_name}{$pre_data.first_name|escape}{elseif $driverData->first_name}{$driverData->first_name|escape}{/if}">
+        </div>
+
+	<div class="item_name"><b>
+	{$smarty.const.COMMON_FURIGANA}</b></div>
+    <div>
+      	<input type="text" name="furigana" size="20" maxlength="30" 
+      		value="{if $pre_data.furigana}{$pre_data.furigana|escape}{elseif $driverData->furigana}{$driverData->furigana|escape}{/if}">
+     </div>
+
+	<div class="item_name">
+	<b><font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+	{$smarty.const.DRIVER_ACCOUNT}&nbsp;({$smarty.const.DATE_VERI_EISUU}{$smarty.const.DATE_VERI_OVER6})
+	&nbsp;{$smarty.const.DATE_VERI_HYPHEN}</b></div>
+		<div>
+        	<input type="text" name="login_id" size="20" maxlength="20" 
+        		value="{if $pre_data.login_id}{$pre_data.login_id|escape}{elseif $driverData->login_id}{$driverData->login_id|escape}{/if}">
+		</div>
+
+	<div class="item_name"><b>
+	<font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+	{$smarty.const.DRIVER_PASSWD}&nbsp;({$smarty.const.DATE_VERI_EISUU}{$smarty.const.DATE_VERI_OVER6})
+	{if $status=='EDIT'}&nbsp;{$smarty.const.COMMON_PWD_EDIT_NOTICE}{/if}
+	</b></div>
+		<div>
+        	<input type="password" name="passwd" size="20" maxlength="20">
+		</div>
+
+	<div class="item_name"><b>
+	{$smarty.const.COMMON_DRIVER_MOBILE}</b></div>
+		<div>
+		<input type="text" name="mobile_tel" size="20" maxlength="30" 	
+			value="{if $pre_data.mobile_tel}{$pre_data.mobile_tel|escape}{elseif $driverData->mobile_tel}{$driverData->mobile_tel|escape}{/if}">
+        </div>
+	<div class="item_name"><b>
+	{$smarty.const.COMMON_DRIVER_MOBILE_MAIL}</b></div>
+		<div>
+		<input type="text" name="mobile_email" size="20" maxlength="30" 
+			value="{if $pre_data.mobile_email}{$pre_data.mobile_email|escape}{elseif $driverData->mobile_email}{$driverData->mobile_email|escape}{/if}">
+        </div>
+        	
+	<div class="item_name"><b>{$smarty.const.COMMON_EXPERIENCE}</b></div>
+		<div>
+        	<input type="text" name="experience" size="5" maxlength="5" 
+        		value="{if $pre_data.experience}{$pre_data.experience|escape}{elseif $driverData->experience}{$driverData->experience|escape}{/if}">
+        		{$smarty.const.COMMON_YEAR}</div>
+
+	<div class="item_name"><b>{$smarty.const.COMMON_NO_ACCIDENT}</b></div>
+		<div>
+        	<input type="text" name="no_accident" size="5" maxlength="5" 
+        		value="{if $pre_data.no_accident}{$pre_data.no_accident|escape}{elseif $driverData->no_accident}{$driverData->no_accident|escape}{/if}">
+        		{$smarty.const.COMMON_YEAR}</div>
+        	
+	<div class="item_name"><b>{$smarty.const.COMMON_CAR_TYPE}</b></div>
+	<div>
+       	<input type="text" name="car_type" size="50" maxlength="100" 
+       		value="{if $pre_data.car_type}{$pre_data.car_type|escape}{elseif $driverData->car_type}{$driverData->car_type|escape}{/if}">
+	</div>
+	<div class="item_name"><b>{$smarty.const.COMMON_EQUIPMENT}</b></div>
+	<div>
+       	<input type="text" name="equipment" size="50" maxlength="100" 
+       		value="{if $pre_data.equipment}{$pre_data.equipment|escape}{elseif $driverData->equipment}{$driverData->equipment|escape}{/if}">
+	</div>
+	<div class="item_name"><b>{$smarty.const.COMMON_COL_SEX}</b></div>
+		<div>
+	       	<input type="radio" name="sex" value="0" 
+	       	{if $driverData->sex==0}checked{/if}
+	       	{if $pre_data.sex==0}checked{/if}
+	       	>
+	       	{$smarty.const.COMMON_COL_MAN}<br>
+        	<input type="radio" name="sex" value="1"
+        	{if $driverData->sex==1}checked{/if}
+        	{if $pre_data.sex==1}checked{/if}
+        	>
+        	{$smarty.const.COMMON_COL_WOMAN}<br>        	
+		</div>
+		
+	<div class="item_name"><b>{$smarty.const.COMMON_BIRTHDAY}</b></div>
+		<div>
+        	<input type="text" name="birthday" size="50" maxlength="100" 
+        		value="{if $pre_data.birthday}{$pre_data.birthday|escape}{elseif $driverData->birthday}{$driverData->birthday|escape}{/if}">
+		</div>
+		
+	{*画像アップロード 本体は記述が多いため、edit_image.htmlへ*}
+	<div class="item_name"><b>{$smarty.const.COMMON_IMAGE}</b>
+	&nbsp;{$smarty.const.IMAGE_NOTICE}</div>
+		{include file="edit_image.html"}
+		
+
+
+	<div class="item_name"><b>{$smarty.const.COMMON_MESSAGE}</b></div>
+		<div>
+        	<textarea name="driver_message" rows="20" cols="75" >{$driverData->driver_message|escape}{$pre_data.driver_message|escape}</textarea>
+		</div>
+
+	<div align="center">
+			<button class="btn btn-large btn-ocher" type="submit" value="{$smarty.const.COMMON_SUBMIT}">
+			{$smarty.const.COMMON_SUBMIT}</button>
+	</div>
+ 
+</FORM>
+
+	{*画像削除*}
+		{literal}
+			<script language="JavaScript" type="text/javascript">
+				<!--
+				//＜クリックした時に実行される関数＞
+				function func1($value){
+					alert("本当に削除してよろしいでしょうか？");
+					var value=$value;
+					document.form1.delete_image.value =value;
+					document.form1.submit();
+				}
+				//-->
+			</script>
+		{/literal}	
+	<!-- 仮想フォーム 上記Javascriptで飛ばすためだけに作っている-->
+	<form name="form1" method="post" action="index.php?action=delete_image&company_id={$company_id}&driver_id={$driverData->id}">			
+		<input type="hidden" name="delete_image">
+	</form>	

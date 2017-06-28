@@ -1,0 +1,164 @@
+{*すべてのドライバーの業務履歴を表示*}
+<script type="text/javascript">
+{literal}
+$(document).ready(function() {
+	$('.checkAll').click(function () {
+		$("input").not(this).prop('checked', this.checked);
+	});
+});
+{/literal}
+</script>
+
+<h1>{$smarty.const.ALL_DRIVER_RECORD_MAP}</h1>
+
+<p>{if !$is_before_search && $time_from && $time_to}{$time_from} から {$time_to}の表示をしています。{/if}</p>
+
+{*PCの場合、テーブルで閲覧できる*} {if $carrier==NULL}
+<div id="too_many_variables"></div>
+<table class="light_gray_table">
+	<tr>
+		<th>{$smarty.const.REFINE}</th>
+		<td>
+			<div class="float">
+				<form method="get" action="index.php">
+					{include file="elements/select_three_hours.html"} 
+						<input type="hidden" name="company_id" value={$company_id}> 
+						<input type="hidden" name="action" value="all_driver_record_map"> 
+					{foreach from=$all_drivers item=driver key=m}
+							<input type="hidden" name="driver_ids[{$m}]" value="{$driver.id}" id="driver_{$driver.id}" >
+					{/foreach}
+						<input type="submit" value="3時間以内">
+				</form>
+			</div>
+			<div class="float">
+				<form method="get" action="index.php">
+					{include file="elements/select_today.html"} 
+						<input type="hidden" name="company_id" value={$company_id}> 
+						<input type="hidden" name="action" value="all_driver_record_map"> 
+					{foreach from=$all_drivers item=driver key=m}
+							<input type="hidden" name="driver_ids[{$m}]" value="{$driver.id}" id="driver_{$driver.id}" >
+					{/foreach}
+						<input type="submit" value="今日">
+				</form>
+			</div>
+			<div class="float">			
+				<form method="get" action="index.php">
+					{include file="elements/select_yesterday.html"} 
+						<input type="hidden" name="company_id" value={$company_id}> 
+						<input type="hidden" name="action" value="all_driver_record_map"> 
+					{foreach from=$all_drivers item=driver key=m}
+							<input type="hidden" name="driver_ids[{$m}]" value="{$driver.id}" id="driver_{$driver.id}" >
+					{/foreach}
+						<input type="submit" value="昨日">
+				</form>
+			</div>
+			<div class="clear_both" style="height:5px;"></div>
+			<form method="get" action="index.php">
+				{include file="select_y_m_d_h_m.html"}
+				<BR>
+				<div id="all_driver_history_search" style="width: 100%;">
+				    <div>
+						<label>
+							<input type="checkbox" id="" class="checkAll" value="">
+							全員にチェックする
+						</label>
+					</div>
+					{assign var="br_timing" value="0"}
+					{foreach from=$all_drivers item=driver key=m}
+						{assign var="br_timing" value="`$br_timing+1`"}
+						{assign var="color" value="000000"}
+						{if $br_timing == 1}
+							<div width="100%">
+						{/if}
+						<div style="width: 200px; float: left; margin: 0;">
+							<input type="checkbox" name="driver_ids[{$m}]" value="{$driver.id}" id="driver_{$driver.id}" 
+							{if $driver.checked && $driver_selected}
+								checked
+							{/if}
+							><font {if $driver.color} color="#{$driver.color}"{/if}>■</font><label for="driver_{$driver.id}">{$driver.last_name} {$driver.first_name}</label>
+						</div>
+						{if $br_timing == 5}
+							</div>
+							{assign var="br_timing" value="0"}
+						{/if}
+					{/foreach}
+				</div>
+			    <div style="clear: both;"></div>
+				<input type="hidden" name="company_id" value={$company_id}>
+				<input type="hidden" name="action" value="all_driver_record_map">
+				<input type="submit" value="送信する" id="submit_btn">
+			</form>
+		</td>
+	</tr>
+</table>
+{*Smartphoneの場合*}
+{else}
+<!-- <table class="light_gray_table"> -->
+<div id="too_many_variables"></div>
+<h2>{$smarty.const.REFINE}</h2>
+<form method="get" action="index.php">
+	{include file="select_y_m_d_h_m.html"}
+	<div id="all_driver_history_search" style="width: 100%;">
+		{assign var="br_timing" value="0"}
+		{foreach from=$all_drivers item=driver key=m}
+			{assign var="br_timing" value="`$br_timing+1`"}
+			{assign var="color" value="000000"}
+			{if $br_timing == 1}
+				<div width="100%">
+			{/if}
+			<div style="width: 200px; float: left; margin: 0;">
+				<input type="checkbox" name="driver_ids[{$m}]" value="{$driver.id}" id="driver_{$driver.id}" 
+				{if $driver.checked && $driver_selected}
+					checked
+				{/if}
+				><font {if $driver.color} color="#{$driver.color}"{/if}>■</font><label for="driver_{$driver.id}">{$driver.last_name} {$driver.first_name}</label>
+			</div>
+			{if $br_timing == 5}
+				</div>
+				{assign var="br_timing" value="0"}
+			{/if}
+		{/foreach}
+	</div>
+	   <div style="clear: both;"></div>
+	   <div>
+			<label>
+				<input type="checkbox" id="" class="checkAll" value="">
+				全員にチェックする
+			</label>
+	</div>
+	   <div style="clear: both;"></div>
+	<input type="hidden" name="company_id" value={$company_id}>
+	<input type="hidden" name="action" value="all_driver_record_map">
+	<input type="submit" value="送信する">
+</form>
+{/if}
+{if $recorded_drivers}
+
+	{*OSM Map本体*} 
+	{include file="osm_map.html"}
+	<!--
+	<font color="#FF0000">{$smarty.const.RECTANGLE}</font>{$working_status->action_1}&nbsp; 
+	<font color="#0e97f8">{$smarty.const.RECTANGLE}</font>{$working_status->action_2}&nbsp;
+	<font color="#0ef850">{$smarty.const.RECTANGLE}</font>{$working_status->action_3}&nbsp;
+	<font color="#760ef8">{$smarty.const.RECTANGLE}</font>{$working_status->action_4}&nbsp;
+	-->
+	<div class="under_map_list">
+		<a href="javascript:resizeToFit();">全体表示</a>
+	<div>
+	<div class="under_map_list">
+	{foreach from=$driver_with_color item=driver key=m}
+		<font {if $driver.color}color="#{$driver.color}"{/if}>{$smarty.const.RECTANGLE}</font>
+		<a href="javascript:resizeToFit({$driver.id});">{$driver.last_name} {$driver.first_name}</a>&nbsp;
+	{/foreach}
+	</div>
+	{if $driver_with_no_color}
+		<div>・以下のドライバーはデータがありません</div>
+		{foreach from=$driver_with_no_color item=driver key=m}
+			{$smarty.const.RECTANGLE}{$driver.last_name} {$driver.first_name}&nbsp;
+		{/foreach}
+	{/if}
+{else}
+	{if !$is_before_search}
+		<p class="message">表示するドライバーの業務履歴がありません。</p>
+	{/if}
+{/if}

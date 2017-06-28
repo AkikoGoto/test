@@ -1,0 +1,162 @@
+<h1>{$smarty.const.EDIT_DATA}</h1>
+
+<FORM METHOD="POST" action="index.php?action={$action}" enctype="multipart/form-data">
+<TABLE  class="thread" border="1" id="middle_box">
+<TBODY>
+	<tr><th width="120px">
+	ID
+    		</th>
+		<td class="con_odd">
+		{$id}
+		<input type="hidden" name="id" value="{$id}">
+ 			</td></tr>
+			
+	<tr><th width="100px">
+    		<span class="hissu">{$smarty.const.COMMON_INDISP}</span>{$smarty.const.COMMON_IS_COMPANY}<br>
+    		</th>
+		<td class="con_odd">
+        	<input type="radio" name="is_company" value="0" {if $data->is_company==0}checked{/if}>{$smarty.const.COMMON_CORPORATE}<br>
+        	<input type="radio" name="is_company" value="1" {if $data->is_company==1}checked{/if}>{$smarty.const.COMMON_INDIVIDUAL}<br>        	        		
+			</td></tr>
+			
+	<tr><th><span class="hissu">{$smarty.const.COMMON_INDISP}</span>
+	{$smarty.const.COMMON_GROUP_ID}</th>
+		<td class="con_odd">
+			<input type="text" size="50" maxlength="50" class="textinput" name="company_group_id" value="{$data->company_group_id}{$session.company_group_id}">
+			&nbsp;※{$smarty.const.DATE_VERI_OVER6}、{$smarty.const.DATE_VERI_EISUU}{$smarty.const.DATE_VERI_AND}{$smarty.const.DATE_VERI_LINE_SYMBOL}{$smarty.const.DATE_VERI_PIIB}
+		</td></tr>
+	
+	<tr><th><span class="hissu">{$smarty.const.COMMON_INDISP}</span>    	
+    		{$smarty.const.COMMON_COMPANY}<br></th>
+		<td class="con_odd">
+		<input type="text" name="company_name" size="50" maxlength="50" value="{$data->company_name}{$session.company_name}">
+       	</td></tr>
+        	
+<!-- Geographic -->
+ {if !$from_web==1}
+	<tr><th>
+	{$smarty.const.COMMON_LAT}</th>
+		<td class="con_odd">
+		{$smarty.const.COMMON_DECIMAL_BASE}<br>
+			<input type="text" size="50" maxlength="100" class="textinput" name="latitude" value="{$data->latitude}">
+		</td></tr>
+
+	<tr><th>
+	{$smarty.const.COMMON_LONG}</th>
+		<td class="con_odd">
+		{$smarty.const.COMMON_DECIMAL_BASE}<br>
+			<input type="text" size="50" maxlength="100" class="textinput" name="longitude" value="{$data->longitude}">
+		</td></tr>
+{/if}
+	<tr><th><span class="hissu">{$smarty.const.COMMON_INDISP}</span>
+	{$smarty.const.COMMON_POSTAL}</th>
+		<td class="con_odd">
+			<input type="text" size="50" maxlength="100" class="textinput" name="postal" value="{$data->postal}{$session.postal}">
+		</td></tr>
+		
+	<tr><th><span class="hissu">{$smarty.const.COMMON_INDISP}</span>
+	{$smarty.const.COMMON_PREFECTURE}</th>
+		<td class="con_odd">
+		   	<select name="prefecture">
+			{foreach from=$prefecturesList item="prefecture"}
+				<option value="{$prefecture->id}" 
+				{if $data->prefecture==$prefecture->id} selected{/if}
+				{if $session.prefecture==$prefecture->id} selected{/if}>
+                	{$prefecture->prefecture_name}</option>
+			{/foreach}
+			</select>
+		</td></tr>
+	
+	<tr><th>{$smarty.const.COMMON_CITY}</th>
+		<td class="con_odd">
+			<input type="text" size="50" maxlength="100" class="textinput" name="city" value="{$data->city}{$session.city}">
+		</td></tr>
+
+	<tr><th>{$smarty.const.COMMON_WARD}</th>
+		<td class="con_odd">
+			<input type="text" size="50" maxlength="100" class="textinput" name="ward" value="{$data->ward}{$session.ward}">
+		</td></tr>
+
+	<tr><th><span class="hissu">{$smarty.const.COMMON_INDISP}</span>
+	{$smarty.const.COMMON_TOWN}</th>
+		<td class="con_odd">
+			<input type="text" size="50" maxlength="100" class="textinput" name="town" value="{$data->town}{$session.town}">
+		</td></tr>
+
+	<tr><th>
+	{$smarty.const.COMMON_ADDRESS}</th>
+		<td class="con_odd">
+			<input type="text" size="50" maxlength="100" class="textinput" name="address" value="{$data->address}{$session.address}">
+		</td></tr>
+
+	<tr><th><span class="hissu">{$smarty.const.COMMON_INDISP}</span>
+	{$smarty.const.COMMON_TEL}</th>
+		<td class="con_odd">
+			<input type="text" size="50" maxlength="100" class="textinput" name="tel" value="{$data->tel}{$session.tel}">
+		</td></tr>
+<!-- Geographic終わり -->
+
+	<tr><th><span class="hissu">{$smarty.const.COMMON_INDISP}</span>
+	{$smarty.const.COMMON_EMAIL}</th>
+		<td class="con_odd">
+			<input type="text" size="50" maxlength="100" class="textinput" name="email" value="{$data->email}{$session.email}">
+		</td></tr>
+	
+	<tr><th>
+	{$smarty.const.WHAT_BILL}</th>
+		<td class="con_odd">
+			<input type="radio" name="invoice" value="1" {if $data->invoice==1}checked{/if}>{$smarty.const.YES}<br>
+			<input type="radio" name="invoice" value="0" {if $data->invoice==0}checked{/if}>{$smarty.const.NO}
+        	<br>  
+		</td></tr>
+	
+	<tr><th>
+	iPhone台数</th>
+		<td class="con_odd">
+			<input type="text" size="5" maxlength="5" class="textinput" name="iphone_device_number" value="{$data->iphone_device_number}{$session.iphone_device_number}"> 台
+        	<br>  
+		</td></tr>
+	
+	<tr><th>
+	Android台数</th>
+		<td class="con_odd">
+			<input type="text" size="5" maxlength="5" class="textinput" name="android_device_number" value="{$data->android_device_number}{$session.android_device_number}"> 台
+        	<br>  
+		</td></tr>
+		
+	<tr><th>
+	{$smarty.const.COMMON_CONTACT_PERSON}</th>
+		<td class="con_odd">
+			<input type="text" size="20" maxlength="50" class="textinput" name="contact_person_last_name" 
+			value="{$data->contact_person_last_name}{$session.contact_person_last_name}">
+			<input type="text" size="20" maxlength="50" class="textinput" name="contact_person_first_name" 
+			value="{$data->contact_person_first_name}{$session.contact_person_first_name}">
+		</td></tr>
+
+	<tr><th>
+	{$smarty.const.COMMON_CONTACT_TEL}</th>
+		<td class="con_odd">
+			<input type="text" size="50" maxlength="100" class="textinput" name="contact_tel" 
+			value="{$data->contact_tel}{$session.contact_tel}">
+		</td></tr>
+
+	<tr><th><span class="hissu">{$smarty.const.COMMON_INDISP}</span>
+	{$smarty.const.COMMON_PWD}</th>
+		<td class="con_odd">
+			<input type="password" name="passwd" size="20" class="textinput" value="">
+			&nbsp;{$smarty.const.COMMON_PWD_NOTICE}{$smarty.const.COMMON_PWD_EDIT_NOTICE}
+		</td></tr>
+		
+	<tr><th>
+	{$smarty.const.COMMON_MESSAGE}欄</th>
+		<td class="con_odd">
+			<textarea cols="50" rows="3" name="remarks">{if $data->remarks}{$data->remarks}{elseif $session.remarks}{$session.remarks}{/if}</textarea>
+		</td></tr>
+			
+<!-- 送信ボタン -->
+	<tr><th colspan="2" align="center">
+	<input type=hidden name="activation" value="{$activation}">
+			<input type="submit" name="submit" value="{$smarty.const.COMMON_SUBMIT}"></th>
+</TBODY>
+</TABLE>
+</FORM>

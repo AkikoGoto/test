@@ -1,0 +1,17 @@
+<h1>運転情報</h1>
+	<div style="margin-bottom: 30px;">
+		<p style="margin-bottom: 0">急ブレーキCSV出力</p>
+		<form method="GET" action="index.php">
+			{include file="select_y_m_d.html"}  
+			<input type="hidden" name="company_id" value={$company_id}>
+			<input type="hidden" name="branch_id" value={$branch_id}> 
+			<input type="hidden" name="action" value="information/driving_information"> 
+				<select name="suddenBrakingBranchId">
+					<option value="" {if empty($branch_id)}{/if}>すべて</option>
+					<option value="{$smarty.const.TEMPORARY_STORAGE}" {if $branch_id == $smarty.const.TEMPORARY_STORAGE}selected{/if}>仮置場</option>
+					<option value="{$testGroupId}" {if $branch_id == $testGroupId}selected{/if}>試走／テスト</option>
+					<option value="{$patrolId}" {if $branch_id == $patrolId}selected{/if}>パトロール</option>
+				</select>
+			<input type="submit" value="送信する">
+		</form>
+	</div>

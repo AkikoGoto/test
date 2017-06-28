@@ -1,0 +1,181 @@
+{*ドライバー情報閲覧*}
+<h1>{$smarty.const.COMMON_DRIVER}</h1>
+
+        	
+	<div class="item_name"><b>
+	{if $carrier=='docomo'}<FONT color="#006400">{/if}
+	{$smarty.const.COMMON_LAST_NAME}&nbsp;{$smarty.const.COMMON_FIRST_NAME}
+	</FONT></b></div>
+        <div>
+        {$data->last_name|escape}    {$data->first_name|escape}        
+        </div>
+                	
+	<div class="item_name"><b>
+	{if $carrier=='docomo'}<FONT color="#006400">{/if}
+	{$smarty.const.COMMON_FURIGANA}
+	</FONT></b></div>
+		<div>
+        {$data->furigana|escape}
+        </div>
+	
+	<div class="item_name"><b>
+	{if $carrier=='docomo'}<FONT color="#006400">{/if}
+	{$smarty.const.DRIVER_ACCOUNT}
+	</FONT></b></div>
+		<div>
+        {$data->login_id|escape}
+        </div>
+	
+    {if $data->mobile_tel}
+	<div class="item_name"><b>
+	{if $carrier=='docomo'}<FONT color="#006400">{/if}
+	{$smarty.const.COMMON_DRIVER_MOBILE}</FONT></b></div>
+		<div>
+        <a href="tel:{$data->mobile_tel}">
+        {$data->mobile_tel|escape}
+        </a>
+        </div>
+      {*　ドライバー携帯電話情報がなければ、グループの電話番号を表示 *}
+      {else if}
+		<div class="item_name"><b>
+		{if $carrier=='docomo'}<FONT color="#006400">{/if}
+		{$smarty.const.CAR_ASSIGN_TEL}</FONT></b></div>
+			<div>
+	        <a href="tel:{$data->tel}">
+	        {$data->tel|escape}
+	        </a>
+	        </div>
+      
+     {/if}
+    {if $data->mobile_email}
+	<div class="item_name"><b>
+	{if $carrier=='docomo'}<FONT color="#006400">{/if}
+	{$smarty.const.COMMON_DRIVER_MOBILE_MAIL}
+	</FONT></b></div>
+		<div>
+	        <a href="mailto:{$data->mobile_email}">
+    	    	{$data->mobile_email|escape}
+    	    </a>
+        </div>
+     {/if}
+
+	<div class="item_name"><b>
+	{if $carrier=='docomo'}<FONT color="#006400">{/if}
+	{$smarty.const.COMMON_EXPERIENCE}
+	</FONT></b></div>
+		<div>
+		{if $data->experience==0}
+			{$smarty.const.COMMON_NO_INFO}
+		{else}
+        	{$data->experience|escape}年
+        {/if}
+        </div>
+
+	<div class="item_name"><b>
+	{if $carrier=='docomo'}<FONT color="#006400">{/if}
+	{$smarty.const.COMMON_NO_ACCIDENT}
+	</FONT></b></div>
+		<div>
+		{if $data->no_accident==0}
+			{$smarty.const.COMMON_NO_INFO}
+		{else}
+        	{$data->no_accident|escape}年
+        {/if}
+        </div>
+
+	<div class="item_name"><b>
+	{if $carrier=='docomo'}<FONT color="#006400">{/if}
+	{$smarty.const.COMMON_CAR_TYPE}
+	</FONT></b></div>
+		<div>
+		{if $data->car_type==NULL}
+			{$smarty.const.COMMON_NO_INFO}
+		{else}
+        	{$data->car_type|escape}
+        {/if}
+        </div>
+
+	<div class="item_name"><b>
+	{if $carrier=='docomo'}<FONT color="#006400">{/if}
+	{$smarty.const.COMMON_EQUIPMENT}
+	</FONT></b></div>
+		<div>
+		{if $data->equipment==NULL}
+			{$smarty.const.COMMON_NO_INFO}
+		{else}
+        	{$data->equipment|escape}
+        {/if}
+        </div>
+
+	<div class="item_name"><b>
+	{if $carrier=='docomo'}<FONT color="#006400">{/if}
+	{$smarty.const.COMMON_COL_SEX}
+	</FONT></b></div>
+		<div>
+		{if $data->sex==0}
+        	{$smarty.const.COMMON_COL_MAN}
+        {else}	
+        	{$smarty.const.COMMON_COL_WOMAN}
+        {/if}      
+        </div>
+        	
+	<div class="item_name"><b>
+	{if $carrier=='docomo'}<FONT color="#006400">{/if}
+	{$smarty.const.COMMON_BIRTHDAY}
+	</FONT></b></div>
+		<div>
+		{if $data->birthday==NULL}
+			{$smarty.const.COMMON_NO_INFO}
+		{else}
+			{$data->birthday|escape}
+		{/if}
+		</div>
+
+	<div class="item_name"><b>
+	{if $carrier=='docomo'}<FONT color="#006400">{/if}
+	{$smarty.const.COMMON_EREA}
+	</FONT></b></div>
+		<div>
+		{if $data->erea==NULL}
+			{$smarty.const.COMMON_NO_INFO}
+		{else}
+			{$data->erea|escape}
+		{/if}
+		</div>
+
+	<div class="item_name"><b>
+	{if $carrier=='docomo'}<FONT color="#006400">{/if}
+	{$smarty.const.COMMON_REGIST_NUMBER}
+	</FONT></b></div>
+		<div>
+		{if $data->regist_number==NULL}
+			{$smarty.const.COMMON_NO_INFO}
+		{else}
+			{$data->regist_number|escape}
+		{/if}
+		</div>
+
+	<div class="item_name"><b>
+	{if $carrier=='docomo'}<FONT color="#006400">{/if}
+	{$smarty.const.MAP_ICON}
+	</FONT></b></div>
+		<div>
+		{if $data->image_name==NULL}
+			{$smarty.const.COMMON_NO_INFO}
+		{else}
+			<img src="http://{$data->image_name|escape}" alt="{$smarty.const.MAP_ICON}">
+		{/if}
+		</div>
+	<div class="item_name"><b>
+	{if $carrier=='docomo'}<FONT color="#006400">{/if}
+	{$smarty.const.COMMON_MESSAGE}
+	</FONT></b></div>
+		<div>
+		{if $data->driver_message==NULL}
+			{$smarty.const.COMMON_NO_INFO}
+		{else}
+			{$data->driver_message|escape|nl2br}
+		{/if}
+		</div>
+	<br>	
+	<a href="index.php?action=putDriver&driver_id={$data->id|escape}&company_id={$data->company_id|escape}">{$smarty.const.DRIVER_INFO_EDIT}</a>	

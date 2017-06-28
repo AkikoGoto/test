@@ -1,0 +1,83 @@
+{*確認表示画面*}
+<h1>{$smarty.const.COMFIRM_RES_TITLE}</h1>
+<FORM METHOD="POST" action="index.php?action={$target}" name="profile">
+	
+	<div class="item_name">
+		<b>
+			<font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+			{$smarty.const.VIEWER_NAME}
+		</b>
+	</div>
+	<div>
+		<span class="users_last_name">{$last_name|escape}</span>
+		<span>{$first_name|escape}</span>
+		<input type=hidden name="last_name" value="{$last_name|escape}">
+		<input type=hidden name="first_name" value="{$first_name|escape}">
+	</div>
+	
+	<!-- フリガナ　-->
+	<div class="item_name">
+		<b>
+			{$smarty.const.COMMON_FURIGANA}
+		</b>
+	</div>
+	<div>
+		{$furigana|escape}
+		<input type=hidden name="furigana" value="{$furigana|escape}">
+	</div>
+	
+	<!-- 電話番号　-->
+	<div class="item_name">
+		<b>
+			{$smarty.const.COMMON_TEL}
+		</b>
+	</div>
+	<div>
+		{$mobile_tel|escape}
+		<input type=hidden name="mobile_tel" value="{$mobile_tel|escape}">
+	</div>
+	
+	<!-- メールアドレス　-->
+	<div class="item_name">
+		<b>
+			{$smarty.const.COMMON_EMAIL}
+		</b>
+	</div>
+	<div>
+		{$mobile_email|escape}
+		<input type=hidden name="mobile_email" value="{$mobile_email|escape}">
+	</div>
+	
+	<!-- ログインID　-->
+	<div class="item_name">
+		<b>
+			<font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+			{$smarty.const.DRIVER_ACCOUNT}
+		</b>
+	</div>
+	<div>
+		{$login_id|escape}
+		<input type=hidden name="login_id" value="{$login_id|escape}">
+	</div>
+
+	<!-- パスワード　-->
+	<div class="item_name">
+		<b>
+			<font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+			{$smarty.const.DRIVER_PASSWD}
+		</b>
+	</div>
+	<div>
+		{$smarty.const.PWD_NO_DISPLAY}
+		<input type=hidden name="passwd" value="{$passwd|escape}">
+	</div>
+	
+	<div align="center">
+		<input type=hidden name="company_id" value="{$company_id|escape}">
+		<input type=hidden name="id" value="{$id|escape}">
+		<button class="btn btn-large btn-ocher" type="submit" name="submit" value="{$smarty.const.COMMON_SUBMIT}">
+			{$smarty.const.COMMON_SUBMIT}
+		</button>
+	</div>
+	
+</form>

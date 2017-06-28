@@ -1,0 +1,95 @@
+<h1>{$smarty.const.COMFIRM_RES_TITLE}</h1>
+<FORM METHOD="POST" action="index.php?action={$target}" name="profile" >
+
+	<div class="item_name"><b>{$smarty.const.DRIVER_STATUS}</b></div>
+	<div>{if $status==1}{if $smarty.const.MODE =="CONCRETE"}{$smarty.const.OFFICE_START}{else}{$working_status->action_1}{/if}{/if}
+		{if $status==2}{if $smarty.const.MODE =="CONCRETE"}{$smarty.const.SCENE_START}{else}{$working_status->action_2}{/if}{/if}
+		{if $status==3}{if $smarty.const.MODE =="CONCRETE"}{$smarty.const.FROM_SCENE_START}{else}{$working_status->action_3}{/if}{/if}
+		{if $status==4}{if $smarty.const.MODE =="CONCRETE"}{$smarty.const.OFFICE_RETURN}{else}{$working_status->action_4}{/if}{/if}
+		{if $status==5}{if $smarty.const.MODE =="CONCRETE"}{$smarty.const.LUNCH}{else}{$smarty.const.DRIVER_OTHER}{/if}{/if}
+		{if $status==6}{$smarty.const.CONTACT_HOLD}{/if}
+		{if $status==7}{$smarty.const.CAR_WASH_HOLD}{/if}
+		{if $status==8}{$smarty.const.CAR_WASH}{/if}
+		{if $status==9}{$smarty.const.FEED}{/if}
+		{if $status==10}{$smarty.const.COPY}{/if}
+		{if $status==11}{$smarty.const.OTHER}{/if}
+		<input type=hidden name="status" value="{$status|escape}"></div>
+		
+	<div class="item_name"><b>{$smarty.const.START_TIME}</b></div>
+	  	<div>
+	  	{$time_from_year|escape}年
+	  	{$time_from_month|escape}月
+	  	{$time_from_day|escape}日
+	  	{$time_from_hour|escape}時
+	  	{$time_from_minit|escape}分
+	  	{$time_from_second|escape}秒
+	<div class="item_name"><b>{$smarty.const.END_TIME}</b></div>
+	  	<div>
+	  	{$time_to_year|escape}年
+	  	{$time_to_month|escape}月
+	  	{$time_to_day|escape}日
+	  	{$time_to_hour|escape}時
+	  	{$time_to_minit|escape}分
+	  	{$time_to_second|escape}秒
+	  	
+	<div class="item_name"><b>{$smarty.const.PLATE_NUMBER}</b></div>
+		<div>
+		{$plate_number}		
+			<input type="hidden" name="plate_number" value="{$plate_number}">
+		</div>	  	
+	<div class="item_name"><b>{$smarty.const.START_ADDRESS}</b></div>
+		<div>		
+		{$start_address}
+			<input type="hidden" name="start_address" value="{$start_address}">
+		</div>	  	
+	<div class="item_name"><b>{$smarty.const.END_ADDRESS}</b></div>
+		{$end_address}
+		<div>		
+			<input type="hidden" name="end_address" value="{$end_address}">
+		</div>	  	
+	<div class="item_name"><b>{$smarty.const.DISTANCE}</b></div>
+		{$distance}&nbsp;Km
+		<div>		
+			<input type="hidden" name="distance" value="{$distance}">
+		</div>	  	
+	<div class="item_name"><b>{$smarty.const.DESTINATION_COMPANY_NAME}</b></div>
+		{$destination_company_name}
+		<div>		
+			<input type="hidden" name="destination_company_name" value="{$destination_company_name}">
+		</div>	  	
+	<div class="item_name"><b>{$smarty.const.AMOUNT}</b></div>
+		{$amount}&nbsp;t
+		<div>		
+			<input type="hidden" name="amount" value="{$amount}">
+		</div>	  	
+	<div class="item_name"><b>{$smarty.const.TOLL_FEE}</b></div>
+		{$toll_fee}&nbsp;{$smarty.const.YEN}
+		<div>		
+			<input type="hidden" name="toll_fee" value="{$toll_fee}">
+		</div>	  	
+	<div class="item_name"><b>{$smarty.const.COMMON_MESSAGE}</b></div>
+		{$drive_memo}&nbsp;
+		<div>		
+			<input type="hidden" name="drive_memo" value="{$drive_memo}">
+		</div>	  	
+	  	
+<input type=hidden name="created" value="{$created|escape}">
+<input type=hidden name="start" value="{$start|escape}">
+<input type=hidden name="end" value="{$end|escape}">
+</div>
+
+	<div align="center">
+	<input type=hidden name="id" value="{$record_data.id}">
+	<input type=hidden name="driver_id" value="{$driver_id}">
+	<input type=hidden name="company_id" value="{$company_id}">
+	<input type=hidden name="start_latitude" value="{$start_latitude}">
+	<input type=hidden name="start_longitude" value="{$start_longitude}">
+	<input type=hidden name="end_latitude" value="{$end_latitude}">
+	<input type=hidden name="end_longitude" value="{$end_longitude}">
+	<input type=hidden name="edit" value="{$edit}">
+	<button class="btn btn-large btn-ocher" type="submit" name="submit" value="{$smarty.const.COMMON_SUBMIT}">
+	{$smarty.const.COMMON_SUBMIT}</button>
+	</div>
+	<br>
+	<div align="center">{$smarty.const.FORM_BACK}</div>
+</FORM>

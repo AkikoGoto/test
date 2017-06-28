@@ -1,0 +1,34 @@
+{*画像データ編集、表示部分*}
+		{if $driverData->image_name|escape}
+
+			<div class="existed_image">
+				<div class="float_left image_edit">
+					<img src="http://{$driverData->image_name|escape}" alt="{$smarty.const.MAP_ICON}">
+					<br>
+					{$each_image.1|escape}
+					<input type="hidden" name="image_name" value="{$driverData->image_name}">
+					
+				</div>
+			
+				<div class="float_left ">
+				{$smarty.const.CHANGE_IMAGE}
+					<input type="file" name="upload_file" />
+				<br>
+							
+						<input type="hidden" name="delete_image" value="{$key}">
+						{*消去はJavascriptを利用する*}
+						<input type="button" onClick={literal}"func1({/literal}{$key}{literal}){/literal}" 
+						value="{$smarty.const.COMMON_DELETE}">
+		
+					
+				</div>
+				<div class="clear_both">
+				</div>
+			</div>
+		{else}				
+			<div> 
+				{$smarty.const.ADD_IMAGE}
+				<input type="file" name="upload_file" />
+			</div>		
+		{/if}
+

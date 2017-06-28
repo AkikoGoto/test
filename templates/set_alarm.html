@@ -1,0 +1,220 @@
+{if $status == 'NEW'}
+<FORM METHOD="POST" action="index.php?action=trySetAlarm&company_id={$id}">
+{elseif $status == 'EDIT'}
+<FORM METHOD="POST" action="index.php?action=/trySetAlarm&set_alarmId={$datas.0}&set_driverId={$datas.id}&company_id={$id}">
+{/if}
+	<h1>{$smarty.const.DRIVER_CUSTIMIZE}</h1>
+	<!-- ドライバーを選択 -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$smarty.const.DRIVER_CHOICE}</b>
+	</div>
+	<div>	
+		<!-- 新規 -->
+		{if $status == 'NEW'}
+			<select name="driver_id">
+				{foreach from=$dataList item="driver"}
+					<option value="{$driver->id|escape}">
+	                	{*営業所名があれば、名称、なければ住所*}
+						{if $driver->last_name}                	
+	                		{$driver->last_name|escape} {$driver->first_name|escape}
+	                	{/if}
+	               	</option>
+				{/foreach}
+			</select>	
+			
+			<!-- 編集-->
+		{elseif $status == 'EDIT'}
+			
+			{$datas.last_name} {$datas.first_name}
+			<input type="hidden" name="driver_id" value="{$datas.driver_id}">
+		
+		{/if}
+         
+	</div>
+	<!-- 指定時間 -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$smarty.const.CHOOSE}{$smarty.const.TIME}</b>
+	</div>
+	<div>			
+		{include file="select_m_d_h_m.html"}	
+	</div>
+	
+	<!-- 指定時間にいるべき場所 -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$smarty.const.CHOOSE}{$smarty.const.TIME}{$smarty.const.MUST_ADDRESS}</b>
+	</div>
+	<div id={$smarty.section.cnt.index}>   	   		
+		{if $status == 'NEW'}
+			<input type="text" name="address" size="50"	maxlength="80" value="{$data->address}{$session.address}">
+		
+		
+				{*Pretty Popinで配送先から取得するリンク*}
+				<a href="index.php?action=/destination/viewDestinationsPopUp&company_id={$id}" 
+					rel="destinations"
+				 id="{$smarty.section.cnt.index}" onclick="root_detail_id={$smarty.section.cnt.index};"
+					 class="link_button" 
+				>
+					{$smarty.const.CHOOSE_FROM_DEST}
+				</a>		
+			
+			<!-- 編集-->
+		{elseif $status == 'EDIT'}
+			
+			<input type="text" name="address" size="50"	maxlength="80" value="{$datas.address}">
+			
+			{*Pretty Popinで配送先から取得するリンク*}
+				<a href="index.php?action=/destination/viewDestinationsPopUp&company_id={$id}" 
+					rel="destinations"
+				 id="{$smarty.section.cnt.index}" onclick="root_detail_id={$smarty.section.cnt.index};"
+					 class="link_button" 
+				>
+					{$smarty.const.CHOOSE_FROM_DEST}
+				</a>		
+		
+		{/if}
+				
+		<!-- <input type="text" name="address" maxlength="100" size="50"> -->
+	</div>
+	
+	<!-- 誤差の範囲 -->
+	<div class="item_name">
+		<b>{$smarty.const.ACCURACY}</b>
+	</div>
+	<div>   	   		
+		{if $status == 'NEW'}
+		
+			<input type="text" name="accuracy" value="1000"> M<br>
+		
+		{elseif $status == 'EDIT'}
+		
+			<input type="text" name="accuracy" value="{$datas.accuracy}"> M<br>
+		
+		{/if}
+		
+		{$smarty.const.THIRTY_M}{$smarty.const.ACCURACY}{$smarty.const.NOT_DISIGNATION}
+	</div><br>
+	<!-- 指定した時間にいるかいないか -->
+	<div>
+		{if $status == 'NEW'}
+		
+			<!-- 指定時間にいない場合 -->   	   		
+			<input type="radio" name="alert_when_there" value="0"> {$smarty.const.NOT_TIME_SENDMAIL}<br>
+			<!-- 指定時間にいる場合 -->
+			<input type="radio" name="alert_when_there" value="1"> {$smarty.const.TIME_SENDMAIL}
+		
+		{elseif $status == 'EDIT'}
+			
+			{if $datas.alert_when_not_there}
+			<!-- 指定時間にいない場合 -->
+			<input type="radio" name="alert_when_there" value="0" checked> {$smarty.const.NOT_TIME_SENDMAIL}<br>
+			<!-- 指定時間にいる場合 -->
+			<input type="radio" name="alert_when_there" value="1"> {$smarty.const.TIME_SENDMAIL}
+			{/if}
+			
+			{if $datas.alert_when_there}
+			<!-- 指定時間にいない場合 -->
+			<input type="radio" name="alert_when_there" value="0"> {$smarty.const.NOT_TIME_SENDMAIL}<br>
+			<!-- 指定時間にいる場合 -->
+			<input type="radio" name="alert_when_there" value="1" checked> {$smarty.const.TIME_SENDMAIL}
+			{/if}
+				
+		{/if}
+		
+	</div>
+	
+	<!-- メールを送る時間 -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$smarty.const.SENDMAIL}{$smarty.const.TIME}</b>
+	</div>
+	<div>
+		{if $status == 'NEW'}
+		<!-- メールを送るタイミング-->
+			{$smarty.const.CHOOSE}した{$smarty.const.TIME}の<input type="text" name="mail_timing" value=10>{$smarty.const.COMMON_MINIT}
+			<!-- メールを事後に送るか事前に送るか -->
+			<select name="mail_before_or_after">
+				<option value="0">前</option>
+				<option value="1">後</option>
+			</select><br>
+			{$smarty.const.SEND_TIMING}
+		
+		{elseif $status == 'EDIT'}
+		
+			{$smarty.const.CHOOSE}した{$smarty.const.TIME}の
+				<input type="text" name="mail_timing" value="{$datas.mail_timing}">{$smarty.const.COMMON_MINIT}
+			
+			<!-- メールを事後に送るか事前に送るか -->
+			<select name="mail_before_or_after">
+			
+				{if $datas.mail_before_or_after == 0}
+					
+					<option value="0" selected=selected>前</option>
+					<option value="1">後</option>
+				
+				{elseif $datas.mail_before_or_after == 1}
+					
+					<option value="0">前</option>
+					<option value="1" selected=selected>後</option>
+					
+				{/if}
+			
+			</select><br>
+			{$smarty.const.SEND_TIMING}
+		
+		{/if}
+				
+	</div>
+	
+	<!-- 管理者メールアドレス以外に送信したいメールアドレス -->
+	<div class="item_name">
+		<b>{$smarty.const.NOT_ADMIN_SENDMAIL}</b>
+	</div>
+	<div>
+		{if $status == 'NEW'}
+			<input type="text" name="email_other_admin" maxlength="100" size="50">
+		{elseif $status == 'EDIT'}
+			<input type="text" name="email_other_admin" value="{$datas.email_other_admin}"maxlength="100" size="50">
+		{/if}
+	</div>
+	<input type="hidden" name="status" value="{$status}">
+	<input type="hidden" name="company_id" value="{$id}">
+	<input type="submit" name="submit" value="{$smarty.const.COMMON_SUBMIT}">
+	
+	<!-- 配送先から選択する際のポップアップ -->
+{literal}
+<script type="text/javascript" charset="utf-8">
+	equipment = new Array();
+	var destination_name = null;
+	var address = null;
+	var information = null;
+	var root_detail_id = null;
+	var i=0;
+	
+	$(document).ready(function(){
+			$("a[rel^='destinations']").prettyPopin({
+			modal : true,
+			width : 1000,
+			//height: 400,
+			opacity: 0.5,
+			animationSpeed: 'fast', 
+			followScroll: false,
+			loader_path: 'templates/images/prettyPopin/loader.gif',
+			callback: function(){
+
+				var number = "#"+root_detail_id;
+				$(number).find('#destination_name').val(destination_name);
+				$(number).find('#address').val(address);
+				$(number).find('#information').val(information);
+
+			}
+		});
+		
+	});
+
+
+</script>
+{/literal}
+</FORM>

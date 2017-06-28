@@ -1,0 +1,33 @@
+{*全体のテンプレートファイル*} {if $carrier==NULL}
+<!DOCTYPE html>
+{/if}
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<TITLE>{$page_title} Smart動態管理</TITLE> {$css} {if
+$carrier==NULL||$carrier=="iPhone"||$carrier=="Android"}
+<!-- png fix -->
+{literal}
+<script type="text/javascript" src="templates/js/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="templates/js/jquery.pngFix.js"></script>
+<script type="text/javascript" src="templates/js/start_png_fix.js"></script>
+<script type="text/javascript" src="templates/js/accordion.js"></script>
+
+<script type="text/javascript"
+	src="https://apis.google.com/js/plusone.js">
+  	{lang: 'ja'}
+	</script>
+
+<link rel="shortcut icon" href="/favicon.ico">
+{/literal} {$js} {/if} {if $carrier==iPhone||$carrier=="Android"}
+<link rel="apple-touch-icon" href="/apple_touch_icon.png" />
+{/if}
+</head>
+<body {$onload_js}>
+	<div class="oc_outline_box">
+		{*コンテンツ*} 
+		{include file=$filename} 
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,184 @@
+{*ルートを地図で表示させる画面*}
+<h1>{$smarty.const.ROOT_DETAIL}</h1>
+<div>{$date}&nbsp;:&nbsp;{$driver_last_name}&nbsp;{$driver_first_name}</div>
+
+{if $data}
+{*点と線を表示　Javascript*}
+<script type="text/javascript">
+		{literal}
+		var locationArray = new Array();
+		var points = new Array();
+		var rootPathArray = new Array();
+		var old_time = 0;
+		var new_time = 0;
+		var map;
+		
+		{/literal}
+
+			{foreach from=$root_locations item=root_location key=k}
+
+			{*緯度・経度がNULL、0でなければ線と点を表示 *}
+			
+			{if $root_location.longitude >0 && $root_location.latitude >0 } 
+
+			{*ドライバーステータスを日本語に変換*}		
+				{literal}
+					var longitude = {/literal}{$root_location.longitude}{literal};
+					var latitude = {/literal}{$root_location.latitude}{literal};
+					var root{/literal}{$k}{literal} = new google.maps.LatLng(latitude, longitude);				
+	
+					var root_info{/literal}{$k}{literal}={
+							"LatLng":root{/literal}{$k}{literal},
+							"destination_name":{/literal}"{$root_location.destination_name}"{literal},
+							"deliver_time":{/literal}"{$root_location.deliver_time}"{literal},
+							"address":{/literal}{if $root_location.address}"{$root_location.address}"{else}null{/if}{literal}
+					};
+			
+					locationArray.push(root_info{/literal}{$k}{literal});
+						
+					{/literal}
+					{if $k>0}
+						{literal}
+	
+						if(root{/literal}{$k-1}{literal} != null){
+	
+							points{/literal}{$k}{literal} = [									
+										root{/literal}{$k-1}{literal},
+										root{/literal}{$k}{literal}										
+										];
+								
+							var rootPath= new google.maps.Polyline({
+								    path: points{/literal}{$k}{literal},
+								    strokeColor: "#FF0000",
+								    strokeOpacity: 1.0,
+								    strokeWeight: 2
+								});
+		
+							rootPathArray.push(rootPath);
+							
+						}
+						{/literal}
+					{/if}
+			{else if}
+			
+				{literal}root{/literal}{$k}{literal} = null;
+				{/literal}
+
+			{/if}		
+				
+		{/foreach}
+		{literal}
+
+				//空車検索用のJS
+				var lat={/literal}{$last_latitude}{literal};
+				var long={/literal}{$last_longitude}{literal};			
+				var geocoder;
+				var infowindow = new google.maps.InfoWindow();
+			    var marker_red='templates/image/map_marker_red.gif';
+			    var marker_blue='templates/image/map_marker_blue.gif';	    
+			    var marker_green='templates/image/map_marker_green.gif';	    
+			    var marker_purple='templates/image/map_marker_purple.gif';	    
+			    var taxi_icons=new Array();
+			    var taxi_windows=new Array();
+				
+				function initialize(lat,long) {
+					
+					geocoder = new google.maps.Geocoder();
+			
+				    var myLatlng = new google.maps.LatLng(lat, long);
+				    var myOptions = {
+				      zoom: 13,
+				      center: myLatlng,
+				      mapTypeId: google.maps.MapTypeId.ROADMAP
+				    }
+				    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+
+			       marker = new google.maps.Marker({
+	                      map: map, 
+	                      position: root_info0.LatLng
+					              
+	                });	
+			  	    	
+		  	    	infowindow.setContent(root_info0.address);
+		            infowindow.open(map, marker);
+		            $("#present_location").text(root_info0.address);
+			  	    	
+
+				    var shape = {
+				    	      coord: [1, 1, 1, 20, 20, 20, 20 , 1],
+				    	      type: 'poly'
+
+				    	  };
+
+					//空車アイコンを表示
+					for (var i = 0; i < locationArray.length; i++) {
+
+						//ステータスによってマーカーの色を変更
+						var image = marker_red; 
+						
+						taxi_icons=new google.maps.Marker({
+
+				    	  position: locationArray[i].LatLng,
+				          map: map,
+				          icon:image,
+				          title:locationArray[i].company_name,
+				          shape: shape,
+				          zIndex: 1
+
+					   	});
+					  	
+				         /*名前とステータスをWindow表示*/
+				         	
+				        //住所がnullの場合、空白を表示 	
+				        if(locationArray[i].address == null){
+
+				        	locationArray[i].address = '';
+				        	
+				        } 
+				         				
+						var contentString = '<div id="content">'+ locationArray[i].address +'<br>'+locationArray[i].destination_name + '<br>'+locationArray[i].deliver_time +  '</div>';												
+						taxi_windows= new google.maps.InfoWindow({
+							
+										content: contentString
+										
+								});
+
+						//タクシーアイコンへのマウスオーバーイベント追加
+						attachInfoWindow(taxi_icons,taxi_windows,i);
+
+						if(rootPathArray[i]){
+							rootPathArray[i].setMap(map);
+						}
+	
+					};
+					
+					resizeToFit();
+
+
+					function attachInfoWindow(taxi_icons,taxi_windows,i){
+
+						//点画像へのマウスオーバーイベント追加　
+						google.maps.event.addListener(taxi_icons, 'mouseover', function() {									
+							taxi_windows.open(map,taxi_icons);
+						});
+
+					}
+		}
+				
+		function resizeToFit() {
+			if(locationArray.length > 0) {
+				var mapBounds = new google.maps.LatLngBounds ();
+				for(var i = 0; i < locationArray.length; i++) {
+					mapBounds.extend(locationArray[i].LatLng);	
+				}
+				map.fitBounds (mapBounds);
+			}
+		}
+	</script>
+{/literal} {*Google Map本体*} {include file="google_map_wide.html"}
+<a href="javascript:resizeToFit();">全体表示</a>
+
+{else if}
+<div>{$smarty.const.TOP_NODATA}</div>
+{/if}

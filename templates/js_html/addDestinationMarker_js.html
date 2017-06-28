@@ -1,0 +1,62 @@
+{* 配送先を表示 *}
+{literal}
+function addDestinationMarker(){
+
+		var destinationLayer = L.mapbox.featureLayer().addTo(map);
+			
+		var destinationGeoJson = [
+							
+			{/literal}
+
+				{foreach from=$destinationList item=destinationList key=k}{literal}
+									
+				{
+				    "type": "Feature",
+				    "geometry": {
+				        "type": "Point",
+				        "coordinates": [{/literal}{$destinationList.longitude}{literal}, 
+				        				{/literal}{$destinationList.latitude}{literal}]
+				    },
+				    "properties": {
+				        "title": {/literal}"{$destinationList.destination_name}"{literal},
+
+					    "marker-color" : "{/literal}{if $destinationList.color !=null }{$destinationList.color}{else}#333333{/if}{literal}",
+						"marker-size" : 'medium',							
+						"marker-symbol" : 'commercial',
+						"information" : {/literal}"{$destinationList.information}"{literal},
+						"url":"index.php?action=/destination/viewDestination&destination_id={/literal}{$destinationList.id}{literal}&company_id={/literal}{$company_id}{literal}"
+						
+				    }
+				},
+				{/literal}{/foreach}{literal}
+					
+					
+			
+			];
+			
+		
+		// Set a custom icon on each marker based on feature properties.
+		destinationLayer.on('layeradd', function(e) {
+				var marker = e.layer;
+			    feature = marker.feature;
+			    
+			    if(marker.feature.properties.icon){
+				    marker.setIcon(L.icon(feature.properties.icon));
+				}
+				
+			    // Create custom popup content
+			    var popupContent =  '<a target="_blank" class="popup" href="' + feature.properties.url + '">' +
+                            		feature.properties.title
+                        			'</a><br>';
+
+			    marker.bindPopup(popupContent,{
+			        closeButton: false
+			    });
+				
+			});
+			
+		destinationLayer.setGeoJSON(destinationGeoJson);
+}
+
+{/literal}
+

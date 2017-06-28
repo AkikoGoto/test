@@ -1,0 +1,14 @@
+<IfModule mod_php5.c>
+  php_value include_path ".:./action:./class:./language:/usr/share/php/Smarty/:/usr/share/pear"
+</IfModule>
+<IfModule mod_rewrite.c>
+    RewriteEngine on
+    RewriteCond %{HTTPS} off
+    RewriteCond %{QUERY_STRING} action=login$
+    RewriteRule ^.*$  https://%{HTTP_HOST}%{REQUEST_URI} [R,L]
+
+    RewriteCond %{HTTPS} on
+    RewriteCond %{QUERY_STRING} !action=login$
+    RewriteCond %{QUERY_STRING} action=(?!driverLoginAndroid|driver_vacancy_smartphone|app_status_json|komatsu_app_status_json|komatsu_obstacles_json)
+    RewriteRule ^.*$  http://%{HTTP_HOST}%{REQUEST_URI} [R,L]
+</IfModule>

@@ -1,0 +1,181 @@
+{*会社内容詳細画面*}
+
+<h1>{$data->company_name|escape}</h1>
+<a name="top">&nbsp;</a>
+ 
+<table border="1" class="thread">
+<tr>
+	<th>ID</th><td class="con_odd">{$data->company_id|escape}</td>
+</tr>
+<tr>
+	<th>{$smarty.const.COMMON_IS_COMPANY}</th>
+	<td class="con_odd">{if $data->is_company==0}
+        {$smarty.const.COMMON_CORPORATE}
+        {elseif $data->is_company==1}	
+        	{$smarty.const.COMMON_INDIVIDUAL}
+        {else}
+        	{$smarty.const.ERROR_TITLE}        	
+        {/if}
+    </td>
+</tr>
+<tr><th>    	
+  		{$smarty.const.COMMON_COMPANY}</th>
+	<td class="con_odd">
+		{$data->company_name|escape}
+   	</td>
+</tr>
+<tr><th>    	
+  		{$smarty.const.COMMON_POSTAL}</th>
+	<td class="con_odd">
+		{$data->postal|escape}
+   	</td>
+</tr>
+<tr><th>    	
+  		{$smarty.const.COMMON_PREFECTURE}</th>
+	<td class="con_odd">
+		{$data->prefecture_name|escape}
+   	</td>
+</tr>
+<tr><th>    	
+  		{$smarty.const.COMMON_CITY}</th>
+	<td class="con_odd">
+		{$data->city|escape}
+   	</td>
+</tr>
+<tr><th>    	
+  		{$smarty.const.COMMON_WARD}</th>
+	<td class="con_odd">
+		{$data->ward|escape}
+   	</td>
+</tr>
+<tr><th>    	
+  		{$smarty.const.COMMON_TOWN}</th>
+	<td class="con_odd">
+		{$data->town}
+   	</td>
+</tr>
+<tr><th>    	
+  		{$smarty.const.COMMON_ADDRESS}</th>
+	<td class="con_odd">
+		{$data->address}
+   	</td>
+</tr>
+<tr><th>    	
+  		{$smarty.const.COMMON_TEL}</th>
+	<td class="con_odd">
+		{$data->tel}
+   	</td>
+</tr>
+<tr><th>    	
+  		{$smarty.const.COMMON_EMAIL}</th>
+	<td class="con_odd">
+		{$data->email}
+   	</td>
+</tr>
+
+<tr><th>
+	{$smarty.const.WHAT_BILL}</th>
+		<td class="con_odd">
+			{if !empty($invoices_data)}
+				{$smarty.const.YES}
+			{else}
+				{$smarty.const.NO}
+			{/if}
+</td></tr>
+	
+<tr>
+	<th>iPhone台数</th>
+	<td class="con_odd">
+		{if !empty($invoices_data.iphone_device_number)}
+			 {$invoices_data.iphone_device_number}
+		{else}0
+       	{/if} 台
+	</td>
+</tr>
+
+<tr>
+	<th>Android台数</th>
+	<td class="con_odd">
+		{if !empty($invoices_data.android_device_number)}
+			{$invoices_data.android_device_number}
+		{else}0
+		{/if} 台
+	</td>
+</tr>
+
+<tr><th>    	
+  		{$smarty.const.COMMON_CONTACT_PERSON}</th>
+	<td class="con_odd">
+		{$data->contact_person_last_name} {$data->contact_person_first_name}
+   	</td>
+</tr>
+
+<tr><th>    	
+  		{$smarty.const.COMMON_CONTACT_TEL}</th>
+	<td class="con_odd">
+		{$data->contact_tel}
+   	</td>
+</tr>
+
+<tr><th>    	
+  		{$smarty.const.COMMON_MESSAGE}欄</th>
+	<td class="con_odd">
+		{if !empty($invoices_data.remarks)}
+			{$invoices_data.remarks}
+		{/if}
+   	</td>
+</tr>
+		
+<tr><th>    	
+  		{$smarty.const.COMMON_CREATE_DATE}</th>
+	<td class="con_odd">
+		{$data->created}
+   	</td>
+</tr>
+<tr><th>    	
+  		{$smarty.const.COMMON_UPDATE}</th>
+	<td class="con_odd">
+		{$data->updated}
+   	</td>
+</tr>
+
+</table>
+{*データ削除時のメッセージ*}
+{literal}
+<script type="text/javascript">
+<!--
+function check(){
+	return confirm("このデータを削除して、本当によろしいですか？削除すると、元に戻すことはできません。")
+}
+//-->
+</script>	
+{/literal}
+<!-- 
+<FORM METHOD="POST" action="index.php?action=putin&id={$data->company_id}" 
+>
+<input type="submit" value="編集">
+</FORM>
+ -->
+<FORM METHOD="POST" action="index.php?action=deleteData&id={$data->company_id}" 
+>
+<input type="submit" value="削除"
+{literal}onclick="return check()"{/literal}
+>
+</FORM>
+<FORM METHOD="POST" action="index.php?action=viewBranches&id={$data->company_id}" >
+<input type="submit" value="営業所情報閲覧">
+</FORM>
+<FORM METHOD="POST" action="index.php?action=putBranch&company_id={$data->company_id}">
+<input type="submit" value="営業所情報追加">
+</FORM>
+
+<FORM METHOD="POST" action="index.php?action=viewDrivers&id={$data->company_id}" 
+>
+<input type="submit" value="ドライバー情報閲覧">
+</FORM>
+
+<div class="right"><a href="#top">▲ページのTOPへ</a></div>
+
+{foreach from=$links item="links"}
+{$links}
+{/foreach}

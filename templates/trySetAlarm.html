@@ -1,0 +1,142 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+{if $datas.status == 'NEW'}
+<FORM METHOD="POST" action="index.php?action={$target}" name="profile">
+{elseif $datas.status == 'EDIT'}
+<FORM METHOD="POST" action="index.php?action={$target}&set_alarmId={$set_alarmId}&set_driverId={$set_driverId}&company_id={$company_id}" name="profile">
+{/if}
+	<h1>{$smarty.const.COMFIRM_RES_TITLE}</h1>
+	<!-- ドライバーを選択　-->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$smarty.const.DRIVER}</b>
+	</div>
+	<div>
+		{$driver_name|escape}
+		<input type="hidden" name="driver_id" value="{$driver_id|escape}">
+		<input type="hidden" name="driver_name" value="{$driver_name|escape}"> 
+	</div>
+		
+	
+	<!-- 指定時間 -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$smarty.const.CHOOSE}{$smarty.const.TIME}</b>
+	</div>
+	<div>
+	{if $datas.daily}
+		{$datas.daily|escape}
+		<input type=hidden name="daily" value="1">
+		<input type=hidden name="weekly" value="">
+		<input type=hidden name="date" value=""> 
+	{elseif $datas.weekly}
+		{$datas.weekly|escape}
+		<input type=hidden name="weekly" value="{$datas.weekly|escape}">
+		<input type=hidden name="daily" value="">
+		<input type=hidden name="date" value="">
+	{elseif $datas.date}
+		{$datas.date|escape}
+		<input type=hidden name="date" value="{$datas.date|escape}">
+		<input type=hidden name="daily" value="">
+		<input type=hidden name="weekly" value="">
+	{/if}
+	
+	{$datas.time_from_hour}時{$datas.time_from_minit}分
+	<input type=hidden name="time_from_hour" value="{$datas.time_from_hour|escape}">
+	<input type=hidden name="time_from_minit" value="{$datas.time_from_minit|escape}">
+	</div>
+	
+	<!-- 指定時間にいるべき場所 -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$smarty.const.CHOOSE}{$smarty.const.TIME}{$smarty.const.MUST_ADDRESS}</b>
+	</div>
+	<div>   	   		
+		{$datas.address}
+		<input type=hidden name="address" value="{$datas.address|escape}">
+	</div>
+	
+	<!-- 緯度 -->
+	<div class="item_name">
+		<b>{$smarty.const.COMMON_LAT}</b>
+	</div>
+	<div>
+		<div id="lat"></div>
+		<input type="hidden" name="latitude">
+	</div>
+	<!-- 経度 -->
+	<div class="item_name">
+		<b>{$smarty.const.COMMON_LONG}</b>
+	</div>
+	<div>
+		<div id="lng"></div>
+		<input type="hidden" name="longitude">
+	</div>
+	
+	<!-- 誤差の範囲 -->
+	<div class="item_name">
+		<b>{$smarty.const.ACCURACY}</b>
+	</div>
+	<div>   	   		
+		{$datas.accuracy} M<br>
+		{$smarty.const.THIRTY_M}{$smarty.const.ACCURACY}{$smarty.const.NOT_DISIGNATION}
+		<input type=hidden name="accuracy" value="{$datas.accuracy|escape}">
+	</div><br>
+	
+	<!-- 指定した時間にいるかいないか -->
+	<div>
+		<!-- 指定時間にいない場合-->  		
+		{if $datas.alert_when_not_there}
+			{$smarty.const.NOT_TIME_SENDMAIL}<br>
+			<input type=hidden name="alert_when_not_there" value="{$datas.alert_when_not_there|escape}">
+			<input type=hidden name="alert_when_there" value="">
+		<!-- 指定時間にいる場合 -->
+		{elseif $datas.alert_when_there}
+			{$smarty.const.TIME_SENDMAIL}
+			<input type=hidden name="alert_when_not_there" value="">
+			<input type=hidden name="alert_when_there" value="{$datas.alert_when_there|escape}">
+		{/if}
+	</div>
+	
+	<!-- メールを送る時間 -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$smarty.const.SENDMAIL}{$smarty.const.TIME}</b>
+	</div>
+	<div>
+		<!-- メールを送るタイミング -->
+		{$smarty.const.CHOOSE}した{$smarty.const.TIME}の{$datas.mail_timing} 分
+		<input type=hidden name="mail_timing" value="{$datas.mail_timing|escape}">
+		<!-- メールを事後に送るか事前に送るか -->
+		{if $datas.mail_before_or_after == 0}
+			前
+		{elseif $datas.mail_before_or_after == 1}
+			後
+		{/if}
+		<input type=hidden name="mail_before_or_after" value="{$datas.mail_before_or_after|escape}">
+		<br>
+		{$smarty.const.SEND_TIMING}
+	</div>
+	
+	<!-- 管理者メールアドレス以外に送信したいメールアドレス -->
+	<div class="item_name">
+		<b>{$smarty.const.NOT_ADMIN_SENDMAIL}</b>
+	</div>
+	<div>
+		{$datas.email_other_admin}
+		<input type=hidden name="email_other_admin" value="{$datas.email_other_admin|escape}">
+	</div>
+	<div>
+	<div id="lat">{if $status=="EDIT"}{$latitude}{/if}</div>
+			<input type="hidden" name="latitude">
+	</div>
+	<input type="hidden" name="status" value="{$datas.status}">
+	<input type="hidden" name="company_id" value="{$datas.company_id}">
+	<input type="hidden" name="id" value="">
+	<input type="hidden" name="mail_time" value="{$datas.mail_time}">
+	<div align="center">
+	<input type="submit" name="submit" value="{$smarty.const.COMMON_SUBMIT}">
+	</div>
+</FORM>
+<div align="center">{$smarty.const.MAP_DETAIL_CHANGE}</div>
+<div id="map_canvas" style="width:100%; height: 500px"></div>

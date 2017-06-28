@@ -1,0 +1,100 @@
+{*登録内容確認フォーム*}
+<h1>{$smarty.const.COMFIRM_RES_TITLE}</h1>
+<FORM METHOD="POST" action="index.php?action={$target}" name="profile">
+	
+	<h1>{$smarty.const.WORK_CUSTOMIZE}</h1>
+	<!-- 作業ステータス1 -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$smarty.const.ACTION_STATUS}１</b>
+	</div>
+	<div>
+		{$action_1|escape}
+		<input type="hidden" name="action_1" value="{$action_1|escape}">
+	</div>
+	
+	<!-- 作業ステータス2 -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$smarty.const.ACTION_STATUS}２</b>
+	</div>
+	<div>
+		{$action_2|escape}
+		<input type="hidden" name="action_2" value="{$action_2|escape}">
+	</div>
+	
+	<!-- 作業ステータス3 -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$smarty.const.ACTION_STATUS}３</b>
+	</div>
+	<div>
+		{$action_3|escape}
+		<input type="hidden" name="action_3" value="{$action_3|escape}">
+	</div>
+	
+	<!-- 作業ステータス4 -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$smarty.const.ACTION_STATUS}４</b>
+	</div>
+	<div>
+		{$action_4|escape}
+		<input type="hidden" name="action_4" value="{$action_4|escape}">
+	</div>
+	
+	<!-- 位置情報を取得する間隔を設定 -->
+	<h1>{$smarty.const.GPS_CUSTOMIZE}</h1>
+	<!-- 距離 -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>移動{$smarty.const.DISTANCE}</b>
+	</div>
+	<div>
+		{$distance|escape} m
+		<input type="hidden" name="distance" value="{$distance|escape}">
+	</div>
+	
+	<!-- 移動時間 -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>移動{$smarty.const.TIME}</b>
+	</div>
+	<div>
+		{$time|escape} 分
+		<input type="hidden" name="time" value="{$time|escape}">
+	</div>
+	
+	<!-- 写真を撮影する間隔を設定 -->
+	<h1>写真を撮影する間隔を{$smarty.const.SETTING}</h1>
+	<!-- 移動距離 -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>移動{$smarty.const.DISTANCE}</b>
+	</div>
+	<div>
+		{$photo_interval_distance|escape} m
+		<input type="hidden" name="photo_interval_distance" value="{$photo_interval_distance|escape}">
+	</div>
+	
+	<!-- 移動時間 -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>移動{$smarty.const.TIME}</b>
+	</div>
+	<div>
+		{$photo_interval_time|escape} 分
+		<input type="hidden" name="photo_interval_time" value="{$photo_interval_time|escape}">
+	</div>
+	
+		
+	<div align="center">
+		<input type="hidden" name="from_web" value="1">
+		<input type=hidden name="company_id" value="{$company_id|escape}">
+		<input type="submit" name="submit" value="{$smarty.const.COMMON_SUBMIT}">
+		<br>
+		{$smarty.const.FORM_BACK}
+	</div>
+			
+</form>
+    

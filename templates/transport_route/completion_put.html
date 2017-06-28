@@ -1,0 +1,40 @@
+<h1>輸送ルートの新規追加が終わりました</h1>
+
+{*OSM Map本体*} 
+{include file="elements/osm_mini_map.html"}
+<br>
+<a href="index.php?action=/navi_area/putArea&company_id={$company_id}&transport_route_id={$transport_route_id}">続けてエリアを作成する</a>｜
+<a href="http://localhost/smart_location_admin_edison/index.php?action=/transport_route/putRoute&company_id={$company_id}">ほかのルートを作成する</a>
+
+<script type="text/javascript">
+{literal}
+var center_latitude ={/literal}{$company_lat}{literal};
+var center_longitude ={/literal}{$company_long}{literal};                    
+
+function initialize(center_latitude,center_longitude) {
+
+       {/literal}
+       {*パラメーターの初期化とマップの描画は別ファイル*}
+       {include file = "js_html/initialize_mapBoxGl_js.html"}
+       
+       {literal}
+       	var route = {geo_json : {/literal}{$geo_json}{literal}}; 
+
+    	addRouteAndPopup(route, "transport_route", "{/literal}{$name}{literal}", "#e87272"); 
+
+    	var positionDatas = route.geo_json.features[0].geometry.coordinates;
+    	
+    	addLineOnStyleLoad(positionDatas, "#ff0000", "newRoute");
+
+    	resizeMapToLine(positionDatas);
+}
+{/literal}              
+</script>
+<script src="templates/js/mapbox/addRoute.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addPolygon.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/resizeToFit.js" type="text/javascript"></script>
+<script src="templates/js/randomColor.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addPopup.js" type="text/javascript"></script>
+<script src="templates/js/mapbox/addLine.js" type="text/javascript"></script>
+<script src='https://api.mapbox.com/mapbox.js/plugins/turf/v2.0.2/turf.min.js'></script>
+<script src="templates/js/mapbox/resizeMapToLine.js" type="text/javascript"></script>

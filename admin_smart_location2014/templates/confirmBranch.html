@@ -1,0 +1,109 @@
+{*確認表示画面 新規・編集はフラグで判断*}
+
+<h1>{$smarty.const.COMFIRM_RES_TITLE}</h1>
+
+<FORM METHOD="POST" action="index.php?action={$target}" name="profile">
+
+<TABLE  class="thread" border="1" id="middle_box">
+<TBODY>
+	<tr><th width="100px">
+	Comapny ID
+    		</th>
+		<td class="con_odd">
+		{$company_id|escape}
+        <input type=hidden name="company_id" value="{$company_id|escape}">  	        		
+			</td></tr>
+	<tr><th width="100px">
+	{$smarty.const.COMMON_BRANCH_ID}
+    		</th>
+		<td class="con_odd">
+		{$id|escape}
+        <input type=hidden name="id" value="{$id|escape}">  	        		
+			</td></tr>			
+<!-- Geographic -->
+	<tr><th>
+	{$smarty.const.BRANCH_NAME}</th>
+		<td class="con_odd">
+		{$name|escape}
+			<input type="hidden" name="name" value="{$name|escape}">
+	</td></tr>
+
+	<tr><th><span class="hissu">{$smarty.const.COMMON_INDISP}</span>
+	{$smarty.const.COMMON_LAT}</th>
+		<td class="con_odd">		
+		  <div id="lat"></div>
+			<input type="hidden" name="latitude">
+		</td></tr>
+
+	<tr><th><span class="hissu">{$smarty.const.COMMON_INDISP}</span>
+	{$smarty.const.COMMON_LONG}</th>
+		<td class="con_odd">
+		  <div id="lng"></div>
+		{$longitude|escape}
+			<input type="hidden" name="longitude" >
+		</td></tr>
+
+	<tr><th><span class="hissu">{$smarty.const.COMMON_INDISP}</span>
+	{$smarty.const.COMMON_POSTAL}</th>
+		<td class="con_odd">
+		{$postal|escape}
+			<input type="hidden" name="postal" value="{$postal|escape}">
+		</td></tr>
+
+	<tr><th><span class="hissu">{$smarty.const.COMMON_INDISP}</span>
+	{$smarty.const.COMMON_PREFECTURE}</th>
+		<td class="con_odd">
+		{$prefecture_name|escape}
+			<input type="hidden" name="prefecture" value="{$prefecture|escape}">
+		</td></tr>
+
+	<tr><th>
+	{$smarty.const.COMMON_CITY}</th>
+		<td class="con_odd">
+		{$city|escape}
+			<input type="hidden" name="city" value="{$city|escape}">
+		</td></tr>
+	<tr><th>
+	{$smarty.const.COMMON_TOWN}</th>
+		<td class="con_odd">
+		{$ward|escape}
+			<input type="hidden" name="ward" value="{$ward|escape}">
+		</td></tr>
+
+	<tr><th>
+	{$smarty.const.COMMON_TOWN}</th>
+		<td class="con_odd">
+		{$town|escape}
+			<input type="hidden" name="town" value="{$town|escape}">
+		</td></tr>
+
+	<tr><th><span class="hissu">{$smarty.const.COMMON_INDISP}</span>
+	{$smarty.const.COMMON_ADDRESS}</th>
+		<td class="con_odd">
+		{$address|escape}
+			<input type="hidden" name="address" value="{$address|escape}">
+		</td></tr>
+
+	<tr><th><span class="hissu">{$smarty.const.COMMON_INDISP}</span>
+	{$smarty.const.COMMON_TEL}</th>
+		<td class="con_odd">
+		{$tel|escape}
+			<input type="hidden" name="tel" value="{$tel|escape}">
+		</td></tr>
+
+
+	<tr><th>{$smarty.const.COMMON_EMAIL}</th>
+		<td class="con_odd">
+		{$email|escape}
+			<input type="hidden" name="email" value="{$email|escape}">
+		</td></tr>
+<!-- Geographic終わり -->
+		
+	<tr><th colspan="2" align="center">
+			<input type="hidden" name="edit" value="{$edit|escape}">
+			<input type="submit" name="submit" value="{$smarty.const.COMMON_SUBMIT}"></th>
+</TBODY>
+</TABLE>
+
+</form>
+    <div id="map_canvas" style="width: 500px; height: 300px"></div>

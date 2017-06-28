@@ -1,0 +1,279 @@
+{*すべてのドライバーの業務履歴を表示*}
+<FORM METHOD="POST" action="index.php?action=trySetting">
+	
+	<h1>{$smarty.const.WORK_CUSTOMIZE}</h1>
+	<!-- 作業ステータス１ -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$smarty.const.ACTION_STATUS}１</b>
+	</div>
+	<div>   	   		
+		<input type="text" name="action_1" size="15" maxlength="15" value="{$data->action_1}{$session.action_1}">
+	</div>
+	
+	<!-- 作業ステータス２ -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$smarty.const.ACTION_STATUS}２</b>
+	</div>
+	<div>   	   		
+		<input type="text" name="action_2" size="15" maxlength="15" value="{$data->action_2}{$session.action_2}">
+	</div>
+	
+	<!-- 作業ステータス３ -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$smarty.const.ACTION_STATUS}３</b>
+	</div>
+	<div>   	   		
+		<input type="text" name="action_3" size="15" maxlength="15" value="{$data->action_3}{$session.action_3}">
+	</div>
+	
+	<!-- 作業ステータス４ -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$smarty.const.ACTION_STATUS}４</b>
+	</div>
+	<div>   	   		
+		<input type="text" name="action_4" size="15" maxlength="15" value="{$data->action_4}{$session.action_4}">
+	</div>
+	
+	<h1>{$smarty.const.GPS_CUSTOMIZE}</h1>
+	<!-- 距離間隔 -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>移動{$smarty.const.DISTANCE}</b>
+	</div>
+	<div>   	   		
+		<input type="text" name="distance" size="5" maxlength="5" value="{$data->distance}{$session.distance}"> m
+	</div>
+	
+	<!-- 時間間隔 -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>移動{$smarty.const.TIME}（Androidのみの機能です）</b>
+	</div>
+	<div>
+		<input type="text" name="time" size="5" maxlength="5" value="{$time}{$session.time}"> 秒
+	</div>
+	<!-- 常駐して動作させるか -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$smarty.const.RESIDENCE}（Androidのみの機能です）</b>
+	</div>
+	<div>
+		<select name="track_always">
+			{if $data->track_always == 0}
+			<option value="0" selected=selected>OFF</option>
+			<option value="1">ON</option>
+			{elseif $data->track_always == 1}
+			<option value="0">OFF</option>
+			<option value="1" selected=selected>ON</option>
+			{/if}
+		</select>
+	</div>
+	<!-- 許容する誤差 -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$smarty.const.ACCORD}{$smarty.const.ACCURACY}</b>
+	</div>
+	<div>
+		{if $data->accuracy == 0}
+		<input type="text" name="accuracy" size="5" maxlength="5" value="2000"> M
+		{$smarty.const.AMBIT}{$smarty.const.CHOOSE}
+		{elseif $data->accuracy}
+		<input type="text" name="accuracy" size="5" maxlength="5" value="{$data->accuracy}{$session.accuracy}"> M
+		 {$smarty.const.AMBIT}{$smarty.const.CHOOSE}
+		{/if}
+	</div>	
+	
+	<!--=================== 一般公開マップの範囲設定 ===================-->
+	<h1>{$smarty.const.PUBLIC_MAP_SCOPE}</h1>
+	<label>
+		<input type="checkbox" id="makeMapPublic" name="is_public" value="1"
+			{if $is_public}
+				checked
+			{/if}>公開する</label>
+	<div class="margin-top">
+		一般向けに御社のリアルタイムマップを公開することができます。
+		<div class="margin-top red-light">（管理画面を編集される心配はございません）</div>
+	</div>
+		
+	<div id="public_drivers_selection" class="message_recipients">
+		{if $public_url}
+			{*共有URL*}
+			<!--======= 共有URL =======-->
+			<div class="item_name">
+				<b>{$smarty.const.PUBLIC_MAP_URL_TITLE}</b>
+			</div>
+			<input style="width:700px; padding: 10px;" title="埋め込みコード" value="{$public_url}">
+			
+			<!--======= iframeコード =======-->
+			<div class="item_name">
+				<b>{$smarty.const.PUBLIC_MAP_IFRAME_CODE_TITLE}</b>
+			</div>
+			<div>自社サイトHTML内のお好きな場所に貼り付けてください。</div>
+			<div class="margin-top red-light">横幅を変える場合は「 width="　" 」、高さを変える場合は「 height="　" 」内の値を変更ください。</div>
+			<input class="margin-top" style="width:700px; padding: 10px;" title="埋め込みコード" 
+				value="&lt;iframe width=&quot;300px&quot; height=&quot;400px&quot; src=&quot;{$public_url}&quot; &gt;&lt;/iframe&gt;">
+		{/if}
+		
+		<!--======= 公開するドライバーの選択 =======-->
+		<div class="item_name">
+			<b>{$smarty.const.PUBLIC_DRIVERS}</b>
+		</div>
+		{foreach from=$driverList item="each_driverList"}
+			{foreach from=$each_driverList item="branch_data"}
+				<div id="visible_public_{$branch_data.geo_id}" class="recipients">
+					<div class="breanch_name_of_recepit">{$branch_data.geo_name}</div>
+					<div class="recpient_drivers">
+						<input type="checkbox" id="{$branch_data.geo_id}" class="checkAllDrivers" value="全員にチェックする">
+						<label for="{$branch_data.geo_id|escape}"><b>すべてチェックする</b></label>
+						{foreach from=$branch_data.drivers item="data"}
+							<div>
+								<input type="checkbox" 
+										name="visible_driver_id[]" 
+										id="{$data->id|escape}" 
+										value="{$data->id|escape}"
+								{if $data->is_public}
+									checked
+								{/if}> 
+								<label for="{$data->id|escape}">{$data->last_name|escape}{$data->first_name|escape}</label>
+							</div>
+						{/foreach}
+					</div> 
+				</div>
+			{/foreach}
+		{foreachelse}
+			<p>{$smarty.const.DRIVER}がまだ登録されていません。</p>
+			<p><a href="{$smarty.const.TEMPLATE_URL}?action=putDriver&id=9841">新しく{$smarty.const.DRIVER}を登録する</a></p>
+		{/foreach}
+		<div class="clear_both"></div>
+		
+	</div>
+	
+	<!--===================閲覧ユーザーの公開設定 ===================-->
+	<h1>{$smarty.const.VIEWERS_SETTING}</h1>
+	<label>
+		<input type="checkbox" id="makeDriversVisibleByUsers" name="is_users_viewing" value="1"
+			{if $is_users_viewing}
+				checked
+			{/if}>公開する</label>
+	<div class="margin-top">
+		自社の車両や営業マンの位置を知らせたい顧客等、閲覧ユーザー毎に{$smarty.const.REALTIME_MAP}上で閲覧できるドライバーを設定し、公開することができます。
+		<div class="margin-top red-light">（管理画面を編集される心配はございません）</div>
+	</div>
+	<div id="viewered_drivers_selection" class="message_recipients">
+		
+		<!--======= 共有URL =======-->
+		<div class="item_name">
+			<b>{$smarty.const.PUBLIC_MAP_URL_TITLE}</b>
+		</div>
+		<div>以下のURLとログインID・パスワードを配布してください。</div>
+		<input style="width:700px; padding: 10px;" title="共有URL" value="{$smarty.const.TEMPLATE_URL}?action=user/user_menu">
+		
+		<!--======= ユーザーの選択 =======-->
+		<div class="item_name">
+			<b>{$smarty.const.DRIVERS_TO_VIEWERS_SETTING}</b>
+		</div>
+				
+		<p><a href="{$smarty.const.TEMPLATE_URL}?action=putUser&id={$company_id|escape}">{$smarty.const.VIEWER}を登録する</a></p>
+		
+		{foreach from=$viewerList item="viewer"}
+			<div id="public_viewer_id_{$viewer.user_id}" class="viewers_list">
+				<div class="viewer_name">{$viewer.user_name}</div>
+				<div class="viewered_drivers">
+					<input type="checkbox" id="{$viewer.user_id}" class="checkAllViewers" value="全員にチェックする">
+					<label for="{$viewer.user_id|escape}"><b>すべてチェックする</b></label>
+					{foreach from=$viewer.drivers item="driver"}
+						<div>
+							<label>
+								<input type="checkbox" 
+										name="viewed_driver_id[{$viewer.user_id}][{$driver.driver_id|escape}]" 
+										id="{$driver.driver_id|escape}" 
+										value="{$driver.driver_name|escape}"
+								{if $driver.is_viewered}
+									checked
+								{/if}>
+								{$driver.driver_name|escape}
+							</label>
+						</div>
+					{/foreach}
+				</div>
+			</div>
+		{foreachelse}
+			<p>{$smarty.const.VIEWER}がまだ登録されていません。</p>
+		{/foreach}
+	</div>
+	
+	<div class="clear_both"></div>
+		
+	<div align="center">
+		{*隠し項目として、備考を渡しておく　顧客には編集・閲覧できないが、これを入れておかないと、備考が消えてしまうため*}
+		<input type="hidden" name="from_web" value="1">
+		<input type="hidden" name="company_id" value="{$company_id}">
+		<button class="btn btn-large btn-ocher" type="submit" name="submit" value="{$smarty.const.COMMON_SUBMIT}">
+			{$smarty.const.COMMON_SUBMIT}
+		</button>
+	</div>
+</FORM>
+
+<script type="text/javascript">
+{literal}
+$(document).ready(function() {
+	
+	/********************************************
+	*	すべてにチェック
+	*********************************************/
+	// 公開ドライバーのすべてにチェック
+	$('.checkAllDrivers').click(function () {
+		var geo_id = $(this).attr("id");
+		$("#visible_public_"+geo_id+" input:checkbox").not(this).prop('checked', this.checked);
+	});
+
+	// 閲覧ユーザーのすべてにチェック
+	$('.checkAllViewers').click(function () {
+		var user_id = $(this).attr("id");
+		$("#public_viewer_id_"+user_id+" input:checkbox").not(this).prop('checked', this.checked);
+	});
+
+	/********************************************
+	*	クリックトグル
+	*********************************************/
+	//公開ドライバー用
+	$('#makeMapPublic').click(function() {
+	    //クリックイベントで要素をトグルさせる
+	    $("#public_drivers_selection").slideToggle(this.checked, function() {
+	        if ($(this).is(':visible'))
+	        	$(this).css('display','inline-block');
+	    });
+	});
+
+	//閲覧ユーザー用
+	$('#makeDriversVisibleByUsers').click(function() {
+	    //クリックイベントで要素をトグルさせる
+	    $("#viewered_drivers_selection").slideToggle(this.checked, function() {
+	        if ($(this).is(':visible'))
+	        	$(this).css('display','inline-block');
+	    });
+	});
+
+	/********************************************
+	*	画面表示時トグル
+	*********************************************/
+	
+	/*「リアルタイムマップを一般公開する」にチェックを入れて、次の画面から戻ってきたとき*/
+	/*これのチェック状態によって、ドライバーの選択欄が表示されるようにする*/
+	if($("#makeMapPublic").prop('checked')) {
+    	$("#public_drivers_selection").css('display','inline-block');
+	}
+	
+	/*「リアルタイムマップを一般公開する」にチェックを入れて、次の画面から戻ってきたとき*/
+	/*これのチェック状態によって、ドライバーの選択欄が表示されるようにする*/
+	if($("#makeDriversVisibleByUsers").prop('checked')) {
+    	$("#viewered_drivers_selection").css('display','inline-block');
+	}
+	
+});
+{/literal}
+</script>

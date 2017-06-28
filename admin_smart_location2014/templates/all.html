@@ -1,0 +1,64 @@
+{*全記事表示画面*}
+
+<h1>全投稿一覧</h1>
+
+{foreach from=$links item="links"}
+{$links}
+{/foreach}
+
+<table border="1" class="thread">
+
+<tr>
+<td >記事No.</td>
+<td >タイトル</td>
+<td >投稿</td>
+<td>名前</td>
+<td>日時</td>
+<td>状況</td>
+<td></td>
+</tr>
+
+{foreach from=$data item="topic"}
+<tr>
+{*各項目はescapeでサニタイズ*}
+<td class="con_odd">{$topic->id|escape}</td>
+<td class="con_even"><a href="?action=content&thread_id={$topic->thread_id}#{$topic->res_id}">{$topic->title|escape}</a></td>
+<td class="con_odd">{$topic->topic}</td>
+<td class="con_even">{$topic->name|escape}</td>
+<td class="con_odd">{$topic->date|escape}</td>
+<td>
+{*削除注意メッセージ*}
+{literal}
+<script type="text/javascript">
+<!--
+function check(){
+	return confirm("この投稿を削除して、本当によろしいですか？削除すると、元に戻すことはできません。。")
+}
+//-->
+</script>	
+{/literal}
+
+<FORM METHOD="POST" action="index.php?action=deleteTopic&id={$topic->id}" 
+>
+<input type="submit" value="投稿を削除" value="削除" 
+{*スレッドの状態に応じてメッセージを変更*}
+{literal}onclick="return check()"{/literal}
+>
+</FORM>
+
+</td>
+{*配列が空だった場合*}
+{foreachelse}
+<tr>
+<td colspan="6">
+現在記事がありません。
+</td>
+
+</tr>
+{/foreach}
+</table>
+
+{foreach from=$links item="links"}
+{$links}
+{/foreach}
+

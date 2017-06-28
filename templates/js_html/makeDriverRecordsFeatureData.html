@@ -1,0 +1,40 @@
+{literal}
+
+	function makeDriverRecordsFeatureData(){
+
+		datas = [];
+
+		{/literal}
+		{foreach from=$driver_locations item=driver_location key=k}
+		{literal}
+
+			var data = {
+			"type" : "Feature",
+			"geometry" : {
+				"type" : "Point",
+				"coordinates" : [{/literal} {$driver_location.longitude}{literal},  {/literal} {$driver_location.latitude}{literal} ]
+				},
+			"properties" : {
+				"status" : {/literal}"{$driver_location.status}"{literal},
+				"status_ja" : {/literal}"{if $driver_location.status==5}{$smarty.const.ACTION_1}{else}{$driver_location.status_ja}{/if}"{literal},
+				"created" : {/literal}"{$driver_location.created}"{literal},
+				"start" : {/literal}"{$driver_location.start}"{literal},
+				"end" : {/literal}"{$driver_location.end}"{literal},
+				"color" : {/literal}"{if $driver_location.status==5}#cf714a{else}{$driver_location.color}{/if}"{literal},
+				"is_deviated":{/literal}"{$driver_location.is_deviated}"{literal}
+				}
+			};
+
+			//表からのリンク用
+			driver_info_consecutive_id[{/literal}{$driver_location.id}{literal}] = data;
+
+			datas.push(data);
+		{/literal}
+	    {/foreach}
+	    {literal}
+
+		return datas;
+
+	}
+
+{/literal}

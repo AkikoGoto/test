@@ -1,0 +1,60 @@
+{*ドライバー業務日誌目次画面*}
+
+<h1>{$companyName}&nbsp;{$smarty.const.COMMON_DRIVERS}</h1>
+<a name="top" style="display:none">&nbsp;</a>
+{if $jvList != null}
+	<div>
+	{foreach from=$jvList item="jv" key=k name="jv"}
+		<a href="index.php?action=viewDriversMemo&company_id={$jv.id}">{$jv.company_name}</a>
+			{if !$smarty.foreach.jv.last}
+				|
+			{/if}
+	{*配列が空だった場合*}
+	{foreachelse}
+		現在JVはありません
+	{/foreach}
+	</div>
+{/if}
+{*複数ページへ渡る場合のリンク*}
+{foreach from=$links item="links"}
+{$links}
+{/foreach}
+<table class="middle_table report_table">
+{foreach from=$data item="data" key=k}
+	<tr>
+		<th>
+			{$k+1}
+		</th>
+		<td>
+			{$data->last_name|escape}{$data->first_name|escape}
+		</td>
+		<td>	
+			{if $smarty.const.MODE =="CONCRETE"}
+				<a href="index.php?action=concrete/driver_record_map&driver_id={$data->id|escape}&company_id={$data->company_id|escape}">
+			{else}
+				<a href="index.php?action=driver_record_map&driver_id={$data->id|escape}&company_id={$data->company_id|escape}">
+			{/if}			
+					{$smarty.const.DRIVER_RECORDS_MAP}
+				</a>
+		</td>
+		<td>
+			{if $smarty.const.MODE =="CONCRETE"}
+				<a href="index.php?action=concrete/worktime&driver_id={$data->id|escape}&company_id={$data->company_id|escape}">{$smarty.const.WORK_RECORDS}</a>
+			{else}
+				<a href="index.php?action=worktime&driver_id={$data->id|escape}&company_id={$data->company_id|escape}">{$smarty.const.WORK_RECORDS}</a>
+			{/if}
+		</td>
+		<td>
+			{$data->geographic_name}
+		</td>
+	</tr>
+{*配列が空だった場合*}
+{foreachelse}
+<tr>
+	<td>
+		現在データがありません。
+	</td>
+</tr>
+{/foreach}
+</table>
+ 

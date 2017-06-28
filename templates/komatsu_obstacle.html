@@ -1,0 +1,35 @@
+{literal}
+<script type="text/javascript">
+function check(){
+return confirm("この記録を消去して、本当によろしいですか？消去すると、元に戻りません。")
+}
+</script>
+{/literal}
+
+
+{if $msg != ''}
+  <font color="red"><b>{$msg}</b></font>
+{/if}
+
+
+<table class="report_table">
+<tr><th>ファイル名</th><th>アップロード日時</th><th>削除</th>　</tr>
+{foreach from=$csvInfo item=info}
+   <tr> 
+    <td><a href="index.php?action=komatsu_viewCSV&company_id={$id}&filename={$info.filename}">{$info.filename}</a></td>
+    <td>{$info.uploadTime}</td>
+    <td>
+		<a onclick="return check()" href="index.php?action=komatsu_obstacle_delete&company_id={$id}&deletedfilename={$info.filename}">
+			<img title="消去" alt="消去" src="templates/image/icon_delete.gif">
+		</a>
+	</td>
+    <tr>
+{/foreach}
+</table>
+
+<form action="index.php?action=komatsu_obstacle_fileupload&company_id={$id}" method="post" enctype="multipart/form-data">
+  ファイル：<br />
+  <input type="file" name="uploadedfile" size="30" /><br />
+  <br />
+  <input type="submit" value="アップロード" />
+</form>

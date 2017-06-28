@@ -1,0 +1,181 @@
+<h2>{$smarty.const.TARGET}
+	{if $id}
+		{$smarty.const.EDIT}
+	{else}
+		{$smarty.const.COMMON_ADD}
+	{/if}
+</h2>
+<FORM METHOD="POST" action="index.php?action=/target/target_confirm" >
+
+	<div class="item_name"><font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$smarty.const.TARGET_ID}</b></div>
+	<input type="text" size="20" maxlength="20" class="textinput" name="target_id" 
+		value="{if $session.target_id}{$session.target_id}{else if}{$data.target_id}{/if}">
+
+	<div class="item_name"><b>{$smarty.const.COMMON_JYUSYO}</b></div>
+	<input type="text" size="60" maxlength="60" class="textinput" name="address" 
+		value="{if $session.address}{$session.address}{else if}{$data.address}{/if}">
+
+	<div class="item_name"><b>{$smarty.const.DRIVER_NAME}</b></div>
+		<select name="driver_id">
+		{foreach from=$drivers item=driver }
+			<option value="{$driver->id}" {if $driver->id==$data.driver_id}" selected=selected "{/if} >
+					{$driver->last_name}&nbsp;{$driver->first_name}
+			</option>
+		{foreachelse}
+			<div>{$smarty.const.TOP_NODATA}</div>
+		{/foreach}
+		</select>
+
+
+	<div class="item_name"><b>{$smarty.const.TARGET_SET_DATE}</b></div>
+
+ 	 {if $data_year}
+		<input type="text" name="target_set_date_year" value={$data_year} size = "4">
+	{else}	 	
+		 <select name="target_set_date_year">
+		  {php} 
+		     $this_year=date('Y');
+		       for($i=$this_year-5; $i<$this_year+1; $i++){
+		          echo "<option value=\"$i\"";
+			     				if($data_year){
+									if($i==$data_year){
+										 echo "selected=selected";	
+									}
+								}elseif($_SESSION['target_set_date_year']){
+									if($i==$_SESSION['target_set_date_year']){
+										 echo "selected=selected";	
+									}
+								}elseif($i==$this_year){
+					 				echo " selected";	
+								}
+				echo ">$i</option>";
+			}
+		  {/php}
+		 </select>
+	{/if} 
+	 年
+ 	 {if $data_month}
+		<input type="text" name="target_set_date_month" value={$data_month} size = "2">
+	{else}	 	
+		 <select name="target_set_date_month">
+		   {php} 
+			$this_month=date('n');
+			 	for($j=1; $j<13; $j++){
+					echo "<option value=\"$j\"";
+			     				if($_SESSION['target_set_date_month']){
+									if($j==$_SESSION['target_set_date_month']){
+										 echo "selected=selected";	
+									}
+								}elseif($j==$this_month){
+						 			echo "selected=selected";	
+								}
+					echo ">$j</option>";
+									
+				}
+		  {/php}		
+		  </select>
+	 {/if} 
+	  月
+	 {if $data_day}
+		<input type="text" name="target_set_date_day" value={$data_day} size = "2">	 	
+	{else}
+		 <select name="target_set_date_day">
+		  {php} 
+			$today=date('d');
+				for($k=1; $k<32; $k++){
+					echo "<option value=\"$k\"";
+					
+						if($_SESSION['target_set_date_day']){
+							if($k==$_SESSION['target_set_date_day']){
+								 echo "selected=selected";	
+								}
+						}elseif($k==$today){
+							echo "selected=selected";	
+						}
+					echo ">$k</option>";
+				}
+		 {/php}		
+	 </select>
+	 {/if}
+	 日
+
+
+	<div class="item_name"><b>{$smarty.const.IS_PICKED}</b></div>
+	<input type="checkbox" name="is_picked" value="1" {if $data.is_picked}checked{/if}>
+	
+	<!-- 引き取り日 -->
+	<div class="item_name"><b>{$smarty.const.TARGET_PICKED_DATE}</b></div>
+		
+ 	 {if $picked_date_year}
+		<input type="text" name="picked_date_year" value={$picked_date_year} size = "4">
+	{else}	 	
+		 <select name="picked_date_year">
+		 <option value="">{$smarty.const.SELECT_BLANK}</option>
+		  {php} 
+		     $this_year=date('Y');
+		       for($i=$this_year-5; $i<$this_year+1; $i++){
+		          echo "<option value=\"$i\"";
+			     				if($_SESSION['picked_date_year']){
+									if($i==$_SESSION['picked_date_year']){
+										 echo "selected=selected";	
+									}
+								}
+				echo ">$i</option>";
+			}
+		  {/php}
+		 </select>
+	{/if} 
+	 年
+ 	 {if $picked_date_month}
+		<input type="text" name="picked_date_month" value={$picked_date_month} size = "2">
+	{else}	 	
+		 <select name="picked_date_month">
+		 <option value="">{$smarty.const.SELECT_BLANK}</option>
+		   {php} 
+			$this_month=date('n');
+			 	for($j=1; $j<13; $j++){
+					echo "<option value=\"$j\"";
+			     				if($_SESSION['picked_date_month']){
+									if($j==$_SESSION['picked_date_month']){
+										 echo "selected=selected";	
+									}
+								}
+					echo ">$j</option>";
+									
+				}
+		  {/php}		
+		  </select>
+	 {/if} 
+	  月
+	 {if $picked_date_day}
+		<input type="text" name="picked_date_day" value={$picked_date_day} size = "2">	 	
+	{else}
+		 <select name="picked_date_day">
+		 <option value="">{$smarty.const.SELECT_BLANK}</option>
+		  {php} 
+			$today=date('d');
+				for($k=1; $k<32; $k++){
+					echo "<option value=\"$k\"";
+					
+					if($_SESSION['picked_date_day']){
+									if($k==$_SESSION['picked_date_day']){
+										 echo "selected=selected";	
+									}
+								}
+					echo ">$k</option>";
+				}
+		 {/php}		
+	 </select>
+	 {/if}
+	 日
+	
+	{$smarty.const.PICKED_DATE_NOTICE}
+	
+	 			
+	<div align="center">
+	<input type="hidden" name="company_id" value={$company_id}>
+	<input type="hidden" name="id" value={$id}>
+	<input type="submit" name="submit" value="{$smarty.const.COMMON_SUBMIT}"></div>
+
+</FORM>

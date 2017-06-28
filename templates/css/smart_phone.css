@@ -1,0 +1,299 @@
+@charset "utf-8";
+/* CSS Document */
+@import url('mobile.css');
+body{
+	font-family:'ヒラギノ角ゴ Pro W3','Hiragino Kaku Gothic Pro','メイリオ',Meiryo,'ＭＳ Ｐゴシック',sans-serif;
+}
+
+.setting_branch_manager,
+.margin-top {
+	margin-top: 10px;
+}
+
+.pale_blue_box{
+	background-color:transparent;
+}
+
+.smartphone_bt{
+	background: -moz-linear-gradient(top, #fff, #F1F1F1 1%, #ccc,#bebdbd 99%, #ccc);
+	background: -webkit-gradient(linear, left top, left bottom, from(#fff), color-stop(0.01, #F1F1F1), color-stop(0.5, #F1F1F1), color-stop(0.99, #DFDFDF), to(#ccc));
+	-moz-box-shadow: 1px 1px 2px #E7E7E7;
+	-webkit-box-shadow: 1px 1px 2px #E7E7E7;
+	text-align:center;
+	border:1px solid #cccccc;
+	
+}
+
+.smartphone_bt a{
+	text-decoration:none;
+	color:#000;
+	text-shadow:0px 1px 0px #fff;
+	display:block;
+	padding:10px;
+}
+
+.orange_bt {
+	background: -moz-linear-gradient(top, #F9934F, #aa5221);
+    background: -webkit-gradient(linear, left top, left bottom, from(#F9934F), to(#aa5221));
+    display:block;
+    float:left;
+	padding: 5px 10px 5px;
+	color: #fff;
+	text-decoration: none;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	-moz-box-shadow: 0 1px 2px rgba(0,0,0,0.6);
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.6);
+	text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+	border:solid 1px #aa5221;
+	cursor: pointer;
+	font-size:14px;
+	margin:5px;
+}
+
+.clear_both{
+	clear:both;
+}
+
+table.zebra tr:nth-child(2n) td {
+    background: none repeat scroll 0 0 #E9F4FC;
+
+}
+
+div.gsc-control-cse{
+	padding:3px;
+	background-color:transparent;
+	border:none;
+}
+
+.footer a{
+	font-size:20px;
+	padding: 5px;
+	margin:5px;
+	display:block;
+	background: -moz-linear-gradient(top, #fff, #F1F1F1 1%, #ccc,#bebdbd 99%, #ccc);
+	background: -webkit-gradient(linear, left top, left bottom, from(#fff), color-stop(0.01, #F1F1F1), color-stop(0.5, #F1F1F1), color-stop(0.99, #DFDFDF), to(#ccc));
+	-moz-box-shadow: 1px 1px 2px #E7E7E7;
+	-webkit-box-shadow: 1px 1px 2px #E7E7E7;
+	border:1px solid #cccccc;
+	text-decoration:none;
+	
+	
+}
+
+ul, ol{
+	margin-left:10px;
+	padding-left:10px;
+}
+
+.green{
+	color:#090;
+}
+
+.has_read{
+	background-color : #26A012;
+	-webkit-border-radius: 10px; /*Chrome、Safari用*/
+	-moz-border-radius:10px;  /*Firefox用*/
+	border-radius:5px;  /*IE9用*/	
+	color:white;
+	padding:1px 2px;
+}
+
+.has_not_read{
+	background-color : red;
+	-webkit-border-radius: 10px; /*Chrome、Safari用*/
+	-moz-border-radius:10px;  /*Firefox用*/
+	border-radius:5px;  /*IE9用*/	
+	color:white;
+	padding:1px 2px;
+}
+
+.each_message{
+	border-top:1px solid #ccc;
+	padding:5px
+}
+	
+.message_header{
+	background-color : #E1F0D1;
+	font-size:13px;
+	margin-top:0px;
+	padding:3px;
+}
+
+.has_read{
+	background-color : #26A012;
+	-webkit-border-radius: 10px; /*Chrome、Safari用*/
+	-moz-border-radius:10px;  /*Firefox用*/
+	border-radius:5px;  /*IE9用*/	
+	color:white;
+	padding:1px 2px;
+}
+
+.has_not_read{
+	background-color : red;
+	-webkit-border-radius: 10px; /*Chrome、Safari用*/
+	-moz-border-radius:10px;  /*Firefox用*/
+	border-radius:5px;  /*IE9用*/	
+	color:white;
+	padding:1px 2px;
+}
+
+.error_info{
+	background-color : pink;
+}
+
+div.message_jyusyo{
+	font-size:13px;
+	color:#26A012;
+	margin:2px;
+}
+
+.search_bar li {
+	float: left;
+	xmargin: 5px;
+	padding: 0px;
+}
+
+.nav li a {
+	margin: 5px;
+}
+
+.new_features_list ul li {
+	margin: 10px 0;
+}
+
+.recommend_way {
+	color: red;
+	margin: 10px 0;
+}
+
+.red-light{
+	color:red;
+}
+
+.textinput {
+	width:100%;
+}
+
+
+.login{
+	padding:10px 5px;
+}
+
+ul.slimmenu li{
+	width:100%;
+    background-color: #ddd;
+
+}
+
+.form-signin input[type="email"] {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    margin-bottom: -1px;
+}
+.form-signin .form-control {
+    -moz-box-sizing: border-box;
+    font-size: 16px;
+    height: auto;
+    padding: 10px;
+    position: relative;
+}
+.form-control {
+    background-color: #FFFFFF;
+    background-image: none;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    color: #555555;
+    display: block;
+    font-size: 14px;
+    height: 34px;
+    line-height: 1.42857;
+    padding: 6px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    width: 100%;
+}
+
+.info_bar{
+	font-size:12px;
+	margin:10px;
+}
+
+.search_bar li, .search_bar li a, .search_bar ul{
+	margin:0px;
+	padding:0px;
+}
+
+.welcome{
+	margin:10px;
+}
+
+.margin20{
+	margin-top:20px;
+	margin-bottom:20px;
+}
+
+#map div.leaflet-control-zoom  {
+	display:none;
+
+}
+
+.report_table{
+	border:1px solid #cccccc;
+	border-collapse:collapse;
+	margin-bottom:10px;
+	margin-top:10px;
+	width:100%;
+	font-size:14px;
+	
+}
+
+.report_table th{
+	background-color:#e1f0d1;
+	border:1px solid #cccccc;
+	font-weight:normal;
+	font-size:13px;
+	padding:5px;
+	
+}
+
+.report_table td{
+	padding:5px;
+	border:1px solid #cccccc;
+}
+
+
+.under_map_list{
+	
+	margin-top:15px;
+	margin-bottom:15px;
+}
+
+#public_drivers_selection {
+	 display:none;
+}
+
+.list1 li{
+	margin:20px;
+	list-style:square;
+}
+
+.jv{
+	
+}
+
+.jv .jv_select{
+	padding:5px;
+}
+
+.jv .jv_select .jv_select_detail{
+	padding:5px;
+}
+
+.jv_submit{
+	padding:5px 0;
+}
+
+.jv_submit button{
+	padding:5px;
+}

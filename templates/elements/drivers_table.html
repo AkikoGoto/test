@@ -1,0 +1,78 @@
+{*ドライバー情報表示*} 
+{if $carrier==NULL}	
+<table class="report_table">
+	<tbody>
+	<tr>
+	<th>{$smarty.const.DRIVER_NAME}</th>
+	<th>{$smarty.const.DRIVER_STATUS}</th>
+	<th>{$smarty.const.COMMON_IMAGE}</th>
+	<th>{$smarty.const.COMMON_DRIVER_MOBILE}</th>
+	<th>{$smarty.const.COMMON_JYUSYO}</th>
+	<th>{$smarty.const.COMMON_NEAR_UPDATE}</th>
+	<th>{$smarty.const.DRIVER_RECORDS_MAP}</th>
+	</tr>
+	
+
+{foreach from=$data item="data"}
+	<tr>
+		<td>
+			<a href="index.php?action=viewDriver&id={$data.driver_id}">{$data.last_name|escape}{$data.first_name|escape}</a>
+		</td>
+		<td>
+		{if
+			$data.status==1 || $data.status==5}{$working_status->action_1} {elseif
+			$data.status==2}{$working_status->action_2} {elseif
+			$data.status==3}{$working_status->action_3} {elseif
+			$data.status==4}{$working_status->action_4} {elseif
+			$data.status==5}{$smarty.const.DRIVER_OTHER} {/if}	
+		</td>
+		<td class="icon_cell">	
+		{if $data.image_name != NULL}<img src="http://{$data.image_name}"
+		alt="{$data.last_name|escape}{$data.first_name|escape}アイコン">{/if}
+		</td>
+		<td>
+		{$data.mobile_tel|escape}
+		</td>
+		<td>
+		{$data.address}
+		</td>
+		<td>
+		{$data.created|escape}
+		</td>
+		<td>
+		 <a
+		href="index.php?action=driver_record_map&driver_id={$data.driver_id}&company_id={$company_id}">{$smarty.const.DRIVER_RECORDS_MAP}</a>
+		</td>
+	</tr>
+	{*配列が空だった場合*} {foreachelse} 
+	<tr><td>
+	{$smarty.const.NO_DATA}
+	</td></tr> {/foreach}
+</tbody></table>
+
+
+{elseif $carrier=="iPhone"||$carrier=="Android"}
+
+	{foreach from=$data item="data"}
+	
+	
+	<div>
+		<b>{$smarty.const.COMMON_DRIVER}</b>： <a
+			href="index.php?action=viewDriver&id={$data.driver_id}">{$data.last_name|escape}{$data.first_name|escape}</a>&nbsp;&nbsp;
+		{if $data.image_name != NULL}<img src="http://{$data.image_name}"
+			alt="{$data.last_name|escape}{$data.first_name|escape}アイコン">{/if} <br>
+		<b>{$smarty.const.DRIVER_STATUS}</b>&nbsp;：&nbsp; {if
+		$data.status==1 || $data.status==5}{$working_status->action_1} {elseif
+		$data.status==2}{$working_status->action_2} {elseif
+		$data.status==3}{$working_status->action_3} {elseif
+		$data.status==4}{$working_status->action_4} {elseif
+		$data.status==5}{$smarty.const.DRIVER_OTHER} {/if} <br> <b>{$smarty.const.COMMON_DRIVER_MOBILE}</b>&nbsp;：&nbsp;<a
+			href="tel:{$data.mobile_tel|escape}">{$data.mobile_tel|escape}</a><br>
+		<b>{$smarty.const.COMMON_JYUSYO}</b>&nbsp;：&nbsp;{$data.address}<br> <b>{$smarty.const.COMMON_NEAR_UPDATE}</b>&nbsp;：&nbsp;{$data.created|escape}
+		&nbsp;：&nbsp; <a
+			href="index.php?action=driver_record_map&driver_id={$data.driver_id}&company_id={$company_id}">{$smarty.const.DRIVER_RECORDS_MAP}</a>
+	</div>
+	<hr>
+	{*配列が空だった場合*} {foreachelse} {$smarty.const.NO_DATA} {/foreach}
+
+{/if}

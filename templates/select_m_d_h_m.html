@@ -1,0 +1,159 @@
+	<!-- 毎日か毎週○○か、○○年○○月○○日か -->
+	<select name="daily">
+		
+		{foreach from=$array item=arrays}
+			
+			<option value="{$arrays}"
+			
+				{if $session.daily==$arrays}
+				
+				 	selected="{$session.daily}">{$arrays}
+				{elseif	$session.weekly && $session.weekly==$arrays}
+					selected="{$session.weekly}">{$arrays}
+				{elseif	$session.date && $session.date==$arrays}		
+					selected="{$session.date}">{$arrays}
+				{elseif !($session.daily) && !($session.weekly) && !($session.date)}
+					
+					{if $arrays== '毎日'}
+						selected=selected>{$arrays}
+					{/if}
+					
+					{if $arrays == $datas.weekly}
+					 	selected=selected>{$arrays}
+					{/if}
+					
+					{if $arrays == $date}
+					 	selected=selected>{$arrays}
+					{/if}
+					
+					{if !($arrays== '毎日') && !($arrays == $datas.weekly) && !($arrays == $date)}
+						>{$arrays}
+					{/if}
+				
+				{elseif !($session.daily==$arrays) && !($session.weekly==$arrays) && !($session.date==$arrays)}
+					>{$arrays}
+				
+				
+				
+				{/if}
+			</option>
+			
+		{/foreach}
+	</select>
+		 
+		 <!-- ○○時 -->
+		 {if $carrier=='Android'||$carrier=='iPhone'}<br>
+		 	 <select name="time_from_hour" style="margin: 0 0 0 22px;">
+		 {else}
+		 	<select name="time_from_hour">
+		 {/if}
+		 
+		 {if $status == 'NEW'}
+		 
+		 {php}
+		 
+			$this_hour=date('G');
+			$status = 'NEW';
+			
+			if($status == 'NEW'){
+			
+				for($l=1; $l<25; $l++){
+					
+					if($_SESSION['setAlarm']['time_from_hour']==$l){
+						
+						echo "<option value=\"$l\" selected=selected>$l";
+						
+					}elseif($_SESSION['setAlarm']['time_from_hour'] && !($_SESSION['setAlarm']['time_from_hour']==$l)){
+					
+						echo "<option value=\"$l\">$l";
+						
+					}elseif(!($_SESSION['setAlarm']['time_from_hour'])){
+						
+						echo "<option value=\"$l\"";
+							
+							if($l == 9 ){
+								echo " selected=selected>$l";
+							}
+						
+							if($l !== 9){
+								echo ">$l";
+							}
+					}
+					
+					echo "</option>";
+				}
+			}
+		{/php}
+		
+		{elseif $status == 'EDIT'}
+			
+			{section name=myloop start=0 loop=25 step=1} 
+    			<option value="{$smarty.section.myloop.index}"
+    			
+    			{if $time == $smarty.section.myloop.index}
+				 	selected=selected>{$smarty.section.myloop.index}
+				{/if}
+    			
+    			{if !($time == $smarty.section.myloop.index)}
+    			 	>{$smarty.section.myloop.index}
+    			{/if}
+    			</option>
+			{/section}  
+		{/if}
+
+		 </select>時
+		 
+		 <!-- ○○分-->
+		 <select name="time_from_minit">
+		  {if $status == 'NEW'}
+		  
+		  {php} 
+			$this_minit=date('i');
+				
+				for($m=0; $m<60; $m++){
+					
+					if($_SESSION['setAlarm']['time_from_minit']==$m){
+					
+					echo "<option value=\"$m\" selected=selected>$m";
+					
+					}elseif($_SESSION['setAlarm']['time_from_minit'] && !($_SESSION['setAlarm']['time_from_minit']==$m)){
+					
+					echo "<option value=\"$m\">$m";
+					
+					}elseif(!($_SESSION['setAlarm']['time_from_minit'])){
+										
+						echo "<option value=\"$m\"";				
+						
+							if( $m == 0 ){
+								echo " selected=selected>$m";
+							}
+							
+							if( $m !== 0 ){
+								echo ">$m";
+							}		
+							
+					echo "</option>";
+					
+					}
+				}
+		 {/php}	
+		 
+		 {elseif $status == 'EDIT'}
+			
+			{section name=myloop start=0 loop=60 step=1} 
+    			<option value="{$smarty.section.myloop.index}"
+    			
+    			{if $minute == $smarty.section.myloop.index}
+				 	selected=selected>{$smarty.section.myloop.index}
+				{/if}
+    			
+    			{if !($minute == $smarty.section.myloop.index)}
+    			 	>{$smarty.section.myloop.index}
+    			{/if}
+    			</option>
+			{/section}  
+		{/if}
+		 
+		 
+		 	
+		 </select>分

@@ -1,0 +1,227 @@
+{*全体のテンプレートファイル*} {if $carrier==NULL}
+<!DOCTYPE html>
+{/if}
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<TITLE>{$page_title} 清水JV運行・動態管理システム {if $is_lite}LITE版{/if}</TITLE> 
+{$additional_css}
+{$css}
+ {if $carrier==NULL||$carrier=="iPhone"||$carrier=="Android"}
+<script type="text/javascript" src="{$smarty.const.TEMPLATE_URL}templates/js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="{$smarty.const.TEMPLATE_URL}templates/js/accordion.js"></script>
+<script type="text/javascript" src="{$smarty.const.TEMPLATE_URL}templates/js/jquery.slimmenu.js"></script>
+<script type="text/javascript" src="{$smarty.const.TEMPLATE_URL}templates/js/config.js"></script>
+<link rel="stylesheet" href="{$smarty.const.TEMPLATE_URL}templates/css/slimmenu.css" 
+			type="text/css" media="screen">
+<link rel="stylesheet" href="{$smarty.const.TEMPLATE_URL}templates/css/spinner.css" 
+			type="text/css" media="screen">
+<link rel="stylesheet" href="{$smarty.const.TEMPLATE_URL}templates/css/drag_upload.css" 
+			type="text/css">
+<link rel="stylesheet" href="{$smarty.const.TEMPLATE_URL}templates/css/print.css" 
+			type="text/css" media="print">
+<link rel="stylesheet" href="{$smarty.const.TEMPLATE_URL}templates/css/common.css" 
+			type="text/css">
+
+<link rel="shortcut icon" href="/favicon.ico">
+{$js} {/if} {if $carrier==iPhone||$carrier=="Android"}
+<link rel="apple-touch-icon" href="/apple_touch_icon.png" />
+{/if}
+{literal}
+<!-- <style>     
+      .alert_popup {
+        box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        background-color: #f5f5f5;
+        border: 1px solid #e3e3e3;
+  		border-radius: 4px;
+  		padding: 19px;
+        display:none;
+        margin:1em;
+      }
+</style> -->
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31593032-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+
+</script>
+<!-- MapBox -->
+{/literal}
+<link href="{$smarty.const.MAPBOX_CSS}" rel='stylesheet' />
+
+</head>
+<body {$onload_js}>
+	{if
+	$carrier==NULL||$carrier=="iPhone"||$carrier=="Android"}{$geocode_address}{/if}
+			<div class="head_navi">
+			<div class="logo">
+				{if $is_branch_manager || $u_id}
+					<a href = "index.php">
+				{else isset($session_driver_id)}
+					<a href = "index.php?action=driver_status">
+				{/if}
+				<img src="{$smarty.const.TEMPLATE_URL}templates/image/logo.png"
+					alt="清水JV運行・動態管理システム ロゴ"/>
+				</a>
+
+			</div>
+			{if $u_id && !($u_id == "10124")}			
+			<div class="welcome">{$smarty.const.HELLO}{$u_company_name}{$smarty.const.DATE_MAIL_KEISHO}</div>
+			{/if}
+			{if $is_branch_manager}
+			<div class="welcome">			
+				{$smarty.const.HELLO}{$u_company_name}:{$session_branch_name}&nbsp;{$smarty.const.ADMINISTRATOR}&nbsp;
+				{$driver_last_name}&nbsp;{$driver_first_name}{$smarty.const.DATE_MAIL_KEISHO}</div>
+			{/if}
+			<div class="info_bar">
+				{if $u_id || $session_driver_id || $is_branch_manager}
+					<a href="index.php?action=logout">ログアウト</a>				
+				 {else}
+					 <a	href="index.php?action=login">{$smarty.const.COMMON_LOGIN}</a>
+				{/if}
+			</div>
+		</div>
+	<div class="oc_outline_box">
+
+		<div class="clear_both"></div>
+		
+		{*ヘッダーメニュー*} {include file="elements/header_menu.html"}
+
+		 {if $message}
+		<div class="message">{$message}</div>
+		{/if}
+		
+		{include file="elements/alarm_block.html"}
+		
+		{*コンテンツ*} 
+		{include file=$filename} 
+		
+		{if $carrier=="NULL"}
+		<hr>
+		{/if}
+		<div class="footer">
+			{if $is_branch_manager || $u_id}
+				<a href = "index.php">
+			{else isset($session_driver_id)}
+				<a href = "index.php?action=driver_status">
+			{/if}
+			TOP</a>
+			{if	$carrier==NULL}|{/if}		
+			{if $u_id || $session_driver_id || $is_branch_manager}
+				<a href="index.php?action=logout">ログアウト</a>
+			{else}
+				<a href="index.php?action=login">ログイン</a>
+			{/if}
+			{if	$carrier==NULL}|{/if}
+	
+			{if	$session_user_id==NULL}
+				<a href="index.php?action=user/userLogin">ユーザー用ログイン</a>
+			{else}
+				<a href="index.php?action=user/user_menu">ユーザー用メニュー</a>
+				<a href="index.php?action=user/userLogout">ユーザー用ログアウト</a>
+			{/if}
+
+		</div>
+		<div align="center" class="copy_right">{if $is_lite}{$smarty.const.COMMON_VERSION} LITE版{else}
+								{$smarty.const.COMMON_VERSION}{/if}</div>
+	</div>
+	{if $u_id || $session_driver_id || $is_branch_manager}
+	   <div id="alert_information" class="alert_popup">
+        <!-- <div align="right"><button class="alert_information_close">×</button></div> -->
+        <div class="alert_date">〇〇年〇〇月〇〇日 〇〇時〇〇分</div>
+        <div class="alert_popup_button"><button class="alert_information_close">×</button></div>
+        <div class="clear_both"></div>
+        <p>
+                車両No.<span class="alert_car_type">〇〇</span><br>
+                ドライバー名：<span class="alert_driver_name">〇〇</span><br>
+                住所：<span class="alert_address">〇〇</span>
+        </p>
+        <p>
+        <span class="alert_driver_name">〇〇</span>さんから<span class="alert_type">〇〇渋滞(積雪)</span>のステータスが送信されました。<br>
+                <span class="alert_desc">この住所周辺は、<span class="alert_type">〇〇渋滞(積雪)</span>となっています。</span>
+        </p>
+
+    </div>
+    <div id="alert_movie" class="alert_popup">
+        <!-- <div align="right"><button  class="alert_movie_close">×</button></div> -->
+        <div class="alert_date">〇〇年〇〇月〇〇日 〇〇時〇〇分</div>
+        <div class="alert_popup_button"><button class="alert_movie_close">×</button></div>
+        <div class="clear_both"></div>
+        <p>
+                車両No.<span class="alert_car_type">〇〇</span><br>
+                ドライバー名：<span class="alert_driver_name">〇〇</span><br>
+                住所：<span class="alert_address">〇〇</span>
+        </p>
+        <p>
+            <span class="alert_driver_name">〇〇</span>さんから動画がアップロードされました。<br>
+            動画は以下のリンクからご確認いただけます。
+        </p>
+        <p><a class="alert_movie_url">link</a></p>
+    </div>
+    <!--<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+    <script type="text/javascript" src="{$smarty.const.TEMPLATE_URL}templates/js/jquery.popupoverlay.js"></script>
+    <script type="text/javascript" src="{$smarty.const.TEMPLATE_URL}templates/js/routeAlarm.js" ></script>
+    <script>
+    var socketio_alert_host = '{$smarty.const.SOCKETIO_ALERT_HOST}';
+    var socketio_alert_path = '{$smarty.const.SOCKETIO_ALERT_PATH}';
+    {literal}
+
+    
+	$(document).ready(function() {
+
+      // Initialize the plugin
+      $('#alert_inforamtion').popup();
+      $('#alert_movie').popup();
+	
+	});
+
+	$('#alert_information .alert_desc').hide();
+
+      var alert_socket = io.connect(socketio_alert_host, {path:socketio_alert_path});
+ 
+      alert_socket.on('information', function(information){
+        console.log(information);
+        $('#alert_information .alert_date').text(information.created);
+        $('#alert_information .alert_car_type').text(information.car_type);
+        $('#alert_information .alert_address').html(information.address);
+        $('#alert_information .alert_driver_name').text(information.driver_name);
+        $('#alert_information .alert_type').text(information.type);
+        if(information.type == '事故') {
+        	$('#alert_information .alert_desc').hide();
+        } else {
+        	$('#alert_information .alert_desc').show();
+        }
+    	$('#alert_information').popup('show');
+      });
+      alert_socket.on('movie', function(information){
+        console.log(information);
+        $('#alert_movie .alert_date').text(information.created);
+        $('#alert_movie .alert_car_type').text(information.car_type);
+        $('#alert_movie .alert_address').text(information.address);
+        $('#alert_movie .alert_driver_name').text(information.driver_name);
+        $('#alert_movie .alert_movie_url').text(information.url);
+        $('#alert_movie .alert_movie_url').attr('href', information.url);
+        $('#alert_movie').popup('show');
+      });
+      
+      alert_socket.on('route_out', function(information){
+          console.log(information);
+          routeAlarm(information);	
+       });
+      
+      {/literal}
+    </script>
+	
+	{/if}
+
+</body>
+</html>

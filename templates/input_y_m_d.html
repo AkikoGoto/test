@@ -1,0 +1,45 @@
+{*年月日のinputフォーム　ルート画面で使用　*}
+	 <select name="year">
+	{foreach from=$select_menu_year item='each_year'}
+		<option value="{$each_year|escape}"
+		{if $driver_record_map_from_year}
+			{if $each_year==$driver_record_map_from_year}
+				selected
+			{/if}
+		{elseif $each_year==$db_year}
+			selected
+		{elseif ($each_year==$this_year) && (!$db_day)}
+			selected
+		{/if}>{$each_year|escape}</option>
+	{/foreach}
+	</select>年
+	
+	<select name="month">
+		{foreach from=$select_menu_month item='each_month'}
+			<option value="{$each_month|escape}"
+			{if $driver_record_map_from_month}
+				{if $each_month==$driver_record_map_from_month}
+					selected
+				{/if}
+			{elseif $each_month==$db_month}
+				selected
+			{elseif ($each_month==$this_month) && (!$db_month)}
+				selected
+			{/if}>{$each_month|escape}</option>
+		{/foreach}
+	</select>月
+	
+	<select name="day">
+		{foreach from=$select_menu_day item='each_day'}
+						<option value="{$each_day|escape}"
+			{if $driver_record_map_from_day}
+				{if $each_day==$driver_record_map_from_day}
+					selected
+				{/if}
+			{elseif $each_day==$db_day}
+				selected
+			{elseif ($each_day==$today) &&(!$db_day)}
+				selected
+			{/if}>{$each_day|escape}</option>
+		{/foreach}
+	</select>日

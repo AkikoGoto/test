@@ -1,0 +1,44 @@
+<h1>請求用・賃金用の日報PDF、選択画面</h1>
+
+	<!-- 開始時間 -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$smarty.const.WORK_RECORDS}：{$driver_name} 様</b>
+	</div>
+	
+		<table class="demand_table">
+			<tr class="tr_border">
+				<td class="exist_border">日付</td>
+				<td align="center">出力するPDF</td>
+			</tr>
+			<form method="post" action="index.php?action=/day_report/concrete_report_pdf">
+			<tr class="tr_border">
+				<td class="exist_border">
+					{include file="select_y_m_d.html"}
+				</td>
+				<td align="center">
+					<input type="hidden" name="driver_id" value={$driver_id}>
+					<input type="hidden" name="is_bill" value=1>
+					<input type="hidden" name="pdf" value=1>
+					<input type="submit" value="請求用PDFを出力する">
+				</td>
+			</form>
+			
+			</tr>
+			<tr class="tr_border">
+			<form method="post" action="index.php?action=/day_report/concrete_report_pdf">
+				<td class="exist_border">
+					{include file="select_y_m_d.html"}
+				</td>
+				<td align="center">
+					<input type="hidden" name="driver_id" value={$driver_id}>
+					<input type="hidden" name="pdf" value=2>
+					<input type="submit" value="賃金用PDFを出力する">
+				</td>
+			</form>
+			</tr>	
+		</table>	
+    
+
+	
+

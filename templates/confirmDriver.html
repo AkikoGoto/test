@@ -1,0 +1,140 @@
+{*確認表示画面*}
+<h1>{$smarty.const.COMFIRM_RES_TITLE}</h1>
+<FORM METHOD="POST" action="index.php?action={$target}" name="profile">
+	<div class="item_name"><b>ID</b></div>
+		<div>
+		{$id|escape}
+        <input type=hidden name="id" value="{$id|escape}">  	        		
+			</div>		
+	<div class="item_name"><b>    	
+    		{$smarty.const.COMMON_COMPANY}<br></b></div>
+		<div>
+		{$company_name|escape}
+		 <input type=hidden name="company_id" value="{$company_id|escape}">  	      
+       	</div>
+	<div class="item_name"><b>    	
+    		{$smarty.const.ASSIGNED_BRANCH}<br></b></div>
+		<div>
+		{$branch_name|escape}
+		 <input type=hidden name="geographic_id" value="{$geographic_id|escape}">
+		</div>
+		<div class="setting_branch_manager">
+       		{if $is_branch_manager}この営業所の管理者として登録します。{/if}
+		 	<input type=hidden name="is_branch_manager" value="{$is_branch_manager|escape}">
+       	</div>
+       	
+	<div class="item_name"><b><font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+	{$smarty.const.COMMON_LAST_NAME}&nbsp;{$smarty.const.COMMON_FIRST_NAME}</b></div>
+        <div>
+        {$last_name|escape}    {$first_name|escape}
+        
+        <input type=hidden name="last_name" value="{$last_name|escape}">  	              
+        <input type=hidden name="first_name" value="{$first_name|escape}">  	              
+        
+        </div>
+                	
+	<div class="item_name"><b>
+	{$smarty.const.COMMON_FURIGANA}</b></div>
+		<div>
+        {$furigana|escape}
+        <input type=hidden name="furigana" value="{$furigana|escape}">  	              
+        </div>
+
+	<div class="item_name"><b><font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+	{$smarty.const.DRIVER_ACCOUNT}</b></div>
+        <div>
+        {$login_id|escape}
+        <input type=hidden name="login_id" value="{$login_id|escape}">  	              
+        </div>
+
+	<div class="item_name"><b><font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+	{$smarty.const.DRIVER_PASSWD}</b></div>
+        <div>
+        {$smarty.const.PWD_NO_DISPLAY}
+        <input type=hidden name="passwd" value="{$passwd|escape}">  	              
+        </div>
+        
+	<div class="item_name"><b>
+	{$smarty.const.COMMON_DRIVER_MOBILE}</b></div>
+		<div>
+		{$mobile_tel|escape}
+		<input type="hidden" name="mobile_tel" value="{$mobile_tel|escape}">
+        </div>
+	<div class="item_name"><b>
+	{$smarty.const.COMMON_DRIVER_MOBILE_MAIL}</b></div>
+		<div>
+		{$mobile_email|escape}
+		<input type="hidden" name="mobile_email" value="{$mobile_email|escape}">
+        </div>
+   
+	<div class="item_name"><b>
+	{$smarty.const.COMMON_EXPERIENCE}</b></div>
+		<div>
+        {$experience|escape}年
+        <input type=hidden name="experience" value="{$experience|escape}">  	                     
+        </div>
+
+	<div class="item_name"><b>
+	{$smarty.const.COMMON_NO_ACCIDENT}</b></div>
+		<div>
+        {$no_accident|escape}年
+        <input type=hidden name="no_accident" value="{$no_accident|escape}">  	                     
+        </div>
+
+	<div class="item_name"><b>
+	{$smarty.const.COMMON_CAR_TYPE}</b></div>
+		<div>
+        {$car_type|escape}
+        <input type=hidden name="car_type" value="{$car_type|escape}">  	                     
+        </div>
+
+	<div class="item_name"><b>
+	{$smarty.const.COMMON_EQUIPMENT}</b></div>
+		<div>
+        {$equipment|escape}
+        <input type=hidden name="equipment" value="{$equipment|escape}">  	                     
+        </div>
+
+	<div class="item_name"><b>
+	{$smarty.const.COMMON_COL_SEX}</b></div>
+		<div>
+		{if $sex==0}
+        	{$smarty.const.COMMON_COL_MAN}
+        {else}	
+        	{$smarty.const.COMMON_COL_WOMAN}
+        {/if}      
+        <input type=hidden name="sex" value="{$sex|escape}">  	                     
+        </div>
+        	
+	<div class="item_name"><b>{$smarty.const.COMMON_BIRTHDAY}</b></div>
+		<div>
+		{$birthday|escape}
+		<input type=hidden name="birthday" value="{$birthday|escape}">  	                     		
+		</div>
+	{*画像アップロード*}
+	<div class="item_name"><b>{$smarty.const.COMMON_IMAGE}</b></div>
+		<div>
+			{if $image_name}
+			<div>
+				<div>
+				<img src="http://{$image_name}" alt="{$smarty.const.MAP_ICON}"　
+					title="{$smarty.const.MAP_ICON}">
+				</div>
+				{$each_image.1|escape}
+				<input type=hidden name="image_name" value="{$image_name|escape}"> 
+			</div>
+	        {/if}
+    
+		</div>
+	<div class="item_name"><b>{$smarty.const.COMMON_MESSAGE}</b></div>
+		<div>
+		{$driver_message|escape}
+		<input type=hidden name="driver_message" value="{$driver_message|escape}">  	                     		
+		</div>
+
+		
+	<div>
+		<button class="btn btn-large btn-ocher" type="submit" value="{$smarty.const.COMMON_SUBMIT}">
+		{$smarty.const.COMMON_SUBMIT}</button>	
+	</div>
+</form>

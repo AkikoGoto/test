@@ -1,0 +1,69 @@
+{*営業所一覧画面*}
+
+<h1>{$company|escape}&nbsp;&nbsp;{$smarty.const.VIEW_BRANCH_TITLE}</h1>
+<a name="top">&nbsp;</a>
+<div><a href="index.php?action=putBranch&company_id={$company_id}">新規に営業所データを追加する</a></div>
+
+<h2><a href="index.php?action=content&id={$company_id}">{$smarty.const.COMPANY_INFO}</a></h2>
+ 
+{*複数ページへ渡る場合のリンク*}
+{foreach from=$links item="links"}
+{$links}
+{/foreach}
+<table border="1" class="thread">
+<tr>
+<td width="25px">ID</td>
+<td width="35%">{$smarty.const.COMMON_JYUSYO}</td>
+<td>{$smarty.const.COMMON_TEL}</td>
+<td>{$smarty.const.COMMON_EMAIL}</td>
+
+<td>{$smarty.const.COMMON_UPDATE}</td>
+<td></td>
+</tr>
+{foreach from=$data item="data"}
+
+<tr>
+
+{*各項目はescapeでサニタイズ*}
+<td class="con_odd">{$data->geographic_id|escape}</td>
+<td class="con_even">{$data->prefecture_name|escape}{$data->city|escape}{$data->ward|escape}
+{$data->town|escape}{$data->address|escape}</td>
+<td class="con_odd">{$data->tel|escape}</td>
+<td class="con_odd">{$data->email|escape}</td>
+
+<td class="con_odd">{$data->updated|escape}</td>
+<td>
+{*データ削除時のメッセージ*}
+{literal}
+<script type="text/javascript">
+<!--
+function check(){
+	return confirm("このデータを削除して、本当によろしいですか？削除すると、元に戻すことはできません。");
+}
+//-->
+</script>	
+{/literal}
+<FORM METHOD="POST" action="index.php?action=deleteBranch&id={$data->geographic_id}" 
+>
+<input type="submit" value="削除"
+{literal}onclick="return check()"{/literal}
+>
+</FORM>
+
+<FORM METHOD="POST" action="index.php?action=putBranch&id={$data->geographic_id}" 
+>
+<input type="submit" value="編集">
+</FORM>
+
+</td>
+</tr>
+{*配列が空だった場合*}
+{foreachelse}
+<tr>
+<td colspan="10">
+現在データがありません。
+</td>
+</tr>
+{/foreach}
+</table>
+ 

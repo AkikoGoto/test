@@ -1,0 +1,35 @@
+{*ドライバーステータス確認画面*}
+<h1>以下でよいかどうか確認して、よろしければ、送信をクリックしてください。</h1>
+<FORM METHOD="POST" action="index.php?action=driver_vacancy_geocoding">
+	<div class="item_name">ステータス</div>
+	<div >{if $status==1}空車
+			{elseif $status==2}乗車
+			{elseif $status==3}休み
+			{elseif $status==4}予約
+			{elseif $status==5}その他
+		　　{/if}
+	</div>
+	<input type="hidden" name="status" value="{$status}">
+	{if $sales}	
+		<div class="item_name">{$smarty.const.DRIVER_SALES}</div>
+		<div>{$sales}</div>
+		<input type="hidden" name="sales" value="{$sales}">
+	{/if}
+	{if $detail}	
+		<div class="item_name">{$smarty.const.DRIVER_MEMO}</div>
+		<div>{$detail}</div>
+		<input type="hidden" name="detail" value="{$detail}">		
+	{/if}
+	<div class="item_name">{$smarty.const.PRESENT_LOCATION}</div>
+	<div id="present_location1"></div>
+	<input type="hidden" id="present_location_form" name="address" value="">
+	
+	<input type="hidden" name="latitude" value="{$latitude}">
+	<input type="hidden" name="longitude" value="{$longitude}">	
+
+	<input type="submit" name="submit" value="{$smarty.const.COMMON_BTN_SRCH}">
+</FORM>	
+
+	{*Google Map*}
+		{include file="google_map.html"}	
+		

@@ -1,0 +1,170 @@
+{*ルート詳細の編集画面*}
+<h1>{$smarty.const.ROOT_DETAIL} {if $status=='EDIT'}
+	{$smarty.const.EDIT_DATA} {else} {$smarty.const.NEW_DATA} {/if}</h1>
+<FORM METHOD="POST" action="index.php?action=/root_detail/tryRootDetail">
+
+	
+	<table class="report_table" id=0>
+		<tr>
+			<th>
+				{$smarty.const.COMMON_ID}
+			</th>
+			<th>
+				<font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+				{$smarty.const.DESTINATION_NAME}
+			</th>
+			<th>
+				<font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+				{$smarty.const.COMMON_JYUSYO}
+			</th>
+		</tr>
+		<tr>
+			<td>
+				{if $status=='EDIT'}
+					{$data.id|escape} <input type=hidden name="0-id"
+						value="{$data.id|escape}">
+				{/if}
+			</td>
+			<td>
+					<input type="text" name="0-destination_name" size="40" maxlength="100" 
+						id="destination_name"
+						value="{$data.destination_name|escape}">
+			</td>
+			<td>
+					<input type="text" name="0-address" size="60"
+						maxlength="80"
+						value="{$data.root_address|escape}"
+						id="address" >
+				{*Pretty Popinで配送先から取得するリンク*}
+				<a href="index.php?action=/destination/viewDestinationsPopUp&company_id={$company_id}" 
+					rel="destinations"
+				 id="0" onclick="root_detail_id=0;"
+					 class="link_button" 
+				>
+					{$smarty.const.CHOOSE_FROM_DEST}
+				</a>
+			</td>
+		</tr>
+		<tr>
+			<th>
+				{$smarty.const.DELIVER_TIME}
+			</th>
+			<th colspan="2">
+				{$smarty.const.COMMON_BIKOU}
+				&nbsp;
+				({$smarty.const.INFORMATION_MAX}
+				{$smarty.const.DATE_VERI_CHAORLE})
+			</th>
+		</tr>
+		<tr>
+			<td>
+				<select name="0-hour">
+				<option value="" {if $deliver_hour==NULL}selected{/if}>
+				なし</option>
+				{foreach from=$select_menu_hour item='each_hour'}
+				<option value="{$each_hour|escape}"
+						{if $each_hour==$deliver_hour}
+							selected
+						{/if}
+					>{$each_hour|escape}</option>
+				{/foreach}
+			</select>時
+		
+			<select name="0-minit">
+				<option value="" {if $deliver_minit==NULL}selected{/if}>
+				なし</option>
+
+				{foreach from=$select_menu_minit item='each_minit'}
+				<option value="{$each_minit|escape}"
+						{if $each_minit==$deliver_minit}
+							selected
+						{/if}
+					>{$each_minit|escape}</option>
+				{/foreach}
+			</select>分
+			</td>
+			<td colspan="2">
+					<input type="text" name="0-information" size="125"
+						maxlength="{$smarty.const.INFORMATION_MAX}"
+						value="{$data.information|escape}{$pre_data.information|escape}">
+			</td>
+		</tr>
+		<tr>
+			<th>
+				{$smarty.const.COMMON_LAT}
+			</th>
+			<th>
+				{$smarty.const.COMMON_LONG}
+			</th>
+			<th>
+				&nbsp;
+			</th>
+		</tr>		
+		<tr>
+			<td>
+				<input type="text" name="0-latitude" size="25"
+						maxlength="50"
+						value="{$data.latitude|escape}">
+			</td>
+			<td>
+				<input type="text" name="0-longitude" size="25"
+						maxlength="50"
+						value="{$data.longitude|escape}">
+			</td>
+			<td>
+				&nbsp;
+			</td>
+		</tr>
+				
+					
+	</table>
+								
+	<div align="center">
+		<input type=hidden name="company_id" value="{$company_id|escape}">
+		<input type=hidden name="root_id" value="{$root_id|escape}">
+		
+		<button class="btn btn-large btn-ocher" type="submit" value="{$smarty.const.COMMON_SUBMIT}">
+		{$smarty.const.COMMON_SUBMIT}</button>
+	</div>
+<!-- 配送先から選択する際のポップアップ -->
+{literal}
+<script type="text/javascript" charset="utf-8">
+	equipment = new Array();
+	var destination_name = null;
+	var address = null;
+	var root_detail_id = null;
+	var i=0;
+	
+	$(document).ready(function(){
+		$("a[rel^='destinations']").prettyPopin({
+			modal : true,
+			width : 1000,
+			//height: 400,
+			opacity: 0.5,
+			animationSpeed: 'fast', 
+			followScroll: false,
+			loader_path: 'templates/images/prettyPopin/loader.gif',
+			callback: function(){
+
+				var number = "#"+root_detail_id;
+				$(number).find('#destination_name').val(destination_name);
+				$(number).find('#address').val(address);
+				//ボックスの位置のIDを付与
+			/*	var destinations_with_no = "#destination_name" + root_detail_id;
+				$(destinations_with_no).val(destination_name);
+
+				var address_with_no = "#address" + root_detail_id;
+				$(address_with_no).val(address);
+*/
+			}
+		});
+		
+	});
+
+
+</script>
+{/literal}
+
+
+</FORM>
+

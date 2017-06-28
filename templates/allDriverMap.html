@@ -1,0 +1,178 @@
+{*全国の空車データを表示*}
+
+<h1>{$smarty.const.ALL_JAPAN_DRIVER_MAP}</h1>
+	{*空車アイコン表示のJavascript*}
+		<script type="text/javascript">
+		{literal}
+		var locationArray=new Array();
+		{/literal}
+			{foreach from=$driver_locations item=driver_location key=k}
+			{*ドライバーステータス*}		
+			{if $driver_location.status==1}{literal}var status="{/literal}{$working_status->action_1}{literal}"{/literal}
+				{elseif $driver_location.status==2}{literal}var status="{/literal}{$working_status->action_2}{literal}"{/literal}
+				{elseif $driver_location.status==3}{literal}var status="{/literal}{$working_status->action_3}{literal}"{/literal}
+				{elseif $driver_location.status==4}{literal}var status="{/literal}{$working_status->action_4}{literal}"{/literal}
+				{elseif $driver_location.status==5}{literal}var status="{/literal}{$smarty.const.DRIVER_OTHER}{literal}"{/literal}
+			{/if}
+		{literal}
+				var longitude = {/literal}{$driver_location.longitude}{literal};
+				var latitude = {/literal}{$driver_location.latitude}{literal};
+				var driver{/literal}{$k}{literal} = new google.maps.LatLng(latitude, longitude);				
+
+				var driver_info{/literal}{$k}{literal}={
+					"LatLng":driver{/literal}{$k}{literal},
+						"company_name":{/literal}"{$driver_location.company_name}"{literal},
+						"driver_name":{/literal}"{$driver_location.driver_name}"{literal},
+						"mobile_tel":{/literal}"{$driver_location.mobile_tel}"{literal},
+						"updated":{/literal}"{$driver_location.updated}"{literal}
+				};
+				
+				locationArray.push(driver_info{/literal}{$k}{literal});
+			
+			{/literal}
+		{/foreach}
+		{literal}
+
+				//空車検索用のJS
+				var lat={/literal}{$company_lat}{literal};
+				var long={/literal}{$company_long}{literal};			
+				var geocoder;
+				var map;
+				var infowindow = new google.maps.InfoWindow();
+			    var image = new google.maps.MarkerImage('templates/image/taxi_icon.gif',
+			    	        new google.maps.Size(30, 30),
+			    	        new google.maps.Point(0,0)			    				    );			    
+			    var taxi_icons=new Array();
+			    var taxi_windows=new Array();
+				
+				function initialize(lat,long) {
+					
+					geocoder = new google.maps.Geocoder();
+			
+				    var myLatlng = new google.maps.LatLng(lat, long);
+				    var myOptions = {
+		    		{/literal}
+		    		{* PC環境とスマホでズームレベルを変更する*}
+		    		{if $carrier=="iPhone"||$carrier=="Android"}
+			    		{literal}
+			    			zoom: 4,
+			    		{/literal}
+			    	{else}
+			    		{literal}
+					      zoom: 5,
+					    {/literal}
+			    	{/if}
+			    	{literal}
+				      center: myLatlng,
+				      mapTypeId: google.maps.MapTypeId.ROADMAP
+				    }
+				    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+				    
+				    geocoder.geocode({'latLng': myLatlng}, function(results, status) {
+			            if (status == google.maps.GeocoderStatus.OK) {
+			              if (results[2]) {
+			                marker = new google.maps.Marker({
+			                    map: map, 
+			                    position: myLatlng
+			                });
+			                
+			              }
+			            } else {
+			              alert("Geocoder failed due to: " + status);
+			            }
+			          });
+
+
+				    var shape = {
+				    	      coord: [1, 1, 1, 20, 20, 20, 20 , 1],
+				    	      type: 'poly'
+				    	  };
+
+
+					//空車アイコンを表示
+					for (var i = 0; i < locationArray.length; i++) {
+							
+						taxi_icons=new google.maps.Marker({
+
+				    	  position: locationArray[i].LatLng,
+				          map: map,
+				          icon:image,
+				          title:locationArray[i].company_name
+
+					   	});
+					   	
+					         //社名をWindow表示						
+						var contentString1 = '<div id="content">'+locationArray[i].company_name +'<br>';
+						var contentString2 = locationArray[i].driver_name +'<br><a href="tel:'+ locationArray[i].mobile_tel + '">'+locationArray[i].mobile_tel +'</a></div>';
+						var contentString=contentString1+contentString2;										
+						taxi_windows= new google.maps.InfoWindow({
+										maxWidth:500,
+										content: contentString
+											
+								});
+						
+						
+						//タクシーアイコンへのマウスオーバーイベント追加
+						attachInfoWindow(taxi_icons,taxi_windows,i);
+	
+					};
+
+
+					function attachInfoWindow(taxi_icons,taxi_windows,i){
+						//タクシーアイコンへのマウスオーバーイベント追加
+						google.maps.event.addListener(taxi_icons, 
+								{/literal}
+						{*PCならマウスオーバーでタクシーアイコンの情報表示　スマートフォンならマウスダウン*}
+									{if $carrier==NULL}
+										{literal}
+											'mouseover'
+										{/literal}
+									{elseif $carrier=='iPhone'||'Android'}
+										{literal}
+											'mousedown'
+										{/literal}
+									{/if}
+									{literal}
+								, 
+								function() {
+							taxi_windows.open(map,taxi_icons);
+						});
+			}
+
+		}
+	</script>
+{/literal}
+	{*Google Map本体*}		
+		{include file="google_map.html"}
+	{*複数ページへ渡る場合のリンク*}
+	{foreach from=$links item="links"}
+		{$links}
+	{/foreach}
+
+	{*ドライバー情報表示*}
+
+	{foreach from=$data item="data"}
+		<div><b>{$smarty.const.COMMON_COMPANY}</b>：
+							{$data.company_name}</div>
+		
+		<div><b>{$smarty.const.COMMON_DRIVER}</b>：
+		
+		<a href="index.php?action=viewDriver&id={$data.driver_id}">{$data.last_name|escape}{$data.first_name|escape}</a><br>
+
+		<b>{$smarty.const.COMMON_DRIVER_MOBILE}</b>&nbsp;：&nbsp;<a href="tel:{$data.mobile_tel|escape}">{$data.mobile_tel|escape}</a><br>
+		{if $data.address}<b>{$smarty.const.COMMON_JYUSYO}</b>&nbsp;：&nbsp;{$data.address}<br>{/if}
+		<!-- <b>{$smarty.const.COMMON_NEAR_UPDATE}</b>&nbsp;：&nbsp;{$data.updated|escape} -->
+		</div>
+		<hr>
+	{*配列が空だった場合*}
+	{foreachelse}
+		{$smarty.const.NO_DATA}
+		<br>
+		{$smarty.const.REFINE_NOTICE}
+	{/foreach}
+	<p>
+		{if $carrier==NULL}タクシーアイコン上にマウスを合わせると、ドライバーのグループ名や電話番号が表示されます。<br>{/if}
+		{if $carrier=='iPhone'||$carrier=='Android'}タクシーアイコン上をタップすると、ドライバーのグループ名や電話番号が表示されます。<br>{/if}
+	</p>
+		
+

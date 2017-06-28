@@ -1,0 +1,176 @@
+		 <select name="time_from_year">
+		  {php} 
+		     $this_year=date('Y');
+		       for($i=$this_year-5; $i<$this_year+1; $i++){
+		          echo "<option value=\"$i\"";
+			     				if($_SESSION['time_from_year']){
+									if($i==$_SESSION['time_from_year']){
+										 echo " selected=selected";	
+									}
+								}elseif($i==$this_year){
+					 				echo " selected";	
+								}
+				echo ">$i</option>";
+				
+			}
+		  {/php}
+		 </select>年
+		 <select name="time_from_month">
+		   {php} 
+			$this_month=date('n');
+			 	for($j=1; $j<13; $j++){
+					echo "<option value=\"$j\"";
+			     				if($_SESSION['time_from_month']){
+									if($j==$_SESSION['time_from_month']){
+										 echo " selected=selected";	
+									}
+								}elseif($j==$this_month){
+						 			echo "selected=selected";	
+								}
+					echo ">$j</option>";
+									
+				}
+		  {/php}		
+		  </select>月
+		 <select name="time_from_day">
+		  {php} 
+			$today=date('d');
+				for($k=1; $k<32; $k++){
+					echo "<option value=\"$k\"";
+							   if($_SESSION['time_from_day']){
+									if($k==$_SESSION['time_from_day']){
+										 echo " selected=selected";	
+									}
+								}elseif($k==$today){
+							 		echo " selected=selected";	
+								}
+					echo ">$k</option>";
+				}
+		 {/php}		
+		 </select>日
+		 {if $carrier=='Android'||$carrier=='iPhone'}
+		 <br>
+		 <select name="time_from_hour" style="margin: 0 0 0 22px;">
+		 {else}
+		 <select name="time_from_hour">
+		 {/if}
+		  {php} 
+			$this_hour=date('G');
+				for($l=0; $l<24; $l++){
+					echo "<option value=\"$l\"";
+					if($_SESSION['time_from_hour'] != null || $_SESSION['time_from_hour'] == 0){
+						if($l==$_SESSION['time_from_hour']){
+							 echo " selected=selected";	
+						}
+					}elseif($l==$this_hour-1){
+							 echo " selected=selected";	
+					}
+					echo ">$l</option>";
+				}
+		 {/php}		
+		 </select>時
+		 <select name="time_from_minit">
+		  {php} 
+			$this_minit=date('i');
+				for($m=0; $m<60; $m++){
+					echo "<option value=\"$m\"";
+							if(isset($_SESSION['time_from_minit'])){
+									if($m==$_SESSION['time_from_minit']){
+										 echo "selected=selected";	
+									}
+							}elseif($m==$this_minit){
+							 		echo " selected=selected";	
+							}
+					echo ">$m</option>";
+				}
+		 {/php}		
+		 </select>分
+		 ~
+		 {if $carrier=='Android'||$carrier=='iPhone'}
+		 <br>
+		 {/if}
+		 <select name="time_to_year">
+		  {php} 
+		       for($i=$this_year-5; $i<$this_year+1; $i++){
+		          echo "<option value=\"$i\"";
+		         	if($_SESSION['time_to_year']){
+						if($i==$_SESSION['time_to_year']){
+							 echo " selected=selected";	
+						}
+					}elseif($i==$this_year){
+					 echo " selected";	
+						}
+				echo ">$i</option>";
+				
+			}
+		  {/php}
+		 </select>年
+		 <select name="time_to_month">
+		   {php} 
+			 	for($j=1; $j<13; $j++){
+					echo "<option value=\"$j\"";
+				    	if($_SESSION['time_to_month']){
+							if($j==$_SESSION['time_to_month']){
+								 echo " selected=selected";	
+							}
+						}elseif($j==$this_month){
+						 echo " selected=selected";	
+					}
+					echo ">$j</option>";
+									
+				}
+		  {/php}		
+		  </select>月
+		 <select name="time_to_day">
+		  {php} 
+			$today=date('d');
+				for($k=1; $k<32; $k++){
+					echo "<option value=\"$k\"";
+						if($_SESSION['time_to_day']){
+							if($k==$_SESSION['time_to_day']){
+								 echo " selected=selected";	
+							}
+						}elseif($k==$today){
+							 echo " selected=selected";	
+						}
+					echo ">$k</option>";
+				}
+		 {/php}		
+		 </select>日
+		 {if $carrier=='Android'||$carrier=='iPhone'}
+		 <br>
+		 <select name="time_to_hour" style="margin: 0 0 0 22px;">
+		 {else}
+		 <select name="time_to_hour">
+		 {/if}
+		  {php} 
+			$this_hour=date('G');
+				for($l=0; $l<24; $l++){
+					echo "<option value=\"$l\"";
+						if(	$_SESSION['time_from_hour'] != null || 
+							$_SESSION['time_from_hour'] == 0){
+							if($l==$_SESSION['time_to_hour']){
+								 echo " selected=selected";	
+							}
+						}elseif($l==$this_hour){
+							 echo " selected=selected";	
+						}
+					echo ">$l</option>";
+				}
+		 {/php}		
+		 </select>時
+		 <select name="time_to_minit">
+		  {php} 
+				for($m=0; $m<60; $m++){
+					echo "<option value=\"$m\"";
+						if(isset($_SESSION['time_to_minit'])){
+							if($m==$_SESSION['time_to_minit']){
+								 echo " selected=selected";	
+							}
+						}elseif($m==$this_minit){
+							 echo " selected=selected";	
+							}
+					echo ">$m</option>";
+				}
+		 {/php}		
+		 </select>分

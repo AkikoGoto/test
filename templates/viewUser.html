@@ -1,0 +1,85 @@
+{*ドライバー情報閲覧*}
+<h1>{$smarty.const.VIEWER_INFO}</h1>
+	<div class="item_name">
+		<b>
+			{if $carrier=='docomo'}
+				<FONT color="#006400">
+					{$smarty.const.VIEWER_NAME}
+				</FONT>
+			{else}
+				{$smarty.const.VIEWER_NAME}
+			{/if}
+		</b>
+	</div>
+	<div>
+		<span class="users_last_name">{$dataList.last_name|escape}</span>
+		{$dataList.first_name|escape}
+	</div>
+	
+	<!-- フリガナ　-->
+	<div class="item_name">
+		<b>
+			{$smarty.const.COMMON_FURIGANA}
+		</b>
+	</div>
+	<div>
+		{$dataList.furigana|escape}
+	</div>
+	
+	<!-- 電話番号　-->
+	<div class="item_name">
+		<b>
+			{$smarty.const.COMMON_TEL}
+		</b>
+	</div>
+	<div>
+		{$dataList.mobile_tel|escape}
+	</div>
+	
+	<!-- メールアドレス　-->
+	<div class="item_name">
+		<b>
+			{$smarty.const.COMMON_EMAIL}
+		</b>
+	</div>
+	<div>
+		{$dataList.mobile_email|escape}
+	</div>
+	
+	<div class="item_name">
+		<b>
+			{if $carrier=='docomo'}
+				<FONT color="#006400">
+			{/if}
+				{$smarty.const.DRIVER_ACCOUNT}
+				</FONT>
+		</b>
+	</div>
+	<div>
+		{$dataList.login_id|escape}
+	</div>
+	
+	<div class="item_name">
+		<b>
+			{if $carrier=='docomo'}
+				<FONT color="#006400">
+			{/if}
+					{$smarty.const.VIEWED_DRIVERS}
+				</FONT>
+		</b>
+	</div>
+	<div>
+		<ul class="viewed_drivers_list">
+			{foreach from=$drivers item="driver"}
+				<li>{$driver.driver_name}</li>
+			{foreachelse}
+				<li>閲覧できるドライバーを、<a href="index.php?action=setting&company_id={$u_id|escape}">設定画面</a>にて登録して下さい。</li>
+			{/foreach}
+		</ul>
+	</div>
+	
+	<p>
+		<a href="index.php?action=putUser&user_id={$dataList.id|escape}&id={$u_id|escape}">
+			{$smarty.const.DRIVER_INFO_EDIT}
+		</a>
+	</p>

@@ -1,0 +1,99 @@
+<h1>{$smarty.const.ROOT_DETAIL}</h1>
+<div>{$date}&nbsp;:&nbsp;{$driver_last_name}&nbsp;{$driver_first_name}</div>
+
+{if $data}	
+	{*データのある時しか、ルートIDは取れないので、このリンクは無効*}
+	<div>
+		<a href="index.php?action=/root_detail/putRootDetail&root_id={$root_id}&company_id={$company_id}">新規追加</a>
+		&nbsp;|&nbsp;
+		<a href="index.php?action=/root_detail/viewRootMap&company_id={$company_id}&driver_id={$driver_id}&date={$date}">地図で見る</a>
+		&nbsp;|&nbsp;
+		<a href="index.php?action=/root/viewRoots&driver_id={$driver_id}&company_id={$company_id}">ルート一覧</a>
+		
+	</div>
+{else}
+	<div style="margin: 10px auto;">データがありません。ルート詳細を追加してください。</div>
+	<div>
+		<a href="index.php?action=/root_detail/putRootDetail&root_id={$root_id}&company_id={$company_id}" style="display: block;">
+			<button class="btn btn-large btn-ocher">
+				ルート詳細を追加する
+			</button>
+		</a>
+	</div>
+{/if}	
+
+
+
+<FORM METHOD="POST" action="index.php?action=/root_detail/tryRootDetail">
+{*複数ページへ渡る場合のリンク*} 
+{foreach from=$links item="links"} 
+	{$links}
+{/foreach}
+	
+	{foreach from=$data item="data"}
+	<table class="report_table" >
+		<tr>
+			<th width="75px">
+				{$smarty.const.COMMON_ID}
+			</th>
+			<th width="300px">
+				<font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+				{$smarty.const.DESTINATION_NAME}
+			</th>
+			<th>
+				<font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+				{$smarty.const.COMMON_JYUSYO}
+			</th>
+			<th>
+				{$smarty.const.EDIT}/{$smarty.const.DELETE}
+				
+			</th>
+		</tr>
+		<tr>
+			<td>
+				{$data.root_detail_id|escape} 
+			</td>
+			<td>
+				{$data.destination_name|escape}
+			</td>
+			<td>
+				{$data.root_address}
+			</td>
+			<td rowspan="3" width="60px">
+		<a href="index.php?action=/root_detail/putRootDetail&root_detail_id={$data.root_detail_id}&root_id={$data.root_id}&company_id={$company_id}" >
+		{$smarty.const.EDIT_ICON}</a>
+		<a href="index.php?action=/root_detail/deleteRootDetail&id={$data.root_detail_id}&company_id={$company_id}"  
+		{literal}onclick="return check()"{/literal}>{$smarty.const.COMMON_DELETE_ICON}</a>
+			</td>
+		</tr>
+		<tr>
+			<th>
+				{$smarty.const.DELIVER_TIME}
+			</th>
+			<th colspan="2">
+				{$smarty.const.COMMON_BIKOU}
+			</th>
+		</tr>
+		<tr>
+			<td>
+				{$data.deliver_time}
+			</td>
+			<td colspan="2">
+				{$data.root_detail_information}
+			</td>
+		</tr>
+	</table>
+	{/foreach}
+								
+
+</FORM>
+
+		{literal}
+			<script type="text/javascript">
+			<!--
+			function check(){
+				return confirm("この記録を消去して、本当によろしいですか？消去すると、元に戻りません。")
+			}
+			//-->
+			</script>	
+		{/literal}

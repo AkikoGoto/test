@@ -1,0 +1,45 @@
+<FORM METHOD="POST" action="index.php?action=concrete/update_db_oil_replenishments_3">
+
+<h1>{$smarty.const.OIL_DATA_INSERT}</h1>
+
+	<!-- 軽油(3)のデータ入力 -->
+	<div class="item_name">
+		<b>{$check_date}</b>
+	</div>
+	
+		<table class="demand_table">
+			<tr class="tr_border">
+				<!-- 軽油補給量 -->
+				<td class="exist_border">{$smarty.const.OIL_REPLENISHMENT}</td>
+				<td>
+					{$oil_replenishment}
+					<input type="hidden" name="oil_replenishment" value="{$oil_replenishment}">
+				</td>
+			</tr>
+			<tr class="tr_border">
+    			<!-- 開始時間 -->
+    			<td class="exist_border">{$smarty.const.START_TIME}</td>
+    			<td>
+    				{$start_time_hour}時{$start_time_minit}分
+    				<input type="hidden" name="start_time" value="{$start_time}">
+		    	</td>
+    		</tr>
+    		<tr class="tr_border">
+    			<!-- 終了時間 -->
+    			<td class="exist_border">{$smarty.const.END_TIME}</td>
+    			<td>
+    				{$end_time_hour}時{$end_time_minit}分
+		    		<input type="hidden" name="end_time" value="{$end_time}">
+    			</td>
+    		</tr>
+    		
+    	</table>
+    	
+	<div align='center'>
+		<input type="hidden" name="oil_replenishment_type" value="3">
+		<input type="hidden" name="status" value="{if $status}{$status}{/if}">
+		<input type="hidden" name="concrete_attendance_id" value="{$concrete_attendance_id}">
+		<input type="submit" name="submit" value="{$smarty.const.COMMON_SUBMIT}">
+	</div>
+	
+</FORM>

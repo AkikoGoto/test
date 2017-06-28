@@ -1,0 +1,143 @@
+<FORM METHOD="POST" action="index.php?action=tryPutin">
+	<div class="item_name">
+    		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font><b>{$smarty.const.COMMON_IS_COMPANY}</b>
+     </div>
+	<div>
+        <input type="radio" name="is_company" value="1" {if $data->is_company == 1}checked{/if}>{$smarty.const.COMMON_CORPORATE}<br>
+        <input type="radio" name="is_company" value="0" {if $data->is_company == 0}checked{/if}>{$smarty.const.COMMON_INDIVIDUAL}<br>         </div>
+     
+     <!-- グループID -->
+	<div class="item_name"><font color="#FF0000">{$smarty.const.COMMON_INDISP}</font><b>        	        		
+		{$smarty.const.COMMON_GROUP_ID}
+	</b></div>
+	<div>
+		<input type="text" name="company_group_id" size="50" maxlength="50"  class="textinput" value="{$data->company_group_id}{$session.company_group_id}">
+	</div>
+     
+     <div class="item_name"><font color="#FF0000">{$smarty.const.COMMON_INDISP}</font><b>        	        		
+    		{$smarty.const.COMMON_COMPANY}
+     </b></div>
+     <div>        	        		
+		<input type="text" name="company_name" size="50" maxlength="50" class="textinput" value="{$data->company_name}{$session.company_name}">
+     </div>        	
+	<!-- Geographic -->
+	<div class="item_name"><b><font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+	{$smarty.const.COMMON_POSTAL}</b>
+	</div>
+	<div>
+		<input type="text" size="10" maxlength="10" class="textinput" name="postal" value="{$data->postal}{$session.postal}">
+	</div>
+	<div class="item_name"><b><font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+	{$smarty.const.COMMON_PREFECTURE}
+	</b></div>
+	<div>
+		<select name="prefecture">
+			{foreach from=$prefecturesList item="prefecture"}
+				<option value="{$prefecture->id|escape}" 
+				{if $session.prefecture==$prefecture->id}selected{/if}
+				{if $data->prefecture==$prefecture->id}selected{/if}>
+                	{$prefecture->prefecture_name|escape}</option>
+			{/foreach}
+		</select>
+	</div>
+	<div class="item_name"><b>
+	{$smarty.const.COMMON_CITY}
+	</b></div>
+	<div>
+		<input type="text" size="50" maxlength="100" class="textinput" name="city" value="{$data->city}{$session.city}">
+	</div>
+	<div class="item_name"><b>{$smarty.const.COMMON_WARD}
+	</b></div>
+	<div>
+		<input type="text" size="50" maxlength="100" class="textinput" name="ward" value="{$data->ward}{$session.ward}">
+	</div>
+
+	<div class="item_name"><b><font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+	{$smarty.const.COMMON_TOWN}
+	</b></div>
+	<div>
+		<input type="text" size="50" maxlength="100" class="textinput" name="town" value="{$data->town}{$session.town}">
+	</div>
+	<div class="item_name"><b>
+	{$smarty.const.COMMON_ADDRESS}
+	</b>
+	</div>
+	<div>
+		<input type="text" size="50" maxlength="100" class="textinput" name="address" value="{$data->address}{$session.address}">
+	</div>
+	<div class="item_name"><b><font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+	{$smarty.const.COMMON_TEL}
+	</b></div>
+	<div>
+		<input type="text" size="50" maxlength="100" class="textinput" name="tel" value="{$data->tel}{$session.tel}">
+	</div>
+	<div class="item_name"><b><font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+	{$smarty.const.COMMON_EMAIL}</b>
+	</div>
+	<div>
+		<input type="text" size="50" maxlength="100" class="textinput" name="email" value="{$data->email}{$session.email}">
+	</div>
+	
+	<div class="item_name"><b><font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+	{$smarty.const.COMMON_CONTACT_PERSON}</b>
+	</div>
+	<div>
+		{$smarty.const.COMMON_LAST_NAME}
+		<input type="text" size="10" maxlength="30" class="textinput" name="contact_person_last_name" 
+		value="{$data->contact_person_last_name}{$session.contact_person_last_name}">
+		{$smarty.const.COMMON_FIRST_NAME}
+		<input type="text" size="10" maxlength="30" class="textinput" name="contact_person_first_name" 
+		value="{$data->contact_person_first_name}{$session.contact_person_first_name}">
+		<br>
+		{$smarty.const.COMMON_CONTACT_NOT_SHOW}
+	</div>
+
+	<div class="item_name"><b><font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+	{$smarty.const.COMMON_CONTACT_TEL}</b>
+	</div>
+	<div>
+		<input type="text" size="50" maxlength="100" class="textinput" name="contact_tel" 
+		value="{$data->contact_tel}{$session.contact_tel}">
+		<br>
+		{$smarty.const.COMMON_CONTACT_NOT_SHOW}
+	</div>
+
+
+	<div class="item_name"><b>
+	{$smarty.const.COMMON_URL}</b>
+	</div>
+	<div>
+		<input type="text" size="50" maxlength="100" class="textinput" name="url" value="{$data->url}{$session.url}">
+	</div>
+
+	<div class="item_name"><b><font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+	{$smarty.const.COMMON_PWD}</b>&nbsp;{$smarty.const.COMMON_PWD_NOTICE}
+	{if $data}{$smarty.const.COMMON_PWD_EDIT_NOTICE}{/if}
+	</div>
+	<div>
+		<input type="password" size="20" class="textinput" name="passwd" value="{$session.passwd}">
+	</div>
+	
+	<div class="item_name">
+    	<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font><b>{$smarty.const.COMMON_IS_DRIVER_BANNED_EDITIG}</b>
+     </div>
+	<div>
+        <input type="radio" name="is_ban_driver_editing" value="0" {if $data->is_ban_driver_editing == 0}checked{/if}>{$smarty.const.COMMON_ACCEPT_EDITING}<br>
+        <input type="radio" name="is_ban_driver_editing" value="1" {if $data->is_ban_driver_editing == 1}checked{/if}>{$smarty.const.COMMON_BAN_EDITING}<br>
+	</div>
+        
+	<!-- Geographicここから-->
+	<div class="item_name"><b>{$smarty.const.COMMON_INFO}</b></div>
+	<div>
+		<div>{$max_message}{$smarty.const.DATE_VERI_CHAORLE}</div>
+			<textarea name="info" rows="15" cols="75" class="textinput" >{$data->info}{$session.info}</textarea>
+	</div>
+	<div>
+	{*隠し項目として、備考を渡しておく　顧客には編集・閲覧できないが、これを入れておかないと、備考が消えてしまうため*}
+			<input type="hidden" name="note" value="{$data->note}">
+			<input type="hidden" name="from_web" value="1">
+			<input type="hidden" name="id" value="{$data->company_id}">
+			<button class="btn btn-large btn-ocher" type="submit" value="{$smarty.const.COMMON_SUBMIT}">
+			{$smarty.const.COMMON_SUBMIT}</button>
+	</div>
+</FORM>

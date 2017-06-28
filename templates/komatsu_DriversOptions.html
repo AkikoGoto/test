@@ -1,0 +1,64 @@
+{*ドライバー一覧画面*}
+
+<h1>{$companyName}&nbsp;ドライバー別アプリ設定一覧<a name="top">&nbsp;</a></h1>
+
+{*営業所ごとのドライバー一覧画面*}
+{foreach from=$branchList item="branch"}
+&nbsp;&nbsp;<a href="index.php?action=komatsu_DriversOptions&branch_id={$branch->geographic_id}&id={$id}" >{$branch->name|escape}</a>
+{/foreach}
+
+{*複数ページへ渡る場合のリンク*}
+{foreach from=$links item="links"}
+{$links}
+{/foreach}
+<FORM METHOD="POST"  enctype="multipart/form-data"　>
+<table>
+{foreach from=$data item="data"}
+	<tr>
+	<td>
+		<a href="index.php?action=viewDriver&id={$data->id}">
+		{$data->last_name|escape}{$data->first_name|escape}
+		</a>
+	</td>
+	<td>
+		<input type="hidden" name="options[{$data->id}][should_save_power_when_unplugged]" value="0" >
+		<label><input type="checkbox" name="options[{$data->id}][should_save_power_when_unplugged]" value="1" 
+		{if $data->should_save_power_when_unplugged}checked="checked"{/if}
+		/>
+		バッテリー動作時に節電する</label>
+	</td>
+	<td>
+		<input type="hidden" name="options[{$data->id}][should_take_photo]" value="0" >
+		<label><input type="checkbox" name="options[{$data->id}][should_take_photo]" value="1" 
+		{if $data->should_take_photo}checked="checked"{/if}
+		 />自動撮影する</label>
+	</td>
+	<td>
+		<input type="hidden" name="options[{$data->id}][should_notice_obstacles]" value="0" >
+		<label><input type="checkbox" name="options[{$data->id}][should_notice_obstacles]" value="1" 
+		{if $data->should_notice_obstacles}checked="checked"{/if}
+		 />障害物を通知する</label>
+	</td>
+	<td><select name="options[{$data->id}][obstacles_file_name]">
+	<option value="">---</option>
+	{foreach from=$csvMetaData item="csvdata"}
+<option value={$csvdata.filename}{if $csvdata.filename == $data->obstacles_file_name} selected{/if}>{$csvdata.filename}</option>
+{/foreach}
+</td>
+		</tr>
+{*配列が空だった場合*}
+{foreachelse}
+<tr><td>
+現在データがありません。
+</td></tr>
+{/foreach}
+</table>
+{*複数ページへ渡る場合のリンク*}
+{foreach from=$links item="links"}
+{$links}
+{/foreach}
+	<div align="center">
+		<input type="submit" name="submit" value="{$smarty.const.COMMON_SUBMIT}">
+	</div>
+</FORM>
+ 

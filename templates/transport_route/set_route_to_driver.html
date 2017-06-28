@@ -1,0 +1,81 @@
+<h1>ドライバーへのルート一括設定：{$date|substr:0:4}年{$date|substr:4:2}月{$date|substr:6:2}日</h1>
+
+<form METHOD="GET" action="index.php">
+	<a href="index.php?action=transport_route/setRouteToDriver&company_id={$company_id|escape}&date={$smarty.now|date_format:'%Y%m%d'}">今日</a>&nbsp;
+	<a href="index.php?action=transport_route/setRouteToDriver&company_id={$company_id|escape}&date={'+1 day'|strtotime|date_format:'%Y%m%d'}">明日</a>&nbsp;
+	<a href="index.php?action=transport_route/setRouteToDriver&company_id={$company_id|escape}&date={'+2 day'|strtotime|date_format:'%Y%m%d'}">明後日</a>&nbsp;
+	<input type="hidden" name="action" value="transport_route/setRouteToDriver">
+	<input type="text" id="datepicker" size="16" class="input_mini" name="date" placeholder="日付を入力" value="{$date}">
+	<input type="hidden" name="company_id" value="{$company_id|escape}">
+	<button type="submit" class="btn-primary">送信</button>
+</form>
+
+<form class="test" METHOD="POST" action="index.php?action=transport_route/tryPutTransportRouteDrivers">
+	<table class="report_table">
+		<tr>
+			<th>ドライバー</th>
+			<th>選択しない</th>
+			{foreach from=$transportRoutes item="transportRoute" key=k}
+				<th>{$transportRoute.name}</th>
+			{/foreach}
+			<th>備考</th>
+		</tr>
+		{foreach from=$drivers item="driver" key=k}
+			<tr>
+				<input type="radio" name="driver[{$driver.id}]" value="" checked="checked" style="display:none;" />
+				<td>
+					{$driver.last_name}{$driver.first_name}
+				</td>
+				<td>
+					<label for="driver{$driver.id}-0" style="display: block; width:100%;height:100%;">
+						<input id="driver{$driver.id}-0" type="radio" name="driver[{$driver.id}][transportRoute]" value="">
+					</label>
+				</td>
+				{foreach from=$transportRoutes item="transportRoute" key=k}
+					<td>
+						<label for="driver{$driver.id}-route{$transportRoute.id}" style="display: block; width:100%;height:100%;">
+							<input id="driver{$driver.id}-route{$transportRoute.id}" type="radio" name="driver[{$driver.id}][transportRoute]" value="{$transportRoute.id}" 
+							{if !empty($smarty.session.transportRouteDrivers[$date])}
+								{if $smarty.session.transportRouteDrivers[$date][$driver.id] == $transportRoute.id}
+									checked	
+								{/if}
+							{elseif $transportRoutesDrivers[$driver.id].transport_route_id ==  $transportRoute.id}
+								checked 
+							{/if}
+							>
+						</label>
+					</td>
+				{/foreach}
+				<td>
+					<input type="text" name="driver[{$driver.id}][information]" style="margin: auto" value="{if !empty($smarty.session.transportRouteDrivers[$date])}{$smarty.session.transportRouteDrivers[$date][$driver.id].information}{else}{$transportRoutesDrivers[$driver.id].information}{/if}">
+				</td>
+			</tr>
+		{*配列が空だった場合*}
+		{foreachelse}
+			<tr>
+				<td>
+					現在データがありません。
+				</td>
+			</tr>
+		{/foreach}
+	</table>
+	<div align="center">
+		<input type="hidden" name="company_id" value="{$company_id|escape}">
+		<input type="hidden" name="date" value="{$date|escape}">
+		<button class="btn btn-large btn-ocher" type="submit" value="{$smarty.const.COMMON_SUBMIT}">{$smarty.const.COMMON_SUBMIT}</button>
+	</div>
+</form>
+<script src="{$smarty.const.JQUERY_UI_JS}"></script>
+<script src="{$smarty.const.DATE_PICKER_JA_JS}"></script>
+<link  rel="stylesheet" href="{$smarty.const.JQUERY_UI_CSS}">
+
+<script>
+{literal}
+$(function() {
+	var dateFormat = 'yymmdd';
+    $("#datepicker").datepicker({
+    	dateFormat: dateFormat
+    });
+  });
+{/literal}
+</script>

@@ -1,0 +1,13 @@
+	{if $user_id}
+		<div class="welcome">{$smarty.const.HELLO}{$nick_name}{$smarty.const.DATE_MAIL_KEISHO}</div>
+		<div class="user_menu">
+			<a href="index.php?action=user/putUser&id={$user_id}">{$smarty.const.USER_INFO_EDIT}</a>
+			{if $carrier==NULL||$carrier=="iPhone"||$carrier=="Android"}
+				｜
+			{else}
+				<br>
+			{/if}
+			<a href="index.php?action=user/adminWord&id={$user_id}">{$smarty.const.ADMIN_WORD_OF_MOUTH}</a>
+			<br>
+		</div>
+	{/if}

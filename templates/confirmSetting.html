@@ -1,0 +1,148 @@
+{*登録内容確認フォーム*}
+<h1>{$smarty.const.COMFIRM_RES_TITLE}</h1>
+<FORM METHOD="POST" action="index.php?action={$target}" name="profile">
+	
+	<!-- 作業ステータス1 -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$smarty.const.ACTION_STATUS}１</b>
+	</div>
+	<div>
+		{$action_1|escape}
+		<input type="hidden" name="action_1" value="{$action_1|escape}">
+	</div>
+	
+	<!-- 作業ステータス2 -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$smarty.const.ACTION_STATUS}２</b>
+	</div>
+	<div>
+		{$action_2|escape}
+		<input type="hidden" name="action_2" value="{$action_2|escape}">
+	</div>
+	
+	<!-- 作業ステータス3 -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$smarty.const.ACTION_STATUS}３</b>
+	</div>
+	<div>
+		{$action_3|escape}
+		<input type="hidden" name="action_3" value="{$action_3|escape}">
+	</div>
+	
+	<!-- 作業ステータス4 -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$smarty.const.ACTION_STATUS}４</b>
+	</div>
+	<div>
+		{$action_4|escape}
+		<input type="hidden" name="action_4" value="{$action_4|escape}">
+	</div>
+	
+	<!-- 距離 -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>移動{$smarty.const.DISTANCE}</b>
+	</div>
+	<div>
+		{$distance|escape} m
+		<input type="hidden" name="distance" value="{$distance|escape}">
+	</div>
+	
+	<!-- 移動時間 -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>移動{$smarty.const.TIME}</b>
+	</div>
+	<div>
+		{$time|escape} 秒
+		<input type="hidden" name="time" value="{$time|escape}">
+	</div>
+	
+	<!-- 常駐して動作させるか -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$smarty.const.RESIDENCE}</b>
+	</div>
+	<div>
+		{if $datas.track_always == 0 }
+			OFF
+			<input type="hidden" name="track_always" value="{$datas.track_always}">
+		{elseif $datas.track_always == 1 }
+			ON
+			<input type="hidden" name="track_always" value="{$datas.track_always}">
+		{/if}
+	</div>
+	
+	<!-- 許容する誤差 -->
+	<div class="item_name">
+		<font color="#FF0000">{$smarty.const.COMMON_INDISP}</font>
+		<b>{$smarty.const.ACCORD}{$smarty.const.ACCURACY}</b>
+	</div>
+	<div>
+		{$datas.accuracy|escape} M 
+		{$smarty.const.AMBIT}{$smarty.const.CHOOSE}
+		<input type="hidden" name="accuracy" value="{$datas.accuracy}">
+	</div>
+	
+	<!-- 一般公開マップの範囲設定 -->
+	<div class="item_name">
+		<b>{$smarty.const.PUBLIC_MAP_SCOPE}</b>
+	</div>
+	<p>{$smarty.const.REALTIME_MAP}を一般公開{if $is_public}する{else}しない{/if}</p>
+	<input type="hidden" name="is_public" value="{$is_public|escape}">
+	<div class="item_name">
+		<b>{$smarty.const.PUBLIC_DRIVERS}</b>
+	</div>
+	<ul>
+		{foreach from=$driver_names key="driver_id" item="driver_name"}
+			<li>
+				{$driver_name}
+				<input type="hidden" name="visible_driver_id[]" value="{$driver_id|escape}">
+			</li>
+		{foreachelse}
+			選択したドライバーはいません。
+		{/foreach}
+	</ul>
+	
+	<!--===================閲覧ユーザーの公開設定 ===================-->
+	<div class="item_name">
+		<b>{$smarty.const.VIEWERS_SETTING}</b>
+	</div>
+	<p>{$smarty.const.VIEWER}に{$smarty.const.REALTIME_MAP}を公開{if $datas.is_users_viewing}する{else}しない{/if}</p>
+	<input type="hidden" name="is_users_viewing" value="{$datas.is_users_viewing|escape}">
+	<div class="item_name">
+		<b>{$smarty.const.DRIVERS_TO_VIEWERS_SETTING}</b>
+	</div>
+	{foreach from=$viewers item="viewer" key="viewer_id"}
+		<div class="viewers_list">
+			<div class="viewer_name">{$viewer.name}</div>
+			<div class="viewered_drivers">
+				{foreach from=$viewer.drivers item="driver_name" key="driver_id"}
+					<div>
+						{$driver_name|escape}
+						<input type="hidden" name="viewed_driver_id[{$viewer_id}][]" value="{$driver_id}">
+					</div>
+				{/foreach}
+			</div>
+		</div>
+	{/foreach}
+	
+	<div class="clear_both"></div>
+		
+	<div align="center">
+		<input type="hidden" name="from_web" value="1">
+		<input type=hidden name="company_id" value="{$company_id|escape}">
+		<button class="btn btn-large btn-ocher" type="submit" name="submit" value="{$smarty.const.COMMON_SUBMIT}">
+			{$smarty.const.COMMON_SUBMIT}
+		</button>
+		<br>
+		{$smarty.const.FORM_BACK}
+	</div>
+	
+			
+</form>
+    

@@ -1,0 +1,137 @@
+{* ヘッダーメニュー *} {if $u_id ||$is_branch_manager}
+<div class="search_bar">
+
+	<ul class="slimmenu" id="navigation">
+		<li>
+		<!-- 政府($is_government==1)ならJVの選択画面へ、それ以外は普通の業務日誌へ遷移 -->
+					{if $is_government==1}
+						<a href="index.php?action=viewDriversMemo_JVSelect&company_id={$company_id}">業務日誌</a>
+					{else}
+						<a href="index.php?action=viewDriversMemo&company_id={$company_id}">業務日誌</a>
+					{/if}
+		</li>
+		<li>{if $smarty.const.MODE =="CONCRETE"} <a
+			href="index.php?action=concrete/getDriverMap&company_id={$company_id}">マップ</a>
+			{elseif $u_id == 9872} <a
+			href="index.php?action=getDriverMap&company_id={$company_id}&vacancy=1">{$status_1}マップ</a>
+			{else} <a href="index.php?action=getDriverMap&company_id={$company_id}">マップ</a>
+			{/if}
+
+			<ul>
+				<li>
+					<!-- 政府($is_government==1)ならJVの選択画面へ、それ以外は普通のリアルタイムマップへ遷移 -->
+					{if $is_government==1}
+						<a href="index.php?action=realtimeDriverMap_JVSelect&company_id={$company_id}">リアルタイムマップ</a>
+					{else}
+						<a href="index.php?action=realtimeDriverMap&company_id={$company_id}{if $branch_id}&branch_id={$branch_id}{/if}&show_route=1&show_destinations=1">リアルタイムマップ</a>
+					{/if}
+				</li>
+				<li>
+					<a href="index.php?action=all_driver_record_map&company_id={$company_id}">{$smarty.const.ABBREVIATE_ALL_DRIVER_RECORD_MAP}</a>
+				</li>
+				<li>
+					<a href="index.php?action=getDriverMap&company_id={$company_id}&vacancy=1">{$status_1}マップ</a>
+				</li>
+				<li>
+					<a href="index.php?action=getDriverMap&company_id={$company_id}&vacancy=2">{$status_2}マップ</a>
+				</li>
+				<li>
+					<a href="index.php?action=getDriverMap&company_id={$company_id}&vacancy=3">{$status_3}マップ</a>
+				</li>
+				<li>
+					<a href="index.php?action=getDriverMap&company_id={$company_id}&vacancy=4">{$status_4}マップ</a>
+				</li>
+				{if $u_id == $smarty.const.SUPER_USER}
+				<li><a
+					href="index.php?action=area/areaMap&company_id={$company_id}">{$smarty.const.AREA_MAP}</a></li>
+				{/if}
+			</ul>
+		</li>
+		{if $u_id}
+		<li>{if !$is_government==1}
+				<a href="index.php?action=putin&id={$company_id}">グループ情報</a>
+			{else}
+				<a href="index.php">グループ情報</a>
+			{/if}
+			<ul>
+				<li><a
+					href="index.php?action=viewBranches&company_id={$company_id}&by=company">サブグループ一覧</a>
+				</li>
+				<li>
+					{if !$is_government==1}
+						<a href="index.php?action=putBranch&company_id={$company_id}">サブグループ追加</a>
+					{/if}
+				</li>
+				<li><a href="index.php?action=viewDrivers&id={$company_id}">ドライバー情報一覧</a>
+				</li>
+				<li>
+					{if !$is_government==1}
+						<a href="index.php?action=putDriver&company_id={$company_id}">ドライバー追加</a>
+					{/if}
+				</li>
+				<li><a
+					href="{$smarty.const.TEMPLATE_URL}?action=viewUsers&id={$company_id}">{$smarty.const.VIEWER_LIST}</a>
+				</li>
+				<li><a href="{$smarty.const.TEMPLATE_URL}?action=putUser&id={$company_id}">{$smarty.const.VIEWER}追加</a>
+				</li> {if $u_id == 9900}
+				<li><a href="index.php?action=komatsu_obstacle&id={$company_id}"> 障害物CSV設定</a>
+				</li>
+				<li><a href="index.php?action=komatsu_DriversOptions&id={$company_id}">ドライバー別アプリ設定</a>
+				</li>
+				<li><a href="index.php?action=komatsu_setting&company_id={$company_id}">設定</a>
+				</li> {elseif $smarty.const.MODE =="CONCRETE"}
+				<li><a href="index.php?action=concrete/setting&company_id={$company_id}">設定</a>
+				</li> {else}
+				<li><a href="index.php?action=setting&company_id={$company_id}">設定</a>
+				</li> {/if}
+			</ul>
+		</li>
+		{/if}
+		{if !$is_lite}
+		<li><a
+			href="index.php?action=/message/message_form&company_id={$company_id}">メッセージ</a>
+			<ul>
+				<li><a
+					href="index.php?action=/message/message_history&company_id={$company_id}">{$smarty.const.MESSAGE_HISTORY}</a>
+				</li>
+			</ul>
+		</li>
+		<li>
+		<!-- <a href="index.php?action=viewDriversRoutes&company_id={$company_id}">ルート</a> -->
+			<a href="index.php?action=/transport_route/viewRoutes&company_id={$company_id}">ルート</a>
+			<ul>
+				<!-- <li><a href="index.php?action=/transport_route/putRoute&company_id={$company_id}">ルート新規追加</a></li> -->
+					<!-- <a href="index.php?action=/root/putRoot&company_id={$company_id}">ルート新規追加</a> -->
+					<li><a href="index.php?action=transport_route/viewDriversRouteArea&company_id={$company_id}">ドライバールート</a></li>
+				<!-- <li>
+					<a href="index.php?action=/transport_route/putRoute&company_id={$company_id}">輸送ルート新規追加</a>
+				</li>
+				<li>
+					<a href="index.php?action=/navi_area/putArea&company_id={$company_id}">ナビエリア新規追加</a>
+				</li> -->
+			</ul>
+		</li>
+		<li><a
+			href="index.php?action=/destination/viewDestinations&company_id={$company_id}">配送先</a>
+			<ul>
+				<li><a
+					href="index.php?action=/destination/putDestination&company_id={$company_id}">配送先新規追加</a>
+				</li>
+				<li><a
+					href="index.php?action=/destination_category/viewDestinationCategories&company_id={$company_id}">{$smarty.const.DESTINATION_CATEGORY}</a>
+
+				<li><a
+					href="index.php?action=/destination/getDestinationMap&company_id={$company_id}">{$smarty.const.DESTINATION_MAP}</a>
+				</li>
+			</ul>
+		</li>
+
+		<li><a href="index.php?action=/information/driving_information&company_id={$company_id}">運転情報</a>
+		</li>
+		<li><a href="index.php?action=/information/viewInformations&company_id={$company_id}">渋滞/ルート外れ</a>
+		</li>
+		 {/if}
+	</ul>
+</div>
+<div class="clear_both"></div>
+{/if}

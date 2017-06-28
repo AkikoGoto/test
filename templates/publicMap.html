@@ -1,0 +1,27 @@
+{*近い営業所データを表示*}
+
+<h1>{$smarty.const.PUBLIC_MAP}</h1>
+{*空車アイコン表示のJavascript*}
+
+{if $is_no_drivers}
+	<div class="red">閲覧できるドライバーが登録されていません。ドライバーを閲覧したい場合は、管理者へお問い合わせください。</div>
+{/if}
+
+{*OSM Map本体*} 
+<iframe id="iframe_realtime_map" width="100%" height="800px" src="http://doutaikanri.com:13000/map?cid={$company_id}&key={$key}" style="border:none;">
+</iframe>
+<div class="under_map_list">
+<font color="#FF0000">{$smarty.const.RECTANGLE}</font>{$working_status->action_1}&nbsp; 
+<font color="#0e97f8">{$smarty.const.RECTANGLE}</font>{$working_status->action_2}&nbsp;
+<font color="#0ef850">{$smarty.const.RECTANGLE}</font>{$working_status->action_3}&nbsp;
+<font color="#760ef8">{$smarty.const.RECTANGLE}</font>{$working_status->action_4}
+{if $carrier==NULL}&nbsp;
+{elseif $carrier == 'Android'|| $carrier =='iPhone'}
+<br>
+{/if}
+<!-- 
+<a href="javascript:var iframe = document.getElementById('youriframe');iframe.src = iframe.src;;">全体表示</a> | 
+<a href="index.php?action=getDriverAndDestinationMap&company_id={$company_id}">配送先を合わせて表示</a>
+ -->
+</div>
+

@@ -1,0 +1,44 @@
+{*ドライバー業務日誌目次画面*}
+
+<h1>{$companyName}&nbsp;{$smarty.const.COMMON_DRIVERS_WORKTIMES}</h1>
+<a name="top">&nbsp;</a>
+{*複数ページへ渡る場合のリンク*}
+{foreach from=$links item="links"}
+{$links}
+{/foreach}
+<table class="middle_table report_table">
+{foreach from=$data item="data"}
+	<tr>
+		<td>
+			{$data->last_name|escape}{$data->first_name|escape}
+		</td>
+		<!-- 
+		<td>	
+			<a href="index.php?action=driver_record_map&driver_id={$data->id|escape}&company_id={$data->company_id|escape}">
+			{$smarty.const.DRIVER_RECORDS_MAP}
+			</a>
+		</td>
+		-->
+		<td>			
+		{if $smarty.const.MODE =="CONCRETE"}
+			<a href="index.php?action=cocrete/worktime&driver_id={$data->id|escape}&company_id={$data->company_id|escape}">
+			{$smarty.const.WORK_RECORDS}
+			</a>
+		{else}
+			<a href="index.php?action=worktime&driver_id={$data->id|escape}&company_id={$data->company_id|escape}">
+			{$smarty.const.WORK_RECORDS}
+			</a>
+		{/if}
+		</td>
+
+	</tr>
+{*配列が空だった場合*}
+{foreachelse}
+<tr>
+	<td>
+		現在データがありません。
+	</td>
+</tr>
+{/foreach}
+</table>
+ 

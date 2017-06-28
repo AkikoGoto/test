@@ -1,0 +1,94 @@
+{*確認表示画面 新規・編集はフラグで判断*}
+<h1>{$smarty.const.COMFIRM_RES_TITLE}</h1>
+<FORM METHOD="POST" action="index.php?action={$target}" name="profile">
+	<div class="item_name">Comapny ID</div>
+		<div>
+		{$company_id|escape}
+        <input type=hidden name="company_id" value="{$company_id|escape}">  	        		
+			</div>
+	<div class="item_name"> 
+	{$smarty.const.COMMON_BRANCH_ID}
+    		</div>
+		<div>
+		{$id|escape}
+        <input type=hidden name="id" value="{$id|escape}">  	        		
+			</div>			
+<!-- Geographic -->
+	<div class="item_name">
+	{$smarty.const.COMMON_LAT}</div>
+		<div>		
+		  <div id="lat"></div>
+			<input type="hidden" name="latitude">
+		</div>
+
+	<div class="item_name">
+	{$smarty.const.COMMON_LONG}</div>
+		<div>
+		  <div id="lng"></div>
+		{$longitude|escape}
+			<input type="hidden" name="longitude" >
+		</div>
+
+	<div class="item_name"> <font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+	{$smarty.const.BRANCH_NAME}</div>
+		<div>
+		{$name|escape}
+			<input type="hidden" name="name" value="{$name|escape}">
+		</div>
+
+	<div class="item_name"> <font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+	{$smarty.const.COMMON_POSTAL}</div>
+		<div>
+		{$postal|escape}
+			<input type="hidden" name="postal" value="{$postal|escape}">
+		</div>
+
+	<div class="item_name"> <font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+	{$smarty.const.COMMON_PREFECTURE}</div>
+		<div>
+		{$prefecture_name|escape}
+			<input type="hidden" name="prefecture" value="{$prefecture|escape}">
+		</div>
+
+	<div class="item_name">{$smarty.const.COMMON_CITY}</div>
+		<div>
+		{$city|escape}
+			<input type="hidden" name="city" value="{$city|escape}">
+		</div>
+
+	<div class="item_name">{$smarty.const.COMMON_WARD}</div>
+		<div>
+		{$ward|escape}
+			<input type="hidden" name="ward" value="{$ward|escape}">
+		</div>
+
+	<div class="item_name"> <font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+	{$smarty.const.COMMON_TOWN}</div>
+		<div>
+		{$town|escape}
+			<input type="hidden" name="town" value="{$town|escape}">
+		</div>
+
+	<div class="item_name"> <font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+	{$smarty.const.COMMON_ADDRESS}</div>
+		<div>
+		{$address|escape}
+			<input type="hidden" name="address" value="{$address|escape}">
+		</div>
+
+	<div class="item_name"> <font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+	{$smarty.const.COMMON_TEL}</div>
+		<div>
+		{$tel|escape}
+			<input type="hidden" name="tel" value="{$tel|escape}">
+		</div>
+
+<!-- Geographic終わり -->
+		
+	<div align="center">
+		<input type="hidden" name="edit" value="{$edit|escape}">			
+		<button class="btn btn-large btn-ocher" type="submit" value="{$smarty.const.COMMON_SUBMIT}">
+		{$smarty.const.COMMON_SUBMIT}</button>
+	</div>
+</form>
+    <div id="map_canvas" style="width: 500px; height: 300px"></div>

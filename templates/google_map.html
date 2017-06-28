@@ -1,0 +1,29 @@
+
+{if $carrier==NULL}
+				<!-- Google Map for PC -->
+				<a name="map">
+				<div id="map_canvas" style="width: 100%; height: 500px"></div>
+				</a>
+			<div align="center">
+				<b>{$smarty.const.PRESENT_LOCATION}</b>
+				<div id="present_location"></div>
+				{$smarty.const.REVERSE_GEOCODING_NOTICE}<br>
+			</div>
+			
+		{elseif $carrier=="iPhone"||$carrier=="Android"}
+		
+			<!-- Google Map for iPhone and Android-->
+			<a name="map">
+			<div id="map_canvas" style="width: 100%; height: 280px"></div>
+			</a>
+			<div ><b>{$smarty.const.PRESENT_LOCATION}：</b>
+			<div id="present_location"></div>
+			{$smarty.const.REVERSE_GEOCODING_NOTICE}</div>
+		{else} 
+			<!-- Google Map for mobile-->
+			<div ><b>{$smarty.const.PRESENT_LOCATION}：</b>{$smarty.const.REVERSE_GEOCODING_NOTICE}
+			<a name="map">		
+			<img src="http://maps.google.com/staticmap?center={$lat},{$long}&zoom=16&size=200x200&maptype=mobile&markers={$lat},{$long}&key=ABQIAAAAk1WLF9vZQbD_CGdJg0C1oxTLCDDRuNc63YKcwsqyMrcjplE-CRTOHAu4yTt1fEgq1pGKfZ0-jOgvZA&sensor=true">
+			</a>
+			</div>
+	{/if}

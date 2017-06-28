@@ -1,0 +1,99 @@
+<h1>{$smarty.const.EDIT_DATA}</h1>
+
+<FORM METHOD="POST" action="index.php?action=tryPutBranch" >
+<TABLE  class="thread" border="1" id="middle_box">
+<TBODY>
+	<tr><th width="100px">
+	{$smarty.const.COMMON_COMPANY}
+    		</th>
+		<td class="con_odd">
+		
+                	{$companyName|escape}
+          <input type=hidden name="company_id" value={$company_selected_id}>
+		</td></tr>
+	{if !$data->id==null}
+	<tr><th width="100px">
+	{$smarty.const.COMMON_BRANCH_ID}
+    		</th>
+		<td class="con_odd">
+		{$data->id|escape}
+        <input type=hidden name="id" value="{$data->id|escape}">  	        		
+			</td></tr>
+	{/if}						
+<!-- Geographic -->
+
+	<tr><th>
+	{$smarty.const.BRANCH_NAME}</th>
+		<td class="con_odd">
+			<input type="text" size="40" maxlength="40" class="textinput" name="name" value="{$data->name}{$session.name}">
+	</td></tr>
+
+	<tr><th><span class="hissu">{$smarty.const.COMMON_INDISP}</span>
+	{$smarty.const.COMMON_POSTAL}</th>
+		<td class="con_odd">
+			<input type="text" size="50" maxlength="100" class="textinput" name="postal" 
+			value="{$data->postal}{$session.postal}">
+		</td></tr>
+
+	<tr><th><span class="hissu">{$smarty.const.COMMON_INDISP}</span>
+	{$smarty.const.COMMON_PREFECTURE}</th>
+		<td class="con_odd">
+		   	<select name="prefecture">
+			{foreach from=$prefecturesList item="prefecture"}
+				<option value="{$prefecture->id|escape}{$session.prefecture_id}" 
+				{if $data->prefecture==$prefecture->id} selected{/if}
+				{if $session.prefecture==$prefecture->id}selected{/if}>
+                	{$prefecture->prefecture_name|escape}</option>
+			{/foreach}
+			</select>
+		</td></tr>
+
+	<tr><th>
+	{$smarty.const.COMMON_CITY}</th>
+		<td class="con_odd">
+			<input type="text" size="50" maxlength="100" class="textinput" name="city" 
+			value="{$data->city}{$session.city}">
+		</td></tr>
+
+	<tr><th>
+	{$smarty.const.COMMON_WARD}</th>
+		<td class="con_odd">
+			<input type="text" size="50" maxlength="100" class="textinput" name="ward" 
+			value="{$data->ward}{$session.ward}">
+		</td></tr>
+
+	<tr><th><span class="hissu">{$smarty.const.COMMON_INDISP}</span>
+	{$smarty.const.COMMON_TOWN}</th>
+		<td class="con_odd">
+			<input type="text" size="50" maxlength="100" class="textinput" name="town" 
+			value="{$data->town}{$session.town}">
+		</td></tr>
+
+	<tr><th><span class="hissu">{$smarty.const.COMMON_INDISP}</span>
+	{$smarty.const.COMMON_ADDRESS}</th>
+		<td class="con_odd">
+			<input type="text" size="50" maxlength="100" class="textinput" name="address" 
+			value="{$data->address}{$session.address}">
+		</td></tr>
+
+	<tr><th><span class="hissu">{$smarty.const.COMMON_INDISP}</span>
+	{$smarty.const.COMMON_TEL}</th>
+		<td class="con_odd">
+			<input type="text" size="50" maxlength="100" class="textinput" name="tel" 
+			value="{$data->tel}{$session.tel}">
+		</td></tr>
+
+
+	<tr><th>
+	{$smarty.const.COMMON_EMAIL}</th>
+		<td class="con_odd">
+			<input type="text" size="50" maxlength="100" class="textinput" name="email" value="{$data->email}">
+		</td></tr>
+<!-- Geographicここまで-->
+        	
+	<tr><th colspan="2" align="center">
+	<input type=hidden name="edit" value="{$edit}">
+	　<input type="submit" name="submit" value="{$smarty.const.COMMON_SUBMIT}"></th>
+</TBODY>
+</TABLE>
+</FORM>

@@ -1,0 +1,55 @@
+{*全体のテンプレートファイル*} {if $carrier==NULL}
+<!DOCTYPE html>
+{/if}
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<TITLE>{$page_title} Smart動態管理</TITLE> {$css} {if
+$carrier==NULL||$carrier=="iPhone"||$carrier=="Android"}
+<!-- png fix -->
+{literal}
+<script type="text/javascript" src="templates/js/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="templates/js/jquery.pngFix.js"></script>
+<script type="text/javascript" src="templates/js/start_png_fix.js"></script>
+<script type="text/javascript" src="templates/js/accordion.js"></script>
+
+<script type="text/javascript"
+	src="https://apis.google.com/js/plusone.js">
+  	{lang: 'ja'}
+	</script>
+
+<link rel="shortcut icon" href="/favicon.ico">
+{/literal} {$js} {/if} {if $carrier==iPhone||$carrier=="Android"}
+<link rel="apple-touch-icon" href="/apple_touch_icon.png" />
+{/if}
+</head>
+<body {$onload_js}>
+	{if
+	$carrier==NULL||$carrier=="iPhone"||$carrier=="Android"}{$geocode_address}{/if}
+	<div class="oc_outline_box">
+		<div class="head_navi">
+			<div class="logo">
+
+				<a href="index.php"><img src="templates/image/logo.png"
+					alt="Smart動態管理　ロゴ" border="0" /> </a>
+
+			</div>
+		</div>
+		{if $message}
+		<div class="message">{$message}</div>
+		{/if} {if $user_id} {*ユーザー用メニュー表示*} {include file="user_menu.html"}
+		{/if} {*コンテンツ*} {include file=$filename} {if $carrier=="NULL"}
+		<hr>
+		{/if}
+		<div class="footer">
+		 {if $session_driver_id==NULL} <a href="index.php?action=driverLogin">ドライバー用ログイン</a>
+			{else}
+			<a href="index.php?action=driver_status">ドライバー用メニュー</a>
+			<a href="index.php?action=driverLogout">ドライバー用ログアウト</a> {/if}
+
+		</div>
+		<div align="center">{$smarty.const.COMMON_VERSION}</div>
+	</div>
+
+</body>
+</html>

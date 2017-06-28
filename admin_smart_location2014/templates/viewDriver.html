@@ -1,0 +1,118 @@
+{*ドライバー情報詳細表示画面*}
+
+<h1>{$smarty.const.COMMON_DRIVER}</h1>
+
+<TABLE  class="thread" border="1" id="middle_box">
+<TBODY>
+	<tr><th width="100px">
+	ID
+    		</th>
+		<td class="con_odd">
+		{$data->id|escape}
+  		</td></tr>			
+	<tr><th>    	
+    		{$smarty.const.COMMON_COMPANY}<br></th>
+		<td class="con_odd">
+		{$data->company_name|escape}
+       	</td></tr>
+        	
+	<tr><th>{$smarty.const.COMMON_LAST_NAME}&nbsp;{$smarty.const.COMMON_FIRST_NAME}</th>
+        <td class="con_odd">
+        {$data->last_name|escape}    {$data->first_name|escape}
+        
+        </td></tr>
+                	
+	<tr><th >
+	{$smarty.const.COMMON_FURIGANA}</th>
+		<td class="con_odd">
+        {$data->furigana|escape}
+        </td></tr>
+
+	<tr><th >
+	{$smarty.const.COMMON_EXPERIENCE}</th>
+		<td class="con_odd">
+        {$data->experience|escape}年
+        </td></tr>
+
+	<tr><th>
+	{$smarty.const.COMMON_NO_ACCIDENT}</th>
+		<td class="con_odd">
+        {$data->no_accident|escape}年
+        </td></tr>
+
+	<tr><th>
+	{$smarty.const.COMMON_CAR_TYPE}</th>
+		<td class="con_odd">
+        {$data->car_type|escape}
+        </td></tr>
+ 	<tr>
+		<td colspan="2">
+		{*画像*}
+			<div>
+			{foreach from=$image_info key=key item=each_image}
+				{if $each_image}
+				<div>
+					<div>
+					<img src="http://{$each_image.0}" alt="{$each_image.1|escape}"　title="{$each_image.1|escape}">
+					</div>
+					{$each_image.1|escape}
+					<input type=hidden name="image_name{$key}" value="{$each_image.0|escape}"> 
+					<input type=hidden name="image_title{$key}" value="{$each_image.1|escape}"> 
+				</div>
+		        {/if}
+	        {/foreach}      
+			</div>
+		</td>
+	</tr>       
+		
+	<tr><th>{$smarty.const.COMMON_EQUIPMENT}</th>
+		<td class="con_odd">
+        	{$data->equipment|escape}
+		</td></tr>
+
+	<tr><th>
+	{$smarty.const.COMMON_COL_SEX}</th>
+		<td class="con_odd">
+		{if $data->sex==0}
+        	{$smarty.const.COMMON_COL_MAN}
+        {else}	
+        	{$smarty.const.COMMON_COL_WOMAN}
+        {/if}      
+        </td></tr>
+        	
+	<tr><th >{$smarty.const.COMMON_BIRTHDAY}</th>
+		<td class="con_odd">
+		{$data->birthday|escape}
+		</td></tr>
+
+	<tr><th >{$smarty.const.COMMON_EREA}</th>
+		<td class="con_odd">
+		{$data->erea|escape}
+		</td></tr>
+
+	<tr><th >{$smarty.const.COMMON_REGIST_NUMBER}</th>
+		<td class="con_odd">
+		{$data->regist_number|escape}
+		</td></tr>
+
+	<tr><th >{$smarty.const.ASSIGNED_BRANCH}</th>
+		<td class="con_odd">
+		{$data->name|escape}
+		</td></tr>
+
+	<tr><th >ID</th>
+		<td class="con_odd">
+		{$data->login_id|escape}
+		</td></tr>
+		
+	<tr><th >{$smarty.const.COMMON_MESSAGE}</th>
+		<td class="con_odd">
+		{if $data->driver_message==NULL}
+			{$smarty.const.COMMON_NO_INFO}
+		{else}
+			{$data->driver_message|escape|nl2br}
+		{/if}
+		</td></tr>
+
+	</TBODY>
+</TABLE>

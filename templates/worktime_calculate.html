@@ -1,0 +1,119 @@
+{*ドライバー業務日誌*}
+<h1>計算結果</h1>
+
+	  {php} 
+	    print $_POST["time_from_year"]. '年';
+	    print $_POST["time_from_month"].'月';
+	    print $_POST["time_from_day"]. '日';
+	  {/php}
+	  ~
+	  {php} 
+	    print $_POST["time_to_year"]. '年';
+	    print $_POST["time_to_month"].'月';
+	    print $_POST["time_to_day"]. '日';
+	    print ":";
+
+	  {/php}
+{if $status==1}{if $smarty.const.MODE =="CONCRETE"}{$smarty.const.OFFICE_START}{else}{$working_status->action_1}{/if} 
+{elseif	$status==2}{if $smarty.const.MODE =="CONCRETE"}{$smarty.const.SCENE_START}{else}{$working_status->action_2}{/if} 
+{elseif	$status==3}{if $smarty.const.MODE =="CONCRETE"}{$smarty.const.FROM_SCENE_START}{else}{$working_status->action_3}{/if} 
+{elseif	$status==4}{if $smarty.const.MODE =="CONCRETE"}{$smarty.const.OFFICE_RETURN}{else}{$working_status->action_4}{/if} 
+{elseif	$status==5}{if $smarty.const.MODE =="CONCRETE"}{$smarty.const.LUNCH}{else}{$smarty.const.DRIVER_OTHER}{/if}
+{elseif	$status=="all_select"}{$smarty.const.ALL_SELECT}
+{elseif $smarty.const.MODE =="CONCRETE"}
+	{if $status==6}{$smarty.const.CONTACT_HOLD}
+	{elseif $status==7}{$smarty.const.CAR_WASH_HOLD}
+	{elseif $status==8}{$smarty.const.CAR_WASH}
+	{elseif $status==9}{$smarty.const.FEED}
+	{elseif $status==10}{$smarty.const.COPY}
+	{elseif $status==11}{$smarty.const.OTHER}
+	{/if}
+{/if}
+
+<br>
+<h2>{$smarty.const.TOTAL_TIME_SUM}:{$selected_total_time}</h2>
+
+{*複数ページへ渡る場合のリンク*} {foreach from=$links item="links"} {$links}
+{/foreach}
+ 
+{*PCの場合、テーブルで閲覧する*} {if $carrier==NULL}
+<table class="report_table">
+	<tr>
+		<th>{$smarty.const.DRIVER_STATUS}</th>
+		<th>{$smarty.const.START_TIME}</th>
+		<th>{$smarty.const.END_TIME}</th>
+		<th>{$smarty.const.TOTAL_TIME}</th>
+		<th>{$smarty.const.EDIT}</th>
+		<th>{$smarty.const.DELETE}</th>
+	</tr>
+	
+	{foreach from=$data item="data"}
+	
+	<tr>
+		<td>
+			{if $data.status==1}{if $smarty.const.MODE =="CONCRETE"}{$smarty.const.OFFICE_START}{else}{$working_status->action_1}{/if}
+			{elseif	$data.status==2}{if $smarty.const.MODE =="CONCRETE"}{$smarty.const.SCENE_START}{else}{$working_status->action_2}{/if} 
+			{elseif	$data.status==3}{if $smarty.const.MODE =="CONCRETE"}{$smarty.const.FROM_SCENE_START}{else}{$working_status->action_3}{/if} 
+			{elseif	$data.status==4}{if $smarty.const.MODE =="CONCRETE"}{$smarty.const.OFFICE_RETURN}{else}{$working_status->action_4}{/if} 
+			{elseif	$data.status==5}{if $smarty.const.MODE =="CONCRETE"}{$smarty.const.LUNCH}{else}{$smarty.const.DRIVER_OTHER}{/if}
+			{elseif $data.status==6}{$smarty.const.CONTACT_HOLD}
+			{elseif $data.status==7}{$smarty.const.CAR_WASH_HOLD}
+			{elseif $data.status==8}{$smarty.const.CAR_WASH}
+			{elseif $data.status==9}{$smarty.const.FEED}
+			{elseif $data.status==10}{$smarty.const.COPY}
+			{elseif $data.status==11}{$smarty.const.OTHER}
+			{/if}</td>
+		<td>{$data.start}</td>
+		<td>{$data.end}</td>
+		<td>{$data.total_time}</td>
+		<td><a href="index.php?action=worktime_edit&id={$data.id}&driver_id={$driver_id}&company_id={$company_id}">
+		{$smarty.const.EDIT}</a></td>
+		{if $carrier==NULL}
+		{literal}
+			<script type="text/javascript">
+			<!--
+			function check(){
+				return confirm("この記録を消去して、本当によろしいですか？消去すると、元に戻りません。")
+			}
+			//-->
+			</script>	
+			{/literal}
+		{/if}
+		<td><a href="index.php?action=worktime_delete&id={$data.id}&driver_id={$driver_id}&company_id={$company_id}" 
+				{literal}onclick="return check()"{/literal}>{$smarty.const.DELETE}</a></td>
+		
+	</tr>
+	{*データがない場合*} {foreachelse}
+	<div>{$smarty.const.TOP_NODATA}</div>
+	{/foreach}
+</table>
+{*スマートフォン、ガラケーの場合*} {else} {foreach from=$data item="data"}
+<div>
+	<b> {if $data.status==1}{if $smarty.const.MODE =="CONCRETE"}{$smarty.const.OFFICE_START}{else}{$working_status->action_1}{/if} 
+		{elseif	$data.status==2}{if $smarty.const.MODE =="CONCRETE"}{$smarty.const.SCENE_START}{else}{$working_status->action_2}{/if} 
+		{elseif	$data.status==3}{if $smarty.const.MODE =="CONCRETE"}{$smarty.const.FROM_SCENE_START}{else}{$working_status->action_3}{/if} 
+		{elseif	$data.status==4}{if $smarty.const.MODE =="CONCRETE"}{$smarty.const.OFFICE_RETURN}{else}{$working_status->action_4}{/if} 
+		{elseif	$data.status==5}{if $smarty.const.MODE =="CONCRETE"}{$smarty.const.LUNCH}{else}{$smarty.const.DRIVER_OTHER}{/if}
+		{elseif	$data.status=="all_select"}{$smarty.const.ALL_SELECT}
+		{elseif $data.status==6}{$smarty.const.CONTACT_HOLD}
+		{elseif $data.status==7}{$smarty.const.CAR_WASH_HOLD}
+		{elseif $data.status==8}{$smarty.const.CAR_WASH}
+		{elseif $data.status==9}{$smarty.const.FEED}
+		{elseif $data.status==10}{$smarty.const.COPY}
+		{elseif $data.status==11}{$smarty.const.OTHER}
+		{/if} </b>
+</div>
+{if $data.start}
+<div>{$data.start}</div>
+{/if} ~
+{if $data.end}
+<div>
+	{$data.end}
+</div>
+{/if} {if $data.total_time}
+<div>{$data.total_time}</div>
+{/if}
+<hr>
+{/foreach} {/if} {*リンクの設定*} 
+{foreach from=$links item="links"} {$links}
+{/foreach}

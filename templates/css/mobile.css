@@ -1,0 +1,101 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+.oc_outline_box{
+	
+	
+}
+
+img{
+	border:none;
+}
+
+.logo{
+	
+	background-color:#f2f3f5;
+}
+
+h1{font-size:14px;
+	background-color:#fdf0be;
+	padding:5px;
+}
+
+h2{font-size:14px;
+	background-color:#cccccc;
+	padding:5px;
+}
+
+
+.item_name{
+	background-color:#cbe6b6;
+	padding:5px;
+	margin:10px 0;
+}
+
+.pale_blue_box{
+	padding:10px;
+	background-color: #ffffff	;
+	border-bottom:1px solid #d5e6f1;
+	border-top:1px solid #d5e6f1;
+}
+
+.white_box{
+		padding:10px;
+}
+	
+
+#map_canvas{
+	margin:5px auto;
+	}
+	
+
+
+.place_name_container{
+	margin:5px;
+	}	
+
+.place_name_clear{
+	display:block;
+	clear:both;
+	height:10px;
+	
+	}	
+
+.small_text{
+	font-size:small;
+}
+	
+table.zebra{
+	cell-spacing:0;
+	padding:0;
+	border-collapse:collapse;
+}	
+table.zebra td {
+    border-bottom:1px solid #ccc;
+    border-top:1px solid #ccc;
+    padding:5px 0;
+}
+
+.name_and_date, .user_menu a, .welcome{
+	color:#26a012;
+	font-size:12px;
+	}
+
+.welcome{
+	color:#26a012;
+	font-size:12px;
+	}
+	
+ul, ol{
+	margin-left:5px;
+	padding-left:5px;
+}
+
+.point{
+	background-color:#fff;
+	}
+
+.footer{
+		font-size:12px;
+	}

@@ -1,0 +1,16 @@
+<IfModule mod_php5.c>
+  php_value include_path ".:/var/www/vhosts/doutaikanri.com/public_html/smart_location_test/action:/var/www/vhosts/doutaikanri.com/public_html/smart_location_test/class::/var/www/vhosts/doutaikanri.com/public_html/smart_location_test/language:/usr/share/php/Smarty/:/usr/share/pear"
+  php_value display_errors On
+</IfModule>
+<IfModule mod_rewrite.c>
+    RewriteEngine on
+    RewriteCond %{HTTPS} off
+    RewriteCond %{QUERY_STRING} action=login$
+    RewriteRule ^.*$  https://%{HTTP_HOST}%{REQUEST_URI} [R,L]
+
+    RewriteCond %{HTTPS} on
+    RewriteCond %{QUERY_STRING} !action=login$
+    RewriteCond %{QUERY_STRING} action=(?!driverLoginAndroid|driver_vacancy_smartphone|app_status_json|komatsu_app_status_json|komatsu_obstacles_json)
+    RewriteRule ^.*$  http://%{HTTP_HOST}%{REQUEST_URI} [R,L]
+</IfModule>
+

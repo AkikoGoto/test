@@ -1,0 +1,36 @@
+{if !$u_id}
+<div class="login">
+<div class="login_title">
+	<b>{$smarty.const.COMMON_LOGIN}</b>
+</div>
+{* action は自分自身です *}
+
+<form method="post" action="index.php?action=login" class="form-signin">
+
+
+	<input class="form-control" type="text" autofocus="" required=""
+		placeholder="EmailかログインID" name="id">
+	<input class="form-control"
+		type="password" required="" placeholder="パスワード" name="pass">
+	<div class="margin20"> 
+	<label class="checkbox"> <input type="checkbox" name="autologin" value="1">
+		{$smarty.const.AUTO_LOGIN} </label>
+</div>
+<div>
+	<button class="btn btn-large btn-ocher" type="submit"
+		value="{$smarty.const.COMMON_LOGIN}">{$smarty.const.COMMON_LOGIN}</button>
+</div>
+</form>
+<br>
+<div>{$smarty.const.COMMON_FRGT_PW}</div>
+
+ 
+{* ユーザー登録へのリンク *}
+<p>
+	<a href="?action=putin">{$smarty.const.NEW_REGISTER_COMPANY}</a>
+</p>
+<!-- 
+<div class="orangeButton">{$smarty.const.DRIVER_LOGIN_LINK}</div>
+ -->
+</div>
+{/if}

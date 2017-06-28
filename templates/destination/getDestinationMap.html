@@ -1,0 +1,62 @@
+{*近い営業所データを表示*}
+<h1>{$smarty.const.DESTINATION_MAP}</h1>
+{*空車アイコン表示のJavascript*}
+<script type="text/javascript">
+{literal}
+var center_latitude ={/literal}{$company_lat}{literal};
+var center_longitude ={/literal}{$company_long}{literal};			
+			
+//openLayers + OSM化
+var map;
+		
+var center_position;
+var fromProjection;
+var toProjection; // to Spherical Mercator Projection
+var myLayer;
+var markerLayer;
+var template_url = "{/literal}{$smarty.const.TEMPLATE_URL}{literal}";
+
+function initialize(center_latitude,center_longitude) {
+
+	//openLayers + OSM化
+	{/literal}
+	{*パラメーターの初期化とマップの描画は別ファイル*}
+	{include file = "js_html/initialize_mapBox_js.html"}
+	{literal}
+	
+	
+	addDestinationMarker();
+					
+}
+
+
+var locationArray = new Array();
+
+	{/literal}
+	{*アイコンとウィンドウの描画は別ファイル*}
+	{include file = "js_html/addDestinationMarker_js.html"}
+	{literal}
+				
+	function resizeToFit() {
+
+		map.fitBounds(destinationLayer.getBounds());
+
+	}
+
+		
+	</script>
+{/literal} 
+{*OSM Map本体*} 
+{include file="osm_map.html"}
+{*複数ページへ渡る場合のリンク*} {foreach from=$links item="links"} {$links}
+{/foreach}
+<div class="under_map_list">
+{foreach from=$categoryList item="category"}
+	<font color="{$category.color}">{$smarty.const.RECTANGLE}</font>{$category.name}&nbsp;
+{/foreach}
+
+</div>
+
+
+
+

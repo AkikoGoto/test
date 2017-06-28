@@ -1,0 +1,433 @@
+{*すべてのドライバーの業務履歴を表示*}
+<script type="text/javascript">
+{literal}
+
+function checkAll () {
+	$("#all_driver_history_search input").attr("checked", true);
+}
+function removeAll () {
+	$("#all_driver_history_search input").attr("checked", false);
+}
+{/literal}
+</script>
+
+<h1>{$smarty.const.ALL_DRIVER_RECORD_MAP}</h1>
+
+<p>{if !$is_before_search && $time_from && $time_to}{$time_from} から {$time_to}の表示をしています。{/if}</p>
+
+{*PCの場合、テーブルで閲覧できる*} {if $carrier==NULL}
+<div id="too_many_variables"></div>
+<table class="light_gray_table">
+	<tr>
+		<th>{$smarty.const.REFINE}</th>
+		<td>
+			<form method="get" action="index.php">
+				{include file="select_y_m_d_h_m.html"}
+				<BR>
+				<div id="all_driver_history_search" style="width: 100%;">
+					{assign var="br_timing" value="0"}
+					{foreach from=$all_drivers item=driver key=m}
+						{assign var="br_timing" value="`$br_timing+1`"}
+						{assign var="color" value="000000"}
+						{if $br_timing == 1}
+							<div width="100%">
+						{/if}
+						<div style="width: 200px; float: left; margin: 0;">
+							<input type="checkbox" name="driver_ids[{$m}]" value="{$driver.id}" id="driver_{$driver.id}" 
+							{if $driver.checked && $driver_selected}
+								checked
+							{/if}
+							><font {if $driver.color} color="#{$driver.color}"{/if}>■</font><label for="driver_{$driver.id}">{$driver.last_name} {$driver.first_name}</label>
+						</div>
+						{if $br_timing == 5}
+							</div>
+							{assign var="br_timing" value="0"}
+						{/if}
+					{/foreach}
+				</div>
+			    <div style="clear: both;"></div>
+			    <div>
+					<input type="button" onclick="checkAll();" value="全員にチェックする">
+					<input type="button" onclick="removeAll();" value="全員のチェックをはずす">
+				</div>
+			    <div style="clear: both;"></div>
+				<input type="hidden" name="company_id" value={$company_id}>
+				<input type="hidden" name="action" value="all_driver_record_map">
+				<input type="submit" value="送信する" id="submit_btn">
+			</form>
+		</td>
+	</tr>
+</table>
+{*Smartphoneの場合*}
+{else}
+<!-- <table class="light_gray_table"> -->
+<div id="too_many_variables"></div>
+<h2>{$smarty.const.REFINE}</h2>
+<form method="get" action="index.php">
+	{include file="select_y_m_d_h_m.html"}
+	<div id="all_driver_history_search" style="width: 100%;">
+		{assign var="br_timing" value="0"}
+		{foreach from=$all_drivers item=driver key=m}
+			{assign var="br_timing" value="`$br_timing+1`"}
+			{assign var="color" value="000000"}
+			{if $br_timing == 1}
+				<div width="100%">
+			{/if}
+			<div style="width: 200px; float: left; margin: 0;">
+				<input type="checkbox" name="driver_ids[{$m}]" value="{$driver.id}" id="driver_{$driver.id}" 
+				{if $driver.checked && $driver_selected}
+					checked
+				{/if}
+				><font {if $driver.color} color="#{$driver.color}"{/if}>■</font><label for="driver_{$driver.id}">{$driver.last_name} {$driver.first_name}</label>
+			</div>
+			{if $br_timing == 5}
+				</div>
+				{assign var="br_timing" value="0"}
+			{/if}
+		{/foreach}
+	</div>
+	   <div style="clear: both;"></div>
+	   <div>
+		<input type="button" onclick="checkAll();" value="全員にチェックする">
+		<input type="button" onclick="removeAll();" value="全員のチェックをはずす">
+	</div>
+	   <div style="clear: both;"></div>
+	<input type="hidden" name="company_id" value={$company_id}>
+	<input type="hidden" name="action" value="all_driver_record_map">
+	<input type="submit" value="送信する">
+</form>
+{/if}
+
+{if $driver_locations}
+{*点と線を表示　Javascript*}
+<script type="text/javascript">
+
+	{literal}
+
+		var template_url = "{/literal}{$smarty.const.TEMPLATE_URL}{literal}";
+		var points = new Array();
+		var driverPathArray = new Array();
+		var old_time = 0;
+		var new_time = 0;
+		var driveLineCoordinates  = new Array();
+
+	
+		// 地図の設定
+		//中心の緯度経度
+		var center_latitude={/literal}{$center_latitude}{literal};
+		var center_longitude={/literal}{$center_longitude}{literal};
+		
+		//openLayers + OSM化
+		var geocoder;
+		var map;
+				
+		//マーカーレイヤー
+		var marker_layer = new OpenLayers.Layer.Markers( "Markers_Layer" );
+		var driverCoordinates = new Array ();
+
+		//地図の範囲
+		var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
+		var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
+		
+		// ルート線
+		var routeLine = null;
+		var lineFeatures = new Array();
+		
+		//　ルート用の点
+		var pointList = [];
+		var last_lat;
+		var last_lng;
+
+		var size;
+		var offset;
+		var icon;
+
+	
+		// 地図の初期化
+		function initialize(center_latitude, center_longitude) {
+
+
+			//openLayers + OSM化
+			{/literal}
+			{*パラメーターの初期化とマップの描画は別ファイル*}
+			{include file = "js_html/initialize_map_js.html"}
+			{literal}
+			
+
+	   		//ライン用のレイヤーを作成
+			var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
+	        renderer = (renderer) ? [renderer] : OpenLayers.Layer.Vector.prototype.renderers;
+	        var vectorLayer = new OpenLayers.Layer.Vector("Driver History Line Layer");
+			
+
+		    var tooManyVariablesElement = document.getElementById("too_many_variables");
+		    tooManyVariablesElement.innerHTML = "";
+
+		    this.size = new OpenLayers.Size(10,10);
+			this.offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
+			this.icon = new OpenLayers.Icon( template_url + 'templates/image/transparent_icon.png', size, offset);
+
+		    //描画
+			try{
+				addMarkerAndWindow();
+			}catch(e){
+				// 表示する数が多すぎる
+				var tooManyVariablesMessage = "<p class=\"message\">データがないか多すぎるため、表示できませんでした。データを絞り込んで、再度検索して下さい。</p>";
+				tooManyVariablesElement.innerHTML = tooManyVariablesMessage;
+			}
+			
+			resizeToFit();
+	        // 線を引く
+	        vectorLayer.addFeatures(lineFeatures);
+	        map.addLayer(vectorLayer);
+			map.addLayer(marker_layer);
+
+
+
+			// メモリ解放
+			delete mapnik;
+		//	delete position;
+			delete zoom;
+			delete rederer;
+			delete vectorLayer;
+
+		}
+		
+		
+	
+	// ウィンドウつきの点を地図に表示
+	function addMarkerAndWindow() {
+		{/literal}
+			// ドライバーをループして取り出す
+			{literal}var last_driver_id;{/literal}
+			{foreach from=$driver_locations item=driver_location key=m}
+				{literal}
+				// ドライバー情報
+				var driver_id = {/literal}{$driver_location.id}{literal};
+				var driver_name = {/literal}"{$driver_location.last_name} {$driver_location.first_name}"{literal};
+				// ラインのスタイル
+				var layer_style{/literal}{$m}{literal} = OpenLayers.Util.applyDefaults(layer_style{/literal}{$m}{literal}, OpenLayers.Feature.Vector.style['default']);
+				var driver_color = "#{/literal}{$driver_location.color}{literal}";
+				// ラインの色
+				layer_style{/literal}{$m}{literal}.strokeColor = driver_color;
+				//ラインの太さ
+				layer_style{/literal}{$m}{literal}.strokeWidth = 5;
+				// ドライバーの緯度経度を入れた配列
+				driverCoordinates[driver_id] = new Array();
+
+				// メモリ解放
+				delete driver_color;
+				{/literal}
+				
+				//　ドライバーの乗車記録をループで取得し、配列へ
+				{foreach from=$driver_location.driver_status item=driver_status key=k}
+					//緯度・経度がNULL、0でなければ線と点を表示
+					{if $driver_status.longitude >0 && $driver_status.latitude >0 } 
+						
+						/* ===========================
+						**　ドライバーの履歴を配列に格納	
+						 ===========================*/
+						//ドライバーステータスを日本語に変換
+						{if $driver_location.status==1}{literal}var status_ja="{/literal}{$smarty.const.OFFICE_START}{literal}";{/literal}
+							{elseif $driver_location.status==2}{literal}var status_ja="{/literal}{$smarty.const.SCENE_START}{literal}";{/literal}
+							{elseif $driver_location.status==3}{literal}var status_ja="{/literal}{$smarty.const.FROM_SCENE_START}{literal}";{/literal}
+							{elseif $driver_location.status==4}{literal}var status_ja="{/literal}{$smarty.const.OFFICE_RETURN}{literal}";{/literal}
+							{elseif $driver_location.status==5}{literal}var status_ja="{/literal}{$smarty.const.LUNCH}{literal}";{/literal}
+							{elseif $driver_location.status==6}{literal}var status_ja="{/literal}{$smarty.const.CONTACT_HOLD}{literal}";{/literal}
+							{elseif $driver_location.status==7}{literal}var status_ja="{/literal}{$smarty.const.CAR_WASH_HOLD}{literal}";{/literal}
+							{elseif $driver_location.status==8}{literal}var status_ja="{/literal}{$smarty.const.CAR_WASH}{literal}";{/literal}
+							{elseif $driver_location.status==9}{literal}var status_ja="{/literal}{$smarty.const.FEED}{literal}";{/literal}
+							{elseif $driver_location.status==10}{literal}var status_ja="{/literal}{$smarty.const.COPY}{literal}";{/literal}
+							{elseif $driver_location.status==11}{literal}var status_ja="{/literal}{$smarty.const.OTHER}{literal}";{/literal}
+						{/if}
+						
+							{if $driver_status.status==1}{literal}var status_ja="{/literal}{$working_status->action_1}{literal}"; {/literal}
+								{elseif $driver_status.status==2}{literal}var status_ja="{/literal}{$working_status->action_2}{literal}"; {/literal}
+								{elseif $driver_status.status==3}{literal}var status_ja="{/literal}{$working_status->action_3}{literal}"; {/literal}
+								{elseif $driver_status.status==4}{literal}var status_ja="{/literal}{$working_status->action_4}{literal}"; {/literal}
+								{else}{literal}var status_ja="{/literal}{$smarty.const.DRIVER_OTHER}{literal}"; {/literal}
+							{/if}
+							
+						//緯度経度を取得、代入
+						{literal} var longitude = {/literal} {$driver_status.longitude}{literal}; 
+						var latitude = {/literal} {$driver_status.latitude}{literal};
+						//ドライバーの位置を設定
+						var driver{/literal}{$k}{literal}  = new OpenLayers.LonLat( longitude, latitude).transform( fromProjection, toProjection);
+					//	{literal};
+					//	var driver{/literal}{$k}{literal} = position;
+						//ドライバー情報の連想配列を作成
+						var driver_info{/literal}{$k}{literal} ={
+							"LatLng":driver{/literal}{$k}{literal},
+							"status_ja":status_ja,
+							"status":{/literal}"{$driver_status.status}"{literal},
+							"created":{/literal}"{$driver_status.created}"{literal},
+							"address":{/literal}{if $driver_status.address}"{$driver_status.address}"{else}null{/if}{literal}
+						};
+						//連想配列を配列に格納
+						driveLineCoordinates.push(driver{/literal}{$k}{literal});
+						
+						var target_info={
+							"longitude":longitude,
+							"latitude":latitude
+						};
+						
+						driverCoordinates[driver_id].push(target_info);
+						
+						// メモリ解放
+						delete target_info;
+					//	delete position;
+						delete driver;
+						delete latitude;
+						delete longitude;
+						
+						//2点間に線を引く 一個前のデータが開始なら線をひかない
+						//選択されているデータが終了なら次のデータとの間に線を引かない
+						var driver_start{/literal}{$k}driver{$m}{literal} = "{/literal}{$driver_status.start}{literal}";
+						var driver_end{/literal}{$k}driver{$m}{literal} = "{/literal}{$driver_status.end}{literal}";{/literal}
+						
+						/* ===========================
+						**　点を表示
+						 ===========================*/
+						{literal}
+							//表示するアイコン
+//							var size = new OpenLayers.Size(10,10);
+//							var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
+//							var icon = new OpenLayers.Icon( 'templates/image/transparent_icon.png', size, offset);
+							
+							var driver_position{/literal}{$k}{literal}driver{/literal}{$m}{literal} = new OpenLayers.LonLat(longitude, latitude).transform( fromProjection, toProjection);
+							var marker{/literal}{$k}{literal}driver{/literal}{$m}{literal} = new OpenLayers.Marker(driver_position{/literal}{$k}{literal}driver{/literal}{$m}{literal}, icon.clone());
+							var contentString{/literal}{$k}{literal}driver{/literal}{$m}{literal} = '<div id="content" style="width:200px">' + driver_name + '&nbsp;' + driver_info{/literal}{$k}{literal}.created +'&nbsp;'+driver_info{/literal}{$k}{literal}.status_ja +  '</div>';
+							
+							//マウスオーバー時のウィンドウ表示
+							marker{/literal}{$k}{literal}driver{/literal}{$m}{literal}.events.register('mouseover', marker{/literal}{$k}{literal}driver{/literal}{$m}{literal}, function(evt) {
+							    popup = new OpenLayers.Popup.FramedCloud("Popup",
+							    driver_position{/literal}{$k}{literal}driver{/literal}{$m}{literal},
+							    	null,
+							        contentString{/literal}{$k}{literal}driver{/literal}{$m}{literal},
+							        null,
+							        false);
+							    map.addPopup(popup);
+							});
+	
+							//情報ウィンドウを隠す	
+							marker{/literal}{$k}{literal}driver{/literal}{$m}{literal}.events.register('mouseout', marker{/literal}{$k}{literal}driver{/literal}{$m}{literal}, function(evt) {popup.hide();})
+							
+							marker_layer.addMarker(marker{/literal}{$k}{literal}driver{/literal}{$m}{literal});
+
+							// メモリ解放
+							delete driver_name;
+						//	delete size;
+						//	delete offset;
+						//	delete icon;
+					        delete driver_position;
+					        delete marker;
+					        delete contentString;
+					        
+						{/literal}
+	
+						/* ===========================
+						**　線を追加
+						===========================*/
+						// 0個以上の場合
+						{if $k>0}
+							{literal}
+							if((driver{/literal}{$k-1}{literal} != null) &&
+								(last_driver_id == driver_id) &&
+								((driver_start{/literal}{$k-1}driver{$m}{literal} == "0000-00-00 00:00:00")||
+								(driver_start{/literal}{$k-1}driver{$m}{literal} == ""))&&
+								((driver_end{/literal}{$k}driver{$m}{literal} == "0000-00-00 00:00:00")||
+								(driver_end{/literal}{$k}driver{$m}{literal} == ""))){
+								
+								var lastRoutePoint = new OpenLayers.Geometry.Point( last_lng, last_lat);
+								var newRoutePoint = new OpenLayers.Geometry.Point( longitude, latitude);
+								var list = new Array();
+								list.push(lastRoutePoint);
+								list.push(newRoutePoint);
+								
+						        var lineFeature = new OpenLayers.Feature.Vector(
+						            new OpenLayers.Geometry.LineString(list).transform(
+						                new OpenLayers.Projection("EPSG:4326"),
+						                new OpenLayers.Projection("EPSG:900913")),null, layer_style{/literal}{$m}{literal});
+						        lineFeatures.push(lineFeature);
+						        
+							}
+					        last_lat = latitude;
+					        last_lng = longitude;
+				            last_driver_id = driver_id;
+
+							// メモリ解放
+				            delete lineFeature;
+					        delete lastRoutePoint;
+					        delete newRoutePoint;
+					        delete list;
+					        delete driver_start;
+					        delete driver_end;
+					        delete driver_info;
+							delete driver_id;
+							delete layer_style;
+							delete driverCoordinates;
+							
+							{/literal}
+						{/if}
+					{else if}
+						{literal}
+							driver{/literal}{$k}{literal} = null;
+						{/literal}
+					{/if}
+				{/foreach}
+			{/foreach}
+		{literal}
+	}
+	
+	function resizeToFit(driver_id) {
+		
+		// マーカーをすべて表示させるため、マーカーを持つレイヤーのデータを取得する
+		var newBound = new OpenLayers.Bounds ();
+		if (driver_id != null) {
+			if(driverCoordinates.length > 0) {
+				var selected_driver_coordinates = driverCoordinates[driver_id];
+				if (selected_driver_coordinates.length > 0) {
+					for(var i = 0; i < selected_driver_coordinates.length; i++) {
+						newBound.extend(new OpenLayers.LonLat(selected_driver_coordinates[i].longitude,selected_driver_coordinates[i].latitude).transform( fromProjection, toProjection));
+					}
+				}
+			}
+		} else {
+			var newBound = marker_layer.getDataExtent();
+		}
+		
+		var new_zoom = map.getZoomForExtent(newBound, false);
+		var new_lon_lat = newBound.getCenterLonLat();
+		map.setCenter(new_lon_lat);
+		map.zoomTo(new_zoom);
+		
+	}
+	
+</script>
+{/literal}
+
+{*OSM Map本体*} 
+{include file="osm_map.html"}
+<!--
+<font color="#FF0000">{$smarty.const.RECTANGLE}</font>{$working_status->action_1}&nbsp; 
+<font color="#0e97f8">{$smarty.const.RECTANGLE}</font>{$working_status->action_2}&nbsp;
+<font color="#0ef850">{$smarty.const.RECTANGLE}</font>{$working_status->action_3}&nbsp;
+<font color="#760ef8">{$smarty.const.RECTANGLE}</font>{$working_status->action_4}&nbsp;
+-->
+<a href="javascript:resizeToFit();">全体表示</a><BR>
+{foreach from=$driver_with_color item=driver key=m}
+	<font {if $driver.color}color="#{$driver.color}"{/if}>{$smarty.const.RECTANGLE}</font>
+	<a href="javascript:resizeToFit({$driver.id});">{$driver.last_name} {$driver.first_name}</a>&nbsp;
+{/foreach}
+{if $driver_with_no_color}
+	<div>・以下のドライバーはデータがありません</div>
+	{foreach from=$driver_with_no_color item=driver key=m}
+		{$smarty.const.RECTANGLE}{$driver.last_name} {$driver.first_name}&nbsp;
+	{/foreach}
+{/if}
+
+{else}
+	{if !$is_before_search}
+		<p class="message">表示するドライバーの業務履歴がありません。</p>
+	{/if}
+{/if}

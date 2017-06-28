@@ -1,0 +1,212 @@
+{*近い営業所データを表示*}
+
+<h1>{$smarty.const.DRIVER_MAP}</h1>
+{*空車アイコン表示のJavascript*}
+<script type="text/javascript">
+{literal}
+var center_latitude ={/literal}{$company_lat}{literal};
+var center_longitude ={/literal}{$company_long}{literal};			
+var template_url = "{/literal}{$smarty.const.TEMPLATE_URL}{literal}";
+//openLayers + OSM化
+var map;
+		
+//マーカーレイヤー
+var marker_layer = new OpenLayers.Layer.Markers( "Markers_Layer" );
+
+var locationArray = new Array();
+
+var center_position;
+var fromProjection;
+var toProjection; // to Spherical Mercator Projection
+
+
+function initialize(center_latitude,center_longitude) {
+
+	//openLayers + OSM化
+	{/literal}
+	{*パラメーターの初期化とマップの描画は別ファイル*}
+	{include file = "js_html/initialize_map_js.html"}
+	{literal}
+	
+	this.center_position = position;
+	this.fromProjection = fromProjection;
+	this.toProjection = toProjection;  
+	map.addLayer(marker_layer);
+	addMarkerAndWindow();
+	resizeToFit(); 
+					
+}
+
+
+var locationArray = new Array();
+				
+	function resizeToFit() {
+		var template_url = "{/literal}{$smarty.const.TEMPLATE_URL}{literal}";
+		var newBound = marker_layer.getDataExtent();
+		var new_zoom = map.getZoomForExtent(newBound, false);
+		var new_lon_lat = newBound.getCenterLonLat();
+		map.setCenter(new_lon_lat);
+		map.zoomTo(new_zoom);
+		
+/*			if(locationArray.length > 0) {
+				var mapBounds = new OpenLayers.Bounds ();
+				for(var i = 0; i < locationArray.length; i++) {
+				//	mapBounds.extend(locationArray[i].LatLng);	
+					mapBounds.extend(new OpenLayers.LonLat(locationArray[i].longitude,locationArray[i].latitude).transform( fromProjection, toProjection));
+				}
+			
+			}
+			var new_zoom = map.getZoomForExtent(mapBounds, false);
+			var new_lon_lat =  mapBounds.getCenterLonLat();
+			map.setCenter(new_lon_lat);
+			map.zoomTo(new_zoom);
+*/
+	}
+
+	function addMarkerAndWindow(){
+
+		{/literal}
+		{foreach from=$driver_locations item=driver_location key=k}
+
+				{*ドライバーステータス*}		
+				{if $driver_location.status==1}{literal}var status="{/literal}{$smarty.const.OFFICE_START}{literal}"{/literal}
+					{elseif $driver_location.status==2}{literal}var status="{/literal}{$smarty.const.SCENE_START}{literal}"{/literal}
+					{elseif $driver_location.status==3}{literal}var status="{/literal}{$smarty.const.FROM_SCENE_START}{literal}"{/literal}
+					{elseif $driver_location.status==4}{literal}var status="{/literal}{$smarty.const.OFFICE_RETURN}{literal}"{/literal}
+					{elseif $driver_location.status==5}{literal}var status="{/literal}{$smarty.const.LUNCH}{literal}"{/literal}
+					{elseif $driver_location.status==6}{literal}var status="{/literal}{$smarty.const.CONTACT_HOLD}{literal}"{/literal}
+					{elseif $driver_location.status==7}{literal}var status="{/literal}{$smarty.const.CAR_WASH_HOLD}{literal}"{/literal}
+					{elseif $driver_location.status==8}{literal}var status="{/literal}{$smarty.const.CAR_WASH}{literal}"{/literal}
+					{elseif $driver_location.status==9}{literal}var status="{/literal}{$smarty.const.FEED}{literal}"{/literal}
+					{elseif $driver_location.status==10}{literal}var status="{/literal}{$smarty.const.COPY}{literal}"{/literal}
+					{elseif $driver_location.status==11}{literal}var status="{/literal}{$smarty.const.OTHER}{literal}"{/literal}
+				{/if}
+				{literal}
+					var company_id = {/literal}{$company_id}{literal};
+					var longitude = {/literal}{$driver_location.longitude}{literal};
+					var latitude = {/literal}{$driver_location.latitude}{literal};
+					var same_position = {/literal}{if $driver_location.same_position}"{$driver_location.same_position}"{else}null{/if}{literal};
+					var driver_name = {/literal}"{$driver_location.driver_name}"{literal};
+					//openLayers + OSM化
+
+					//ドライバー個人用のアイコンがあれば表示	
+					var driver_icon = {/literal}{if $driver_location.image_name != NULL}"http://{$driver_location.image_name}"{else}null{/if}{literal};				
+
+					var driver_info{/literal}{$k}{literal}={
+							"longitude":longitude,
+							"latitude":latitude,
+							"status":status,
+							"driver_icon":driver_icon,
+							"same_position":same_position,
+							"driver_name":driver_name
+					};
+					
+					locationArray.push(driver_info{/literal}{$k}{literal});
+
+
+					//表示するアイコン
+					var size = new OpenLayers.Size(30,30);
+					var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
+					
+					if(driver_icon != null ){
+						driver_icon = new OpenLayers.Icon(driver_icon, size, offset);
+					}else{
+						driver_icon = new OpenLayers.Icon(　template_url+'templates/image/car_icon.gif', size, offset);
+					}
+						
+					var driver_position{/literal}{$k}{literal} = new OpenLayers.LonLat(longitude, latitude).transform( fromProjection, toProjection);
+						
+					var marker{/literal}{$k}{literal} = new OpenLayers.Marker(driver_position{/literal}{$k}{literal}, driver_icon.clone());
+
+					var contentString{/literal}{$k}{literal} = driver_name +' '+status;
+
+
+					//マウスオーバー時のウィンドウ表示
+					marker{/literal}{$k}{literal}.events.register(
+						{/literal}
+						{* PCの場合はマウスオーバー、スマートフォンの場合はタッチ *}
+						{if $carrier==null}{literal}
+							'mouseover',
+						{/literal}{else if $carrier=="iPhone"||$carrier=="Android"}{literal}
+							'touchstart',
+						{/literal}{/if}{literal}
+						 marker{/literal}{$k}{literal}, function(evt) {
+
+//							if(popup !=null){
+//								popup.hide();							   
+//							}else{
+								 popup = new OpenLayers.Popup.FramedCloud("Popup",
+										    driver_position{/literal}{$k}{literal},
+								    		null,
+									        contentString{/literal}{$k}{literal},
+									        null,
+									        true);
+								map.addPopup(popup);
+//							}
+						});
+
+
+					
+					//情報ウィンドウを隠す	
+			//		marker{/literal}{$k}{literal}.events.register(
+			//				'mouseout',
+			//			 marker{/literal}{$k}{literal}, function(evt) {popup.hide();})
+					
+					marker_layer.addMarker(marker{/literal}{$k}{literal});
+
+
+				   //同じ場所に、複数人がいる場合
+					if(same_position != null){
+
+						same_position_popup = new OpenLayers.Popup.FramedCloud("SamePositionPopup",
+							    center_position,
+							    null,
+							    '<div class="popup_window">'+same_position+'と'+driver_name+'が同じ場所にいます</div>',
+						        null,
+						        true);
+				        same_position_popup.padding = 50;
+					    map.addPopup(same_position_popup);
+					}
+						
+				{/literal}
+			{/foreach}
+			{literal}
+	}
+
+		
+	</script>
+{/literal} 
+{*OSM Map本体*} 
+{include file="osm_map.html"}
+{*複数ページへ渡る場合のリンク*} {foreach from=$links item="links"} {$links}
+{/foreach} &nbsp;
+<a href="javascript:resizeToFit();">全体表示</a>
+
+{*ドライバー情報表示*} {foreach from=$data item="data"}
+<div>
+	<b>{$smarty.const.COMMON_DRIVER}</b>： <a
+		href="index.php?action=viewDriver&id={$data.driver_id}">{$data.last_name|escape}{$data.first_name|escape}</a>&nbsp;&nbsp;
+	{if $data.image_name != NULL}<img src="http://{$data.image_name}"
+		alt="{$data.last_name|escape}{$data.first_name|escape}アイコン">{/if} <br>
+	<b>{$smarty.const.DRIVER_STATUS}</b>&nbsp;：&nbsp; {if $data.status==1}{$smarty.const.OFFICE_START}{elseif
+			$data.status==2}{$smarty.const.SCENE_START} {elseif
+			$data.status==3}{$smarty.const.FROM_SCENE_START} {elseif
+			$data.status==4}{$smarty.const.OFFICE_RETURN} {elseif
+			$data.status==5}{$smarty.const.LUNCH} {elseif
+			$data.status==6}{$smarty.const.CONTACT_HOLD} {elseif
+			$data.status==7}{$smarty.const.CAR_WASH_HOLD} {elseif
+			$data.status==8}{$smarty.const.CAR_WASH} {elseif
+			$data.status==9}{$smarty.const.FEED} {elseif
+			$data.status==10}{$smarty.const.COPY} {elseif
+			$data.status==11}{$smarty.const.OTHER} {elseif
+			$data.status==12}{$smarty.const.DRIVER_OTHER} {/if} <br> <b>{$smarty.const.COMMON_DRIVER_MOBILE}</b>&nbsp;：&nbsp;<a
+		href="tel:{$data.mobile_tel|escape}">{$data.mobile_tel|escape}</a><br>
+	<b>{$smarty.const.COMMON_JYUSYO}</b>&nbsp;：&nbsp;{$data.address}<br> <b>{$smarty.const.COMMON_NEAR_UPDATE}</b>&nbsp;：&nbsp;{$data.created|escape}
+	&nbsp;：&nbsp; <a
+		href="index.php?action=driver_record_map&driver_id={$data.driver_id}&company_id={$company_id}">{$smarty.const.DRIVER_RECORDS_MAP}</a>
+</div>
+<hr>
+{*配列が空だった場合*} {foreachelse} {$smarty.const.NO_DATA} {/foreach}
+
+
+

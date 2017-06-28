@@ -1,0 +1,109 @@
+{*ルート詳細確認画面*}
+<h1>{$date} {$smarty.const.COMMON_CONFIRM}</h1>
+<FORM METHOD="POST" action="index.php?action=/root_detail/putRootDetailDb"
+	name="profile">
+	
+	<div class="">
+		総距離：<span id="root_kilo_distance_result"></span>
+	</div>
+	
+	<table class="report_table" id={$k}>
+		<tr>
+			<th>
+				{$smarty.const.ROOT_INDEX}
+			</th>
+			{if $data.id}
+				<th width="90px">
+					{$smarty.const.COMMON_ID}
+				</th>
+			{/if}
+			<th>
+				{$smarty.const.DELIVER_TIME}
+			</th>
+			<th width="250px">
+				<font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+				{$smarty.const.DESTINATION_NAME}
+			</th>
+			<th>
+				<font color="#ff0000">{$smarty.const.COMMON_INDISP}</font>
+				{$smarty.const.COMMON_JYUSYO}
+			</th>
+			<th>
+				{$smarty.const.COMMON_LAT}
+			</th>
+			<th>
+				{$smarty.const.COMMON_LONG}
+			</th>
+			<th colspan="2">
+				{$smarty.const.COMMON_BIKOU}
+			</th>
+		</tr>
+	{foreach from=$datas key=k item="data"}
+		<tr id="{$k}" name="{$data.address|escape}{$pre_data.address|escape}">
+			<td>
+				<div class="orange_button">
+					{$k+1}
+				</div>
+			</td>
+			{if $data.id}
+				<td>
+					{$data.id|escape}
+						<input type=hidden name="id[{$k}]"
+							value="{$data.id|escape}">
+				</td>
+			{/if}
+			<td>
+				<span id="hour">{$data.hour}{$smarty.const.COMMON_HOUR}</span>
+				&nbsp;
+				<span id="minutes">{$data.minit}{$smarty.const.COMMON_MINIT}</span>
+				<input type="hidden" name="hour[{$k}]" id="hour_input"
+					value="{$data.hour|escape}" >
+				<input type="hidden" name="minit[{$k}]" id="minutes_input" 
+					value="{$data.minit|escape}" >
+			</td>
+			<td>
+				<div id="display_destination">{$data.destination_name}</div>
+				<input id="destination_name" type="hidden" name="destination_name[{$k}]" size="40" maxlength="100" 
+				value="{$data.destination_name|escape}{$pre_data.destination_name|escape}">
+			</td>
+			<td>
+					<div>{$smarty.const.CHANGE_ADDRESS_MANUALLY}</div>
+					<input type="text" name="address[{$k}]" class="address_input" size="60" data-number="{$k}"
+						value="{$data.address|escape}">	 
+			</td>
+			<td>
+				<span id="lat"></span>
+				<input id="latitude" type="hidden" name="latitude[{$k}]" value="{$data.latitude|escape}">
+			</td>
+			<td>
+				<span id="lng"></span>
+				<input id="longitude" type="hidden" name="longitude[{$k}]" value="{$data.longitude|escape}">
+			</td>
+			<td colspan="2">
+				<div id="display_information">{$data.information}</div>
+				<input type="hidden" name="information[{$k}]" id="information"
+					value="{$data.information|escape}">
+			</td>
+		</tr>
+	
+	{/foreach}
+	</table>
+
+	<div id="result" class="red"></div>
+
+	<div align="center">
+		<input type=hidden name="company_id" value="{$company_id|escape}"> 
+		<input type=hidden name="root_id" value="{$root_id|escape}">
+		<button class="btn btn-large btn-ocher"
+			type="submit" name="submit" value="{$smarty.const.COMMON_SUBMIT}">
+			{$smarty.const.COMMON_SUBMIT}
+		</button>
+	</div>
+			
+</form>
+
+{if !is_shortest}
+	<div align="center" style="margin: 20px auto;">{$smarty.const.MARKER_CHANGE}</div>
+{/if}
+<div id="map_canvas" class="margin-top" style="width:100%; height: 700px"></div>
+<!-- <a href="#map" onclick="startRouteAnimation();"><img src="templates/image/bt_play.png" alt="開始"></a> -->

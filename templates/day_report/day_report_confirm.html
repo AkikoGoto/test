@@ -1,0 +1,31 @@
+<h2>{$smarty.const.COMFIRM_RES_TITLE}</h2>
+<FORM METHOD="POST" action="index.php?action=/day_report/day_report_putindb" >
+
+	<div class="item_name"><b>{$smarty.const.START_METER}</b></div>
+	<div>{$start_meter}</div>
+	<input type="hidden" name="start_meter" 
+		value="{$start_meter}">
+
+	<div class="item_name"><b>{$smarty.const.ARRIVAL_METER}</b></div>
+	<div>{$arrival_meter}</div>
+	<input type="hidden" name="arrival_meter" 
+		value="{$arrival_meter}">
+
+	<div class="item_name"><b>{$smarty.const.SUPPLIED_OIL}</b></div>
+	<div>{$supplied_oil}</div>
+	<input type="hidden" name="supplied_oil" 
+		value="{$supplied_oil}">
+
+	<div class="item_name"><b>{$smarty.const.DRIVE_DATE}</b></div>
+	<div>{$drive_date}</div>
+	<input type="hidden" name="drive_date" 
+		value="{$drive_date}">
+	 			
+	<div align="center">
+		<input type="hidden" name="id" value={$id}>
+		<input type="hidden" name="driver_id" value={$driver_id}>
+		<input type="hidden" name="company_id" value={$company_id}>
+		<input type="submit" name="submit" value="{$smarty.const.COMMON_SUBMIT}">
+	</div>
+
+</FORM>

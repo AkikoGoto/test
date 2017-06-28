@@ -1,0 +1,30 @@
+{* 配送先のデータをJSONにする *}
+
+destinationDatas = [];
+colorList = [];
+
+{foreach from=$destinationList item=destinationList key=k}
+	
+	{literal}
+		
+		var data = {
+		"type" : "Feature",
+		"geometry" : {
+			"type" : "Point",
+			"coordinates" : [ {/literal}{$destinationList.longitude}{literal}, {/literal}{$destinationList.latitude}{literal} ]
+			},
+		"properties" : {			
+			"id" : {/literal}{$k}{literal},
+			"name" : {/literal}"{$destinationList.destination_name}"{literal},
+			"color" : {/literal}"{if $destinationList.color !=null }{$destinationList.color}{else}#333333{/if}"{literal},
+			"information" : {/literal}"{$destinationList.information}"{literal},
+			"url" : "index.php?action=/destination/viewDestination&destination_id={/literal}{$destinationList.id}{literal}&company_id={/literal}{$company_id}"{literal}
+			}
+		}; 
+
+		destinationDatas.push(data);	
+		colorList.push([{/literal}{$k}{literal}, "{/literal}{if $destinationList.color !=null }{$destinationList.color}{else}#333333{/if}{literal}"]);
+
+	{/literal}
+	
+{/foreach}

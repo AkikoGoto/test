@@ -1,0 +1,28 @@
+{* Mapbox GL MAPのパラメーターの初期化とMAPの初期化*}
+{literal}
+
+	mapboxgl.accessToken = '{/literal}{$smarty.const.MAPBOX_GL_ACCESS_TOKEN}{literal}'; 
+
+	if (!mapboxgl.supported()) {
+	    alert('このブラウザではMapbox GLを表示することができません。違うブラウザをお試しください。');
+	} else {
+		map = new mapboxgl.Map({
+		    container: 'map',
+		  //  style: 'mapbox://styles/onlineconsultant/cixqub94n00042smj5o4gtpu9?optimize=true', //福道建設さん
+		  	style: '{/literal}{$smarty.const.MAPBOX_GL_STYLE_ID}{literal}',
+		    center: [center_longitude, center_latitude ],
+		    zoom: 17
+		});				
+					
+		map.addControl(new mapboxgl.NavigationControl());
+		
+		map.addControl(new mapboxgl.ScaleControl({
+	   		maxWidth: 80
+		}));
+		map.addControl(new mapboxgl.ScaleControl({
+	   		maxWidth: 80,
+    		unit: 'imperial'
+		}));
+		
+	}
+ {/literal}

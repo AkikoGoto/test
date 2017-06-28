@@ -1,0 +1,15 @@
+{*県名表示画面　モバイル版*}
+<h1>{$smarty.const.ALL_COMPANY}</h1>
+	{foreach from=$data item="data"}
+	<div><a href="?action=content&id={$data.id}">{$data.company_name}</a></div>
+	{*データがない場合*}
+	{foreachelse}
+	<div>
+	{$smarty.const.TOP_NODATA}
+	</div>
+	{/foreach}
+	
+	{*リンクの設定*}
+	{foreach from=$links item="links"}
+	{$links}
+	{/foreach}
