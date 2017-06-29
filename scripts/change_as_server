@@ -2,4 +2,5 @@
 if [ "$DEPLOYMENT_GROUP_NAME" == "DeployTest" ]
 then
     echo aaa > /var/www/html/index2.html
+    echo php_flag display_errors On > .htaccess
 fi
