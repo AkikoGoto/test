@@ -1,0 +1,5 @@
+#!/bin/bash
+if [ "$DEPLOYMENT_GROUP_NAME" == "DeployTest" ]
+then
+    echo aaa > /var/www/html/index2.html
+fi
