@@ -13,14 +13,3 @@ fp=open("/var/www/html/index.html","w")
 fp.write(buffer.replace(strToSearch,strToReplace))
 fp.close()
 
-
-strToSearchPhp="require_once(\"inc/dbconfig.php\");"
-strToReplacePhp="ini_set(\'error_reporting\', E_ALL);require_once(\"inc/dbconfig.php\");"
- 
-fp=open("/var/www/html/index.php","r")
-buffer=fp.read()
-fp.close()
- 
-fp=open("/var/www/html/index.php","w")
-fp.write(buffer.replace(strToSearchPhp,strToReplacePhp))
-fp.close()
