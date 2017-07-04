@@ -3,3 +3,8 @@ if [ "$DEPLOYMENT_GROUP_NAME" == "DeployTest" ]
 then
     echo aaabbb > /var/www/html/index2.html
 fi
+
+if [ "$DEPLOYMENT_GROUP_NAME" == "DeployTestRelease" ]
+then
+    echo ccc > /var/www/html/index2.html
+fi
