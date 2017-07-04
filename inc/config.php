@@ -43,12 +43,17 @@ require_once('transport_route_driver.class.php');
 require_once('deviated.class.php');
 require_once('last_driver_status.class.php');
 require_once('relay_server.class.php');
+require_once('transport_route_history.class.php');
+require_once('navi_area_history.class.php');
 
 //言語ファイル
 require_once('language_ja.php');
 //レンタルサーバー用
 //require_once('../Smarty/libs/Smarty.class.php');
 require_once('Smarty.class.php');
+
+//JVごとに実行するスクリプト
+initByJV();
 
 //ドコモの場合、セッションを明示する。
 if(get_carrier()=='docomo'){
@@ -99,7 +104,7 @@ $realtime_map_setting_array = array( 'visible_driver_id', 'is_public', 'viewed_d
 
 $app_setting_array=array('company_id','action_1','action_2','action_3','action_4','time','distance','photo_interval_distance','photo_interval_time','accuracy','track_always');
 
-$driver_status_array=array('driver_id','status','latitude','longitude','sales','address','detail','speed','start','end','saved_time','isTransporting');
+$driver_status_array=array('driver_id','status','latitude','longitude','sales','address','detail','speed','start','end','saved_time','isTransporting', 'accuracy');
 
 $registration_array=array('driver_last_name','driver_first_name');
 
