@@ -1,4 +1,4 @@
 #!/bin/bash
 
-    echo $DEPLOYMENT_GROUP_NAME > /var/www/html/index2.html
+echo $DEPLOYMENT_GROUP_NAME > /var/www/html/index3.html
 
