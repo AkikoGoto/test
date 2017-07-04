@@ -1,4 +1,10 @@
 #!/bin/bash
+if [ "$DEPLOYMENT_GROUP_NAME" == "DeployTest" ]
+then
+    echo aaabbb > /var/www/html/index2.html
+fi
 
-echo $DEPLOYMENT_GROUP_NAME > /var/www/html/index3.html
-
+if [ "$DEPLOYMENT_GROUP_NAME" == "DeployTestRelease" ]
+then
+    echo ccc > /var/www/html/index2.html
+fi
