@@ -1,5 +1,8 @@
 <?php
 
+ini_set( 'display_errors', 1 );
+print "なぜ動かぬの？";
+
 //共通定数ファイル読み込み
 require_once("inc/jv_const.php");
 require_once("inc/server_const.php");
