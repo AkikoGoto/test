@@ -2,6 +2,9 @@
 
 //共通定数ファイル読み込み
 require_once("inc/jv_const.php");
+
+initByJV();
+
 require_once("inc/server_const.php");
 require_once("inc/application_const.php");
 

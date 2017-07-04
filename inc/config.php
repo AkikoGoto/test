@@ -52,8 +52,6 @@ require_once('language_ja.php');
 //require_once('../Smarty/libs/Smarty.class.php');
 require_once('Smarty.class.php');
 
-//JVごとに実行するスクリプト
-initByJV();
 
 //ドコモの場合、セッションを明示する。
 if(get_carrier()=='docomo'){
