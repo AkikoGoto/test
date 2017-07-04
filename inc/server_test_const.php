@@ -12,21 +12,18 @@
  *	サーバーパス
  */
 
-//test
-
-ini_set( 'display_errors', 1 ); 
 
 //test
-define('SERVER_URL', 'edison.doutaikanri.com/smart_location_test/');
-define('SERVER_URL_WITHOUT_SLASH', 'edison.doutaikanri.com/smart_location_test');
+define('SERVER_URL', DOMAIN_BY_JV.'/smart_location_test/');
+define('SERVER_URL_WITHOUT_SLASH', DOMAIN_BY_JV.'/smart_location_test');
 define('SERVER_PATH', '/var/www/vhosts/doutaikanri.com/public_html/smart_location_test/');
 define('SERVER_IMAGE_PATH', '/var/www/vhosts/doutaikanri.com/public_html/smart_location_test/uploaded/images/');
 define('PUSH_NOTIFICATION_CER_PATH', '/var/www/vhosts/doutaikanri.com/public_html/smart_location_test/inc/push_notification_certificates/');
 
 
-define('SOCKETIO_SERVER_HOST', 'wss://edison.doutaikanri.com/');
+define('SOCKETIO_SERVER_HOST', 'wss://'.DOMAIN_BY_JV.'/');
 define('SOCKETIO_REALTIMEMAP_PATH', '/ws/test/rtmap/socket.io');
-define('SOCKETIO_ALERT_HOST', 'wss://edison.doutaikanri.com/');
+define('SOCKETIO_ALERT_HOST', 'wss://'.DOMAIN_BY_JV.'/');
 define('SOCKETIO_ALERT_PATH', '/ws/test/alert/socket.io');
 
 define('SOCKETIO_ALERT_API_HOST', 'http://localhost:23000/');

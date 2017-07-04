@@ -24,8 +24,9 @@ define('TABLINK_AGREE'	,'利用規約');	//利用規約
 
 //その他共通-------------------------------------
 
-define('COMMON_SITE_TTL'	,'中間貯蔵運行・動態管理システム');//サイトタイトル
-define('COMMON_VERSION'	,'中間貯蔵運行・動態管理システム ver2.0　Smart動態管理 ver5.4');//バージョン
+
+//define('COMMON_VERSION'	,'中間貯蔵運行・動態管理システム ver2.0　Smart動態管理 ver5.4');//バージョン
+define('COMMON_VERSION'	, COMMON_SITE_TTL.' '.COMMON_SITE_VERSION.'  Smart動態管理 ver5.4');//バージョン
 define('COMMON_SITE_KEYWORD'	,'');//キーワード
 define('COMMON_SITE_LANGUAGE'	,'ja');//言語
 define('COMMON_IND_POLICY'	,'個人情報保護方針');//個人情報保護方針
@@ -753,6 +754,7 @@ define('PUBLIC_MAP','パブリックマップ');
 define('NO_REGIST','登録しない');
 define('SPEED','速度');
 define('SHARE','共有');
+define('ACCURACY', '精度');
 
 /*ドライバー業務日誌閲覧画面*/
 define('LIMIT_DRIVER_RECORDS','最新1000件の記録を表示しています。');

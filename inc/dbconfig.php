@@ -2,7 +2,8 @@
 //データベースのアカウント・パスワード
 
 /*　サーバーによって切り替える項目　*/
-define('DB_HOST', '160.16.70.168');//データベースサーバー
+//エジソン版ではjv_const.phpに移動している
+/*define('DB_HOST', '160.16.70.168');//データベースサーバー
 
 //define('DB_USER', 'root');//ローカル
 //define('DB_USER', 'admin');
@@ -20,6 +21,7 @@ define('DB_PASS', 'kaiji3838');//テストサーバー
 //define('DB_NAME', 'concrete_location');//データベース名
 //define('DB_NAME', 'smart_location_in_service');//データベース名
 define('DB_NAME', 'smart_location_test');//テストデータベース名
+*/
 
 define('DATA_SOURCE_NAME','mysql:dbname='.DB_NAME.';host='.DB_HOST.';charset=utf8');
 
